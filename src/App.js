@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Main from './pages/Main.jsx';
+import UserRoutes from './routes/UserRoutes';
+import VendorRoutes from './routes/VendorRoutes';
+import AdminRoutes from './routes/AdminRoutes';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+
+        {/* 메인화면 */}
+        <Route path='/' element={<Main />}/>
+
+        {/* 사용자 라우터 */}
+        <Route path="/user/*" element={<UserRoutes />} />
+
+        {/* 업체 라우터 */}
+        <Route path="/vendor/*" element={<VendorRoutes />} />
+
+        {/* 관리자 라우터 */}
+        <Route path="/admin/*" element={<AdminRoutes />} />
+      </Routes>
+    </Router>
   );
 }
 
