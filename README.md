@@ -105,8 +105,7 @@ develop               # 전체 개발 병합용 (테스트 포함)
 feature/*/*           # 기능 개발 브랜치  
 fix/*/*               # 버그 수정 브랜치  
 refactor/*/*          # 코드 개선 브랜치  
-hotfix/*/*            # 운영 중 긴급 수정 브랜치  
-```
+hotfix/*/*            # 운영 중 긴급 수정 브랜치  ```
 
 ---
 
@@ -125,7 +124,6 @@ hotfix/*/*            # 운영 중 긴급 수정 브랜치
 git checkout -b feature/product/create
 
 # 주문 생성 버그 수정
-git checkout -b fix/order/submit-failure
-```
+git checkout -b fix/order/submit-failure```
 
 ---
