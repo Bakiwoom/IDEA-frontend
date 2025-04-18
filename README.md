@@ -35,8 +35,24 @@
 
 ```src/ 
   ├── assets/
-  │ ├── images/
-  │ └── css/ │ ├── contexts/ │ ├── index.js │ ├── user/ │ │ └── index.js │ ├── vendor/ │ │ └── index.js │ └── css/ │ └── index.js │ ├── pages/ │ ├── user/ │ ├── vendor/ │ └── main.jsx │ ├── routes/ │ ├── user/ │ └── vendor/ │ └── App.js```
+  │   ├── images/
+  │   └── css/
+  ├── contexts/
+  │   ├── index.js
+  │   ├── user/
+  │   │   └── index.js
+  │   ├── vendor/
+  │   │   └── index.js
+  │   ├── css/
+  │   |   └── index.js
+  ├── pages/
+  │   ├── user/
+  │   ├── vendor/
+  │   ├── main.jsx
+  ├── routes/
+  │   ├── user/
+  │   └── vendor/
+  └── App.js```
 
 ---
 
