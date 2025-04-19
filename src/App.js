@@ -4,6 +4,8 @@ import UserRoutes from './routes/UserRoutes';
 import VendorRoutes from './routes/VendorRoutes';
 import AdminRoutes from './routes/AdminRoutes';
 
+import "./assets/css/all.css";
+
 function App() {
   return (
     <Router>
