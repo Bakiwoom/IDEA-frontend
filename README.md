@@ -1,70 +1,131 @@
-# Getting Started with Create React App
+# IDEA (React Frontend)
+> **장애인 구직자와 고용주를 연결하고, 정부의 고용 지원 정책을 쉽게 확인할 수 있는 서비스**  
+> 공공데이터와 AI 요약 기능을 결합해, 복잡한 정책을 더 쉽게 이해할 수 있도록 돕습니다.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+📆 개발 기간: 2024.03 ~ 2024.05  
+👥 팀원: 임현성, 진소영, 황주영
 
-In the project directory, you can run:
+## 💡 프로젝트 개요
 
-### `npm start`
+장애인 고용률을 높이고, 고용의 진입 장벽을 줄이기 위한 플랫폼입니다.  
+**장애인 구직자**의 정보를 기반으로, **고용주(업체)** 가 해당 인원을 채용할 경우 **어떤 정부지원 혜택이나 장점이 있는지**를 **AI 요약** 기능을 통해 제공하는 것이 핵심입니다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+본 리포지토리는 **React로 구성된 프론트엔드**이며, AI 요약 기능은 **Python 기반 백엔드에서 처리**합니다.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 주요 기능
 
-### `npm test`
+- ✅ 사용자(고용주)가 해당 지원자를 고용했을 때 받을 수 있는 **정부 지원 정보** 확인
+- ✅ **AI 기반 요약 기능**으로 복잡한 정책 내용을 간결하게 보여줌 *(Python기반 백엔드에서 처리 예정)*
+- ✅ 사용자 유형별 페이지 분리: 일반 사용자(User) / 고용업체(Vendor)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📊 공공데이터 활용
 
-### `npm run build`
+본 서비스는 다음과 같은 공공데이터를 활용하여 구성됩니다:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| 출처 | 활용 내용 |
+|------|-----------|
+| 고용노동부 | 수집중 |
+| 워크넷 | 수집중 |
+| 기타 관련기관 | 수집중 |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+> 해당 데이터는 OpenAPI 또는 정제된 CSV 형태로 수집되며, 사용자별 맞춤형 정보 제공에 활용됩니다.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🗂️ 폴더 구조
 
-### `npm run eject`
+```
+src/ 
+  ├── assets/
+  │   ├── images/
+  │   └── css/
+  ├── contexts/
+  │   ├── index.js
+  │   ├── user/
+  │   │   └── index.js
+  │   ├── vendor/
+  │   │   └── index.js
+  │   ├── css/
+  │   |   └── index.js
+  ├── pages/
+  │   ├── user/
+  │   ├── vendor/
+  │   ├── main.jsx
+  ├── routes/
+  │   ├── user/
+  │   └── vendor/
+  └── App.js
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+<br>
+<br>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🌿 Git 브랜치 네이밍 가이드
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+팀 협업 시 일관된 브랜치 네이밍으로 관리 효율성을 높이기 위해 아래 규칙을 따릅니다.
+#### ✅ 브랜치 네이밍 규칙
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+`<브랜치타입>/<도메인>/<기능 또는 작업내용>`
 
-## Learn More
+- `브랜치타입`: 작업 목적에 따른 구분 (`feature`, `fix`, `hotfix`, `refactor`, `chore` 등)  
+- `도메인`: 기능이 속하는 모듈 또는 영역 (`product`, `order`, `review` 등)  
+- `기능명`: 구현하거나 수정할 기능 명칭 (`create`, `update`, `option-add` 등)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### ✅ 브랜치 타입 목록
 
-### Code Splitting
+| 타입       | 설명                             |
+|------------|----------------------------------|
+| `feature`  | 새로운 기능 개발 시              |
+| `fix`      | 버그 수정 시                     |
+| `hotfix`   | 운영 중 긴급 패치 필요 시        |
+| `refactor` | 코드 리팩토링 (기능 변화 없음)   |
+| `chore`    | 빌드 설정, 문서 등 잡일 변경 시  |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+#### ✅ 브랜치 이름 예시
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+| 브랜치 이름                    | 설명                       |
+|-------------------------------|----------------------------|
+| `feature/product/create`      | 상품 등록 기능 개발        |
+| `feature/product/option-add`  | 상품 옵션 추가 기능        |
+| `feature/order/create`        | 주문 생성 기능             |
+| `fix/order/cancel-error`      | 주문 취소 오류 수정        |
+| `refactor/review/handler`     | 리뷰 관련 로직 리팩토링    |
+| `chore/env/config-cleanup`    | 환경설정 정리              |
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+#### ✅ 브랜치 전략 예시
 
-### Advanced Configuration
+```
+main or master        # 실제 서비스 배포용  
+develop               # 전체 개발 병합용 (테스트 포함)  
+feature/*/*           # 기능 개발 브랜치  
+fix/*/*               # 버그 수정 브랜치  
+refactor/*/*          # 코드 개선 브랜치  
+hotfix/*/*            # 운영 중 긴급 수정 브랜치
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+#### 🔖 참고
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- 브랜치명은 **소문자**로 작성하고, 단어 구분은 **하이픈(-)** 을 사용합니다.  
+- 브랜치명은 **간결하고 명확하게** 작성합니다.  
+- 모든 기능 브랜치는 `develop` 브랜치에서 분기하여 작업 후 Pull Request로 병합합니다.
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### ✅ 사용 예시
+
+```bash
+# 상품 등록 기능 시작
+git checkout -b feature/product/create
+
+# 주문 생성 버그 수정
+git checkout -b fix/order/submit-failure 
+```
+
+---

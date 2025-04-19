@@ -1,0 +1,44 @@
+/* 사이드바 스타일 */
+.sidebar {
+    width: 170px;
+    background-color: #5a6acf;
+    color: white;
+    padding-top: 20px;
+    min-height: 100vh;
+}
+
+.sidebarTitle {
+    text-align: center;
+    padding: 15px 0;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 20px;
+}
+
+.sidebarMenu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebarMenu li {
+    padding: 0;
+    text-align: center;
+    cursor: pointer;
+}
+
+.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.menuLink {
+    display: block;
+    width: 100%;
+    color: white;
+    text-decoration: none;
+    padding: 15px 0;
+}
+
+.logoutItem {
+    padding: 15px 0;
+}
