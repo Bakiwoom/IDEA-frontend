@@ -1,0 +1,151 @@
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* 메인 콘텐츠 스타일 */
+.mainContent {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.pageTitle {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.actionButton {
+    background-color: #4263eb;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* 테이블 스타일 */
+.tableContainer {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    background-color: #f1f3f5;
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 14px;
+    color: #4a5568;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+tbody td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.statusBadge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.statusOpen {
+    background-color: #e3faec;
+    color: #2b8a3e;
+}
+
+.statusClosed {
+    background-color: #fff5f5;
+    color: #e03131;
+}
+
+.statusReview {
+    background-color: #e7f5ff;
+    color: #1971c2;
+}
+
+.actionCell {
+    text-align: center;
+}
+
+.actionButtonSmall {
+    background-color: #e9ecef;
+    color: #495057;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* 폼 스타일 */
+.formSection {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.formGroup {
+    margin-bottom: 16px;
+}
+
+.formRow {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.formRow .formGroup {
+    flex: 1;
+    margin-right: 16px;
+}
+
+.formRow .formGroup:last-child {
+    margin-right: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #4a5568;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* 스크린 전환을 위한 스타일 */
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}

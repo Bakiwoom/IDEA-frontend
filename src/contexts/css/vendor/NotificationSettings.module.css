@@ -1,0 +1,265 @@
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* 메인 콘텐츠 스타일 */
+.mainContent {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.pageTitle {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.actionButton {
+    background-color: #4263eb;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* 폼 스타일 */
+.formSection {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.sectionTitle {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.formGroup {
+    margin-bottom: 16px;
+}
+
+.formRow {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.formRow .formGroup {
+    flex: 1;
+    margin-right: 16px;
+}
+
+.formRow .formGroup:last-child {
+    margin-right: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #4a5568;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.inputDescription {
+    font-size: 12px;
+    color: #718096;
+    margin-top: 4px;
+}
+
+/* 알림 설정 스타일 */
+.toggleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.toggleLabel {
+    font-size: 14px;
+}
+
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggleSlider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e0;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.toggleSlider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggleSlider {
+    background-color: #4263eb;
+}
+
+input:checked + .toggleSlider:before {
+    -webkit-transform: translateX(24px);
+    -ms-transform: translateX(24px);
+    transform: translateX(24px);
+}
+
+/* 탭 스타일 */
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.tab {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.tab.active {
+    color: #4263eb;
+    border-bottom: 2px solid #4263eb;
+}
+
+/* 정보 박스 스타일 */
+.infoBox {
+    background-color: #ebf8ff;
+    border-left: 4px solid #4299e1;
+    padding: 16px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #2c5282;
+    border-radius: 4px;
+}
+
+/* 테이블 스타일 */
+.tableContainer {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+table, .notificationTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    background-color: #f1f3f5;
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 14px;
+    color: #4a5568;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+tbody td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* 상태 배지 스타일 */
+.statusBadge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.statusEmail {
+    background-color: #e6fffa;
+    color: #2c7a7b;
+}
+
+.statusSms {
+    background-color: #ebf8ff;
+    color: #2c5282;
+}
+
+.statusBoth {
+    background-color: #f0fff4;
+    color: #276749;
+}
+
+/* 버튼 영역 */
+.buttonRow {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.buttonCenter {
+    text-align: center;
+    margin-top: 16px;
+}
+
+.buttonSecondary {
+    background-color: #e2e8f0;
+    color: #4a5568;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+/* 스크린 전환을 위한 스타일 */
+.screen {
+    display: none;
+}
+
+.active {
+    display: block;
+}
