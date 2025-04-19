@@ -1,7 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
 
-import "../contexts/css/Reset.css";
-
 import VendorSidebar from "../pages/vendor/VendorSidebar";
 import ApplicantManagement from "../pages/vendor/ApplicantManagement";
 import InfoManagement from "../pages/vendor/InfoManagement";
