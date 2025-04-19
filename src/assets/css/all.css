@@ -1,0 +1,54 @@
+@charset "UTF-8";
+
+/************* 초기화 관련 ***************/
+
+/* 기본 요소 초기화 */
+body, div, p, dl, dt, ol, ul, li,
+h1, h2, h3, h4, h5, h6,
+form, input, select, textarea, button,
+fieldset, legend,
+table, thead, tbody, tfoot, tr, th, td,
+header, footer, main, nav, section, article, aside {
+    margin: 0;
+    padding: 0;
+}
+/* 리스트 스타일 초기화 */
+ul, ol {
+    list-style: none;
+}
+/* 텍스트 관련 초기화 */
+h1, h2, h3, h4, h5, h6 {
+    font-size: inherit; /* 상속된 폰트 사이즈 사용 */
+    font-weight: normal; /* 기본 폰트 두께 설정 */
+}
+/* 테이블 스타일 초기화 */
+table {
+    border-collapse: collapse; /* 테이블 경계 합치기 */
+}
+/* 기본 폼 요소 초기화 */
+input, button, textarea, select {
+    font-family: inherit; /* 폰트 패밀리 상속 */
+    font-size: inherit; /* 폰트 사이즈 상속 */color: inherit;
+        /* 텍스트 색상 상속 */
+}
+/* 앵커 태그 초기화 */
+a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: inherit; /* 부모 색상 상속 */
+}
+/* 기본 스크롤바 스타일 */
+body {
+    overflow-x: hidden; /* 가로 스크롤 제거 */
+}
+
+
+/******************* 전역 스타일 ***********************/
+
+/* 색상 변수 정의 */
+:root {
+    --logo-color : #2C30FF; /* 로고 색상 */
+    --primary-color: #ffffff; /* 주 색상 */
+    --secondary-color: #ffffff; /* 보조 색상 */
+    --text-color: #333; /* 텍스트 색상 */
+    --background-color: #ffffff; /* 배경 색상 */
+}
