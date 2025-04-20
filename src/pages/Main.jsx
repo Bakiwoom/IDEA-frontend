@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../assets/css/main/Main.module.css";
-import Header from "../components/Header"; // Header 컴포넌트 임포트
-import Footer from "../components/Footer"; // Footer 컴포넌트 임포트
 
 const Main = ({ activeMenu, handleMenuChange }) => {
   const [activeTab, setActiveTab] = useState("장애인 채용");
@@ -11,9 +9,6 @@ const Main = ({ activeMenu, handleMenuChange }) => {
     <div>
       {/* 구직자 메인화면 */}
       <div className={styles.active} id="job-seeker-screen">
-        {/* 헤더 컴포넌트 사용 */}
-        <Header />
-
         {/* 네비게이션 */}
         <nav className={styles.nav}>
           <div className={`${styles.container} ${styles.navContainer}`}>
@@ -180,9 +175,6 @@ const Main = ({ activeMenu, handleMenuChange }) => {
             </div>
           </section>
         </main>
-
-        {/* 푸터 컴포넌트 사용 */}
-        <Footer />
       </div>
     </div>
   );
