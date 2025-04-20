@@ -1,0 +1,428 @@
+/* 공통 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 헤더 스타일 */
+.header {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4263eb;
+    text-decoration: none;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+}
+
+.profileButton {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.profileImage {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #adb5bd;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+/* 네비게이션 스타일 */
+.nav {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.navContainer {
+    display: flex;
+    align-items: center;
+}
+
+.menuButton {
+    background: none;
+    border: none;
+    font-size: 20px;
+    padding: 15px 15px 15px 0;
+    cursor: pointer;
+}
+
+.navMenu {
+    display: flex;
+    list-style: none;
+}
+
+.navMenu li {
+    margin-right: 20px;
+}
+
+.navMenu a {
+    display: block;
+    padding: 15px 10px;
+    text-decoration: none;
+    color: #495057;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.navMenu a.active {
+    color: #4263eb;
+    border-bottom: 2px solid #4263eb;
+}
+
+/* 배너 스타일 */
+.banner {
+    background-color: #4263eb;
+    color: white;
+    padding: 30px 20px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.banner h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.banner p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.mainButton {
+    background-color: white;
+    color: #4263eb;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.outlineButton {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* 주요 섹션 스타일 */
+.mainSection {
+    margin-bottom: 30px;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.sectionTitle {
+    font-size: 18px;
+    font-weight: bold;
+    color: #343a40;
+}
+
+.viewAll {
+    font-size: 14px;
+    color: #868e96;
+    text-decoration: none;
+}
+
+/* 카드 그리드 스타일 */
+.cardGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: transform 0.2s;
+    border: 1px solid #e9ecef;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cardCompanyLogo {
+    height: 40px;
+    margin-bottom: 15px;
+    object-fit: contain;
+}
+
+.cardTitle {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #212529;
+}
+
+.cardCompany {
+    font-size: 14px;
+    color: #495057;
+    margin-bottom: 10px;
+}
+
+.cardTags {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.cardTag {
+    font-size: 12px;
+    background-color: #f1f3f5;
+    color: #495057;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.cardTag i {
+    margin-right: 4px;
+    color: #adb5bd;
+}
+
+.cardBottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    font-size: 12px;
+    color: #868e96;
+}
+
+.cardBadge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-right: 6px;
+}
+
+.cardBadgeHot {
+    background-color: #fff5f5;
+    color: #e03131;
+}
+
+.cardBadgeNew {
+    background-color: #ebfbee;
+    color: #2f9e44;
+}
+
+.likeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #adb5bd;
+    font-size: 16px;
+}
+
+.likeButton:hover {
+    color: #e03131;
+}
+
+/* 대시보드 스타일 */
+.dashboardGrid {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 20px;
+}
+
+.dashboardCard {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.dashboardCardTitle {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #212529;
+}
+
+.statGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.statCard {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.statValue {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4263eb;
+    margin-bottom: 5px;
+}
+
+.statLabel {
+    font-size: 13px;
+    color: #868e96;
+}
+
+.sidebarCard {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.sidebarCardTitle {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #212529;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.badgeCounter {
+    background-color: #4263eb;
+    color: white;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 10px;
+}
+
+.notificationList {
+    list-style: none;
+}
+
+.notificationItem {
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f3f5;
+    font-size: 13px;
+}
+
+.notificationItem:last-child {
+    border-bottom: none;
+}
+
+.notificationTitle {
+    color: #212529;
+    margin-bottom: 5px;
+}
+
+.notificationTime {
+    color: #adb5bd;
+    font-size: 12px;
+}
+
+/* 버튼 스타일 */
+.actionButton {
+    background-color: #4263eb;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+}
+
+.actionButtonSecondary {
+    background-color: #e9ecef;
+    color: #495057;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* 탭 컨테이너 스타일 */
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.tab {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #868e96;
+}
+
+.tab.active {
+    color: #4263eb;
+    border-bottom: 2px solid #4263eb;
+}
+
+/* React에서 active 클래스 */
+.active {
+    display: block;
+}
