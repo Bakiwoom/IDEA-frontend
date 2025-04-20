@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import styles from "../../contexts/css/vendor/NotificationSettings.module.css";
+import styles from "../../assets/css/vendor/NotificationSettings.module.css";
 import VendorSidebar from "./VendorSidebar";
 
 const NotificationSettings = () => {

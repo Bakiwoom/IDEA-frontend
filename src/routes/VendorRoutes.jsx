@@ -8,7 +8,7 @@ import NotificationSettings from "../pages/vendor/NotificationSettings";
 const VendorRoutes = () => {
   return (
     <Routes>
-      <Route path="/Sidebar" element={<VendorSidebar />} />
+      <Route path="/sidebar" element={<VendorSidebar />} />
       <Route path="/applicant/management" element={<ApplicantManagement />} />
       <Route path="/info/management" element={<InfoManagement />} />
       <Route path="/notification/settings" element={<NotificationSettings />} />

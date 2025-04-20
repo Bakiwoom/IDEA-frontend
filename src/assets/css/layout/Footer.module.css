@@ -1,0 +1,170 @@
+.footer {
+  padding: 30px 0;
+  background-color: #ffffff;
+  border-top: 1px solid #e9ecef;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 15px;
+}
+
+.menuItem {
+  text-decoration: none;
+  color: #555;
+  font-size: 14px;
+  margin: 0 15px;
+  padding: 5px 0;
+}
+
+.menuItem:hover {
+  color: #4263eb;
+}
+
+.infoContainer {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.logoContainer {
+  flex: 0 0 auto;
+  margin-right: 30px;
+}
+
+.logo {
+  font-size: 70px;
+  font-weight: 600;
+  color: #666;
+  margin: 0;
+  line-height: 1;
+}
+
+.info {
+  flex: 1;
+}
+
+.infoText {
+  font-size: 12px;
+  color: #767676;
+  margin-bottom: 5px;
+  line-height: 1.5;
+}
+
+.buttonsContainer {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.emailButton {
+  display: inline-block;
+  padding: 8px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #666;
+  font-size: 12px;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.emailButton:hover {
+  background-color: #f8f9fa;
+}
+
+.socialButtons {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.socialButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  color: #666;
+  font-size: 16px;
+  text-decoration: none;
+  margin-left: 10px;
+  background-color: #f8f9fa;
+}
+
+.socialButton:hover {
+  background-color: #e9ecef;
+}
+
+.certificateContainer {
+  display: flex;
+  align-items: center;
+}
+
+.certificate {
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #666;
+  font-size: 12px;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.certificate:hover {
+  background-color: #f8f9fa;
+}
+
+.ismsP {
+  display: inline-block;
+}
+
+.ismsPLogo {
+  height: 40px;
+}
+
+.logoBottom {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.footerLogo {
+  height: 36px;
+}
+
+@media (max-width: 768px) {
+  .infoContainer {
+    flex-direction: column;
+  }
+  
+  .logoContainer {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  
+  .buttonsContainer {
+    margin-top: 15px;
+    align-items: flex-start;
+  }
+  
+  .menu {
+    justify-content: flex-start;
+  }
+  
+  .menuItem {
+    margin: 5px 15px 5px 0;
+  }
+}
