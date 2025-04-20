@@ -7,7 +7,7 @@ const Header = () => {
     <header className={styles.header}>
       <div className={`${styles.container} ${styles.headerContainer}`}>
         <Link to="/" className={styles.logo}>
-          Dear
+          IDEA
         </Link>
         <div className={styles.headerRight}>
           <button className={styles.profileButton}>
