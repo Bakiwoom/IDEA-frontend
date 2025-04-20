@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import styles from "../../contexts/css/vendor/InfoManagement.module.css";
+import styles from "../../assets/css/vendor/InfoManagement.module.css";
 import VendorSidebar from "./VendorSidebar";
 
 const InfoManagement = () => {
