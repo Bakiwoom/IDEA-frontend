@@ -5,5 +5,7 @@
 }
 
 .mainContent {
-  flex: 1;
+  flex: 1; /* 남은 공간 모두 채움 */
+  /* min-height: 800px; */
+  /* height: calc(100vh - 헤더높이px - 푸터높이px); */ /* 화면 높이에서 헤더와 푸터 높이를 뺀 값 */
 }
