@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styles from "../assets/css/layout/Header.module.css";
-import ProfileDropdown from "./ProfileDropdown"; // ProfileDropdown 컴포넌트 import
+import ProfileDropdown from "./ProfileDropdown";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
