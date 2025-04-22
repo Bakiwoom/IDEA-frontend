@@ -40,7 +40,7 @@ const Footer = () => {
 
           <div className={styles.info}>
             <p className={styles.infoText}>
-              사용자 고객센터 02-8282-5959 (평일 09:00~19:00, 주말·공휴일 휴무)
+              사용자 고객센터 02-1234-5678 (평일 09:00~19:00, 주말·공휴일 휴무)
             </p>
             <p className={styles.infoText}>
               이메일 : help@idea.co.kr, Fax : 02-7777-0000(대표),
