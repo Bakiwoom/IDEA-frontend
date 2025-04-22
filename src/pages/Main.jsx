@@ -67,8 +67,8 @@ const Main = ({ activeMenu, handleMenuChange }) => {
               {/* 채용 카드 1 */}
               <div className={styles.card}>
                 <img
-                  src="#"
-                  alt="쿠팡 로고"
+                  src="/images/쿠팡로고.png"
+                  alt="쿠팡로고"
                   className={styles.cardCompanyLogo}
                 />
                 <h3 className={styles.cardTitle}>
@@ -104,8 +104,8 @@ const Main = ({ activeMenu, handleMenuChange }) => {
               {/* 채용 카드 2 */}
               <div className={styles.card}>
                 <img
-                  src="#"
-                  alt="쿠팡 로고"
+                  src="/images/쿠팡로고.png"
+                  alt="쿠팡로고"
                   className={styles.cardCompanyLogo}
                 />
                 <h3 className={styles.cardTitle}>
@@ -141,8 +141,250 @@ const Main = ({ activeMenu, handleMenuChange }) => {
               {/* 채용 카드 3 */}
               <div className={styles.card}>
                 <img
-                  src="#"
-                  alt="SC제일은행 로고"
+                  src="/images/SC제일은행로고.png"
+                  alt="SC제일은행로고"
+                  className={styles.cardCompanyLogo}
+                />
+                <h3 className={styles.cardTitle}>소프트웨어 기술지원 채용</h3>
+                <p className={styles.cardCompany}>(주)디에이씨</p>
+                <div className={styles.cardTags}>
+                  <span className={styles.cardTag}>
+                    <i>📍</i> 서울전체
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>🏢</i> 신입/경력
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>♿</i> 초대졸 ↑
+                  </span>
+                </div>
+                <div className={styles.cardBottom}>
+                  <div>
+                    <span
+                      className={`${styles.cardBadge} ${styles.cardBadgeNew}`}
+                    >
+                      취업축하금
+                    </span>
+                  </div>
+                  <div>
+                    <span>~05.08(목)</span>
+                    <button className={styles.likeButton}>♡</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 최고의 인기 공고 */}
+          <section className={styles.mainSection}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>최고의 인기 공고</h2>
+              <Link to="#" className={styles.viewAll}>
+                내 조건 정보 입력하기
+              </Link>
+            </div>
+
+            <div className={styles.cardGrid}>
+              {/* 채용 카드 1 */}
+              <div className={styles.card}>
+                <img
+                  src="/images/쿠팡로고.png"
+                  alt="쿠팡로고"
+                  className={styles.cardCompanyLogo}
+                />
+                <h3 className={styles.cardTitle}>
+                  [쿠팡 CFS] 지역허브 셀러보상 전문가 림핑크룸 정규직 채용
+                </h3>
+                <p className={styles.cardCompany}>쿠팡풀필먼트서비스(주)</p>
+                <div className={styles.cardTags}>
+                  <span className={styles.cardTag}>
+                    <i>📍</i> 경기/인천
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>🏢</i> 신입/경력
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>♿</i> 학력무관
+                  </span>
+                </div>
+                <div className={styles.cardBottom}>
+                  <div>
+                    <span
+                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
+                    >
+                      인기공고 주간 TOP100
+                    </span>
+                  </div>
+                  <div>
+                    <span>~04.30(화)</span>
+                    <button className={styles.likeButton}>♡</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* 채용 카드 2 */}
+              <div className={styles.card}>
+                <img
+                  src="/images/쿠팡로고.png"
+                  alt="쿠팡로고"
+                  className={styles.cardCompanyLogo}
+                />
+                <h3 className={styles.cardTitle}>
+                  쿠팡이츠서비스 CXM 대규모 채용
+                </h3>
+                <p className={styles.cardCompany}>쿠팡(주)</p>
+                <div className={styles.cardTags}>
+                  <span className={styles.cardTag}>
+                    <i>📍</i> 경기/인천
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>🏢</i> 신입/경력
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>♿</i> 학력무관
+                  </span>
+                </div>
+                <div className={styles.cardBottom}>
+                  <div>
+                    <span
+                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
+                    >
+                      마감임박 스크랩 지원 TOP100
+                    </span>
+                  </div>
+                  <div>
+                    <span>D-3</span>
+                    <button className={styles.likeButton}>♡</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* 채용 카드 3 */}
+              <div className={styles.card}>
+                <img
+                  src="/images/SC제일은행로고.png"
+                  alt="SC제일은행로고"
+                  className={styles.cardCompanyLogo}
+                />
+                <h3 className={styles.cardTitle}>소프트웨어 기술지원 채용</h3>
+                <p className={styles.cardCompany}>(주)디에이씨</p>
+                <div className={styles.cardTags}>
+                  <span className={styles.cardTag}>
+                    <i>📍</i> 서울전체
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>🏢</i> 신입/경력
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>♿</i> 초대졸 ↑
+                  </span>
+                </div>
+                <div className={styles.cardBottom}>
+                  <div>
+                    <span
+                      className={`${styles.cardBadge} ${styles.cardBadgeNew}`}
+                    >
+                      취업축하금
+                    </span>
+                  </div>
+                  <div>
+                    <span>~05.08(목)</span>
+                    <button className={styles.likeButton}>♡</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 요즘 주목받는 공고 */}
+          <section className={styles.mainSection}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>요즘 주목받는 공고</h2>
+              <Link to="#" className={styles.viewAll}>
+                내 조건 정보 입력하기
+              </Link>
+            </div>
+
+            <div className={styles.cardGrid}>
+              {/* 채용 카드 1 */}
+              <div className={styles.card}>
+                <img
+                  src="/images/쿠팡로고.png"
+                  alt="쿠팡로고"
+                  className={styles.cardCompanyLogo}
+                />
+                <h3 className={styles.cardTitle}>
+                  [쿠팡 CFS] 지역허브 셀러보상 전문가 림핑크룸 정규직 채용
+                </h3>
+                <p className={styles.cardCompany}>쿠팡풀필먼트서비스(주)</p>
+                <div className={styles.cardTags}>
+                  <span className={styles.cardTag}>
+                    <i>📍</i> 경기/인천
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>🏢</i> 신입/경력
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>♿</i> 학력무관
+                  </span>
+                </div>
+                <div className={styles.cardBottom}>
+                  <div>
+                    <span
+                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
+                    >
+                      인기공고 주간 TOP100
+                    </span>
+                  </div>
+                  <div>
+                    <span>~04.30(화)</span>
+                    <button className={styles.likeButton}>♡</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* 채용 카드 2 */}
+              <div className={styles.card}>
+                <img
+                  src="/images/쿠팡로고.png"
+                  alt="쿠팡로고"
+                  className={styles.cardCompanyLogo}
+                />
+                <h3 className={styles.cardTitle}>
+                  쿠팡이츠서비스 CXM 대규모 채용
+                </h3>
+                <p className={styles.cardCompany}>쿠팡(주)</p>
+                <div className={styles.cardTags}>
+                  <span className={styles.cardTag}>
+                    <i>📍</i> 경기/인천
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>🏢</i> 신입/경력
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>♿</i> 학력무관
+                  </span>
+                </div>
+                <div className={styles.cardBottom}>
+                  <div>
+                    <span
+                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
+                    >
+                      마감임박 스크랩 지원 TOP100
+                    </span>
+                  </div>
+                  <div>
+                    <span>D-3</span>
+                    <button className={styles.likeButton}>♡</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* 채용 카드 3 */}
+              <div className={styles.card}>
+                <img
+                  src="/images/SC제일은행로고.png"
+                  alt="SC제일은행로고"
                   className={styles.cardCompanyLogo}
                 />
                 <h3 className={styles.cardTitle}>소프트웨어 기술지원 채용</h3>
@@ -175,6 +417,13 @@ const Main = ({ activeMenu, handleMenuChange }) => {
             </div>
           </section>
         </main>
+        <div className={styles.chatbotContainer}>
+          <img
+            src="/images/chatbot.png"
+            alt="챗봇"
+            className={styles.chatbotIcon}
+          />
+        </div>
       </div>
     </div>
   );

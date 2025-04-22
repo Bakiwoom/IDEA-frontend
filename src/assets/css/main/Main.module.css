@@ -229,7 +229,26 @@ body {
     color: #e03131;
 }
 
-/* React에서 active 클래스 */
 .active {
     display: block;
+}
+
+.chatbotContainer {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.chatbotIcon {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.chatbotIcon:hover {
+  transform: scale(1.1);
 }
