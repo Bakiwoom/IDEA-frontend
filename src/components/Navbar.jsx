@@ -2,6 +2,7 @@ import { Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import styles from "../assets/css/layout/Navbar.module.css";
+import { CATEGORY_PAGE } from "../routes/contantsRoutes";
 
 const Navbar = () => {
     return(
@@ -11,7 +12,7 @@ const Navbar = () => {
                     <button className={styles.menuButton}>☰</button>
                     <ul className={styles.navMenu}>
                     <li>
-                        <Link to="#" className={styles.active}>
+                        <Link to={CATEGORY_PAGE} className={styles.active}>
                         채용정보
                         </Link>
                     </li>
@@ -32,7 +33,7 @@ const Navbar = () => {
                     </li> */}
                     </ul>
                 </div>
-            </nav>
+                </nav>
         </>
     );
 }
