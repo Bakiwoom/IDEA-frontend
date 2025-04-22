@@ -11,8 +11,8 @@ const Header = () => {
         </Link>
         <div className={styles.headerRight}>
           <button className={styles.profileButton}>
-            <div className={styles.profileImage}>홍</div>
-            <span>홍길동님</span>
+            <div className={styles.profileImage}>차</div>
+            <span>차은우님</span>
           </button>
         </div>
       </div>
