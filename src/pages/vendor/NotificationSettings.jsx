@@ -158,14 +158,14 @@ const NotificationSettings = () => {
             <h2 className={styles.sectionTitle}>최근 알림 내역</h2>
             <div className={styles.tableContainer}>
               <table className={styles.notificationTable}>
-                <thead>
+                <thead className={styles.tableHead}>
                   <tr>
                     <th>알림 내용</th>
                     <th>날짜/시간</th>
                     <th>채널</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className={styles.tableBody}>
                   {notifications.map((notification) => (
                     <tr key={notification.id}>
                       <td>{notification.content}</td>

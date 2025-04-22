@@ -121,8 +121,8 @@ const ApplicantManagement = () => {
 
           {/* 지원자 목록 테이블 */}
           <div className={styles.tableContainer}>
-            <table>
-              <thead>
+            <table className={styles.tableContent}>
+              <thead className={styles.tableHead}>
                 <tr>
                   <th>프로필</th>
                   <th>지원 공고</th>
@@ -133,7 +133,7 @@ const ApplicantManagement = () => {
                   <th>액션</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className={styles.tableBody}>
                 {applicants.map((applicant) => (
                   <tr key={applicant.id}>
                     <td>
