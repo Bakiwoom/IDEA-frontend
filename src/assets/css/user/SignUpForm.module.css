@@ -1,0 +1,109 @@
+@charset "UTF-8";
+
+.container{
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+}
+.fieldsContainer{
+    /* background-color: rgb(250, 144, 144); */
+    margin-top: 50px;
+}
+.fieldsContainer h2{
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.inputBox{
+    margin-top: 15px;
+    margin-left: 90px;
+}
+/*input + button*/
+.inputWithButtonBox{
+    display: flex;
+}
+.checkBtn{
+    height: 35px;
+    width: 100px;
+    margin-left: 4px;
+    margin-top: 2px;
+    font-size: 13px;
+    cursor: pointer;
+    background-color: var(--logo-color);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+}
+.checkBtn:hover {
+    background-color: var(--login-button-hover-color);
+    transform: scale(1.03);
+  }
+
+/**/
+.fieldsContainer label,.checkboxTitle{
+    font-size: var(--login-labelfont-size);
+    font-weight: bold;
+}
+.required{
+    margin-left: 3px;
+    color: red;
+}
+.fieldsContainer .input{
+    height: 40px;
+    width: 300px;
+    padding-left: 7px;
+    font-size: var(--login-labelfont-size);
+}
+.fieldsContainer input::placeholder{
+    font-size: 13px;
+    color: var(--login-hiddenfont-color);
+}
+
+/*파일첨부*/
+.fileInput{
+    width: 300px;
+    height: 200px;
+    border: 1px dashed var(--logo-color);
+    padding: 5px 5px;
+}
+
+/*체크박스*/
+.checkBoxContainer{
+    /* background-color: aqua; */
+    width: 300px;
+    margin-left: 90px;
+    margin-top: 20px;
+}
+.checkboxLine{
+    border: 1px solid #dfdfdf;
+    border-radius: 4px;
+    margin-top: 5px;
+    padding: 10px 7px;
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+}
+.checkboxItem{
+    display: flex;
+}
+.checkboxItem input{
+    width: 15px;
+    margin-right: 5px;
+}
+
+/* 회원가입 버튼*/
+.submitBtn{
+    width: 300px;
+    height: 40px;
+    margin: 30px 0 50px 90px;
+    border: none;
+    background-color: var(--logo-color);
+    border-radius: 6px;
+    color: #fff;
+}
+.submitBtn:hover{
+    background-color: var(--login-button-hover-color);
+    transform: scale(1.03);
+}

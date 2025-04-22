@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+.container{
+    width: 170px;
+    background-color: var(--logo-color);
+    min-height: 800px;
+    padding-top: 30px;
+    text-align: center;
+    color: #fff;
+}
+
+.title{
+    font-size: 18px;
+}
+
+.liBox{
+    text-align: left;
+    width: 70%;
+    margin: 0 auto;
+    padding: 40px 0 0 0;
+    font-size: 15px;
+}
+.liBox li{
+    margin-bottom: 20px;
+}
+

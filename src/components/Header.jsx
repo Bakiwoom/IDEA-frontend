@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styles from "../assets/css/layout/Header.module.css";
 import ProfileDropdown from "./ProfileDropdown";
+import { USER_MYPAGE_MAIN } from "../routes/contantsRoutes";
 
-const Header = () => {
+const Header = ({type}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
@@ -34,6 +35,25 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  let title = "";
+
+  switch (type) {
+    case "signUpTypeChoicePage":
+      title = "회원가입";
+      break;
+    case "userSignUpPage":
+      title = "개인 회원가입";
+      break;
+    case "vendorSignUpPage":
+      title = "기업 회원가입";
+      break;
+    case "loginPage":
+      title = "로그인";
+      break;
+    default:
+      title = "";
+  }
 
   return (
     <header className={styles.header}>
