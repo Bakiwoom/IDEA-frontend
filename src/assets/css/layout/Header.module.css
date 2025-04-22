@@ -20,6 +20,14 @@
     justify-content: space-between;
     align-items: center;
 }
+.headerLeft{
+    /* background-color: aqua; */
+}
+.headerLeft span{
+    padding-left: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
 
 .logo {
     font-size: 24px;

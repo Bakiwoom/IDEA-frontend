@@ -21,11 +21,13 @@ function App() {
         <Route element={<Layout />}>
           {/* 메인화면 */}
           <Route path="/" element={<Main />} />
-          {/* 사용자 라우터 */}
-          <Route path="/user/*" element={<UserRoutes />} />
           {/* 관리자 라우터 */}
           <Route path="/admin/*" element={<AdminRoutes />} />
         </Route>
+
+        {/* 사용자 라우터 (layout X) */}
+        <Route path="/user/*" element={<UserRoutes />} />
+
       </Routes>
     </Router>
   );
