@@ -15,7 +15,7 @@ const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
             className={styles.menuLink}
             onClick={() => handleMenuChange("job-management")}
           >
-            지원자 관리
+            내 공고 관리
           </Link>
         </li>
         {/* <li

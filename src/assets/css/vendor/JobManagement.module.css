@@ -1,0 +1,109 @@
+/* 마이페이지 컨테이너 */
+.mypageWrap {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* 메인 콘텐츠 영역 */
+.mainContent {
+  flex: 1;
+  padding: 20px;
+  background: #fff;
+  border-radius: 0 16px 16px 0;
+}
+
+/* 메인 헤더 */
+.mainHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mainHeader h1 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 버튼 스타일 */
+.btnPrimary {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnPrimary:hover {
+  background: #1d4ed8;
+}
+
+.btnSecondary {
+  background: #e0e7ff;
+  color: #222;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 0.97rem;
+  cursor: pointer;
+  margin-right: 4px;
+  transition: background 0.2s;
+}
+
+.btnSecondary:hover {
+  background: #c7d2fe;
+}
+
+/* 테이블 스타일 */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+}
+
+.table th, 
+.table td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 12px 8px;
+  text-align: left;
+}
+
+.table tr:hover {
+  background: #f1f5f9;
+}
+
+.table a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.table a:hover {
+  text-decoration: underline;
+}
+
+/* 상태 뱃지 */
+.statusBadge {
+  display: inline-block;
+  border-radius: 6px;
+  padding: 2px 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.statusOpen {
+  background: #4ade80;
+  color: #065f46;
+}
+
+.statusClose {
+  background: #e0e7ff;
+  color: #475569;
+}
+
+.statusEnd {
+  background: #fca5a5;
+  color: #b91c1c;
+}
