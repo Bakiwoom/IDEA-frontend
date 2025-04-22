@@ -39,6 +39,8 @@
 .headerRight {
     display: flex;
     align-items: center;
+    position: relative; /* 드롭다운 위치 조정을 위해 추가 */
+    border-radius: 25px;
 }
 
 .profileButton {
@@ -48,6 +50,14 @@
     border: none;
     cursor: pointer;
     margin-left: 20px;
+    padding: 8px 12px;
+    border-radius: 25px;
+    transition: background-color 0.2s;
+}
+
+.profileButton:hover {
+    border-radius: 25px;
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .profileImage {
@@ -64,5 +74,36 @@
 }
 
 .userName {
-  font-size: 14px;
+    font-size: 14px;
+}
+
+.arrowIcon {
+    font-size: 10px;
+    margin-left: 6px;
+    color: #adb5bd;
+    transition: transform 0.2s;
+}
+
+/* 드롭다운 관련 스타일 */
+.dropdownContainer {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-in-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
