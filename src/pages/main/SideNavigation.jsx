@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../assets/css/main/SideNavigation.module.css";
-import { Target, Flame, TrendingUp, ArrowUp } from "lucide-react";
+import { Star, Target, Flame, TrendingUp, ArrowUp } from "lucide-react";
 
 const SideNavigation = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -52,7 +52,7 @@ const SideNavigation = () => {
               onClick={() => scrollToSection("recommended-jobs")}
               className={styles.navItem}
             >
-              <Target className={styles.icon} size={20} />
+              <Star className={styles.icon} size={20} />
               <span className={styles.text}>추천 공고</span>
             </button>
           </li>
