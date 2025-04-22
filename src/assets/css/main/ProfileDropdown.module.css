@@ -1,0 +1,89 @@
+.sidebar {
+  width: 180px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.menuItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 15px;
+}
+
+.menuTitle {
+  font-size: 14px;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.menuCount {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4263eb;
+}
+
+.myMenuSection {
+  margin-bottom: 15px;
+}
+
+.myMenuTitle {
+  font-size: 14px;
+  font-weight: bold;
+  color: #495057;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.menuList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.menuListItem {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.menuListItem:last-child {
+  margin-bottom: 0;
+}
+
+.menuListItem a {
+  color: #495057;
+  text-decoration: none;
+  transition: color 0.2s;
+  display: block;
+  padding: 5px 0;
+}
+
+.menuListItem a:hover {
+  color: #4263eb;
+}
+
+.logoutButtonContainer {
+  padding-top: 15px;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+}
+
+.logoutButton {
+  background-color: transparent;
+  border: none;
+  color: #868e96;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 5px;
+  transition: color 0.2s;
+}
+
+.logoutButton:hover {
+  color: #212529;
+}
