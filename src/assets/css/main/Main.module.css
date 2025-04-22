@@ -55,7 +55,7 @@ body {
 
 .navMenu a.active {
     color: #4263eb;
-    border-bottom: 2px solid #4263eb;
+    /* border-bottom: 2px solid #4263eb; */
 }
 
 /* 배너 스타일 */
