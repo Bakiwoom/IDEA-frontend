@@ -1,9 +1,10 @@
 @charset "UTF-8";
 
 .container{
-    /* background-color: beige; */
-    width: 1200px;
+    background-color: #fff;
+    width: 100%;
     margin: 0 auto;
+    padding-bottom: 100px;
 }
 
 /*카테고리*/
@@ -13,12 +14,101 @@
     margin: 0 auto;
     background-color: #fff;
     box-sizing: border-box;
-    padding: 23px 0 0 416px;
+    padding: 23px 0 0 408px;
     font-size: 14px;
     cursor: pointer;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid #ffffff;
+}
+.categotyContainer li{
+    width: 100px;
+}
+.categotyContainer li:hover{
+    font-size: 15px;
+    color: #4263eb;
 }
 
 .selected{
     color: #4263eb;
+}
+
+/*페이지 타이틀*/
+.pageTitle{
+    font-size: 25px;
+    font-weight: bold;
+    /* background-color: #4263eb; */
+    padding-top: 20px;
+    width: 1100px;
+    margin: 0 auto;
+}
+
+
+/*공고글*/
+.itemBoxContainer{
+    /* background-color: #ffd1d1; */
+    margin:  auto;
+    width: 1100px;
+    padding-top: 30px;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.itemBox{
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    width: 340px;
+    height: 175px;
+    box-sizing: border-box;
+    margin-top: 0px;
+    box-shadow: 0 4px 10px rgba(177, 177, 177, 0.1);
+    padding: 8px 15px 10px 25px;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.itemBox:hover{
+    transform: scale(1.03) translateY(-5px);
+}
+
+
+.logoImg{
+    height: 40px;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: contain;
+    display: block;
+    
+}
+.itemTitle{
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+.itemCompany{
+    font-size: 13px;
+}
+.spanBox{
+    padding-top: 8px;
+}
+.spanBox span{
+    background-color: #e9ecef;
+    margin-right: 5px;
+    font-size: 12px;
+    padding: 3px 3px;
+    border-radius: 3px;
+}
+.dayBox{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.itemEndday{
+    font-size: 12px;
+    margin-left: auto;
+    margin-right: 4px;
+}
+.heartIcon{
+    font-size: 20px;
 }
