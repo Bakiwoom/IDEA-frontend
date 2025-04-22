@@ -36,8 +36,8 @@ const Header = ({type}) => {
         </div>
         <div className={styles.headerRight}>
           <button className={styles.profileButton}>
-            <div className={styles.profileImage}>홍</div>
-            <Link to={USER_MYPAGE_MAIN}><span>홍길동님</span></Link>
+            <div className={styles.profileImage}>차</div>
+            <Link to={USER_MYPAGE_MAIN}><span>님</span></Link>
           </button>
         </div>
       </div>

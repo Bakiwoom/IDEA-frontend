@@ -49,33 +49,33 @@ body {
     padding: 15px 10px;
     text-decoration: none;
     color: #495057;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 500;
 }
 
 .navMenu a.active {
     color: #4263eb;
-    border-bottom: 2px solid #4263eb;
+    /* border-bottom: 2px solid #4263eb; */
 }
 
 /* 배너 스타일 */
 .banner {
     background-color: #4263eb;
     color: white;
-    padding: 30px 20px;
+    padding: 50px 20px;
     margin-bottom: 30px;
     border-radius: 8px;
     text-align: center;
 }
 
 .banner h1 {
-    font-size: 24px;
+    font-size: 30px;
     margin-bottom: 10px;
 }
 
 .banner p {
-    font-size: 16px;
-    margin-bottom: 20px;
+    font-size: 20px;
+    margin-bottom: 10px;
     opacity: 0.9;
 }
 
@@ -120,22 +120,22 @@ body {
     color: #343a40;
 }
 
-.viewAll {
+/* .viewAll {
     font-size: 14px;
     color: #868e96;
     text-decoration: none;
-}
+} */
 
 /* 카드 그리드 스타일 */
 .cardGrid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
 }
 
 .card {
     background-color: white;
-    border-radius: 8px;
+    border-radius: 20px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     padding: 20px;
     transition: transform 0.2s;
@@ -151,6 +151,9 @@ body {
     height: 40px;
     margin-bottom: 15px;
     object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .cardTitle {
@@ -229,7 +232,31 @@ body {
     color: #e03131;
 }
 
-/* React에서 active 클래스 */
 .active {
     display: block;
+}
+
+.topBorderedCard {
+  border: 1px solid #e9ecef;
+  box-shadow: 0 3px 0 0 #4263eb inset, 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chatbotContainer {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.chatbotIcon {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.chatbotIcon:hover {
+  transform: scale(1.1);
 }

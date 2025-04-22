@@ -12,28 +12,33 @@
 
 .menu {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between; /* 아이템들 사이에 동일한 여백 생성 */
   margin-bottom: 20px;
   border-bottom: 1px solid #e9ecef;
   padding-bottom: 15px;
+  width: 100%;
 }
 
 .menuItem {
   text-decoration: none;
   color: #555;
   font-size: 14px;
-  margin: 0 15px;
   padding: 5px 0;
+  white-space: nowrap; /* 텍스트가 줄바꿈 되지 않도록 설정 */
 }
 
 .menuItem:hover {
   color: #4263eb;
 }
 
+/* 첫 번째 아이템(회사소개)과 마지막 아이템(고객센터)을 제외한 모든 아이템에 대한 스타일 */
+.menuItem:not(:first-child):not(:last-child) {
+  text-align: center;
+}
+
 .infoContainer {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -43,7 +48,7 @@
 }
 
 .logo {
-  font-size: 70px;
+  font-size: 40px;
   font-weight: 600;
   color: #666;
   margin: 0;
@@ -161,6 +166,7 @@
   }
   
   .menu {
+    flex-wrap: wrap;
     justify-content: flex-start;
   }
   

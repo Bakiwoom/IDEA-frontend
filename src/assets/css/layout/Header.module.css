@@ -30,7 +30,7 @@
 }
 
 .logo {
-    font-size: 24px;
+    font-size: 40px;
     font-weight: bold;
     color: #4263eb;
     text-decoration: none;
@@ -61,4 +61,8 @@
     color: #adb5bd;
     font-size: 14px;
     margin-right: 8px;
+}
+
+.userName {
+  font-size: 14px;
 }
