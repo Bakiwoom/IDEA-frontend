@@ -1,14 +1,21 @@
 import { Routes, Route } from 'react-router-dom';
 import UserHeaderLayout from '../components/UserHeaderLayout';
+import Layout from "../components/Layout";
+
 import SignUpTypeChoice from '../pages/user/SignUpTypeChoice';
 import UserSignUpPage from '../pages/user/UserSignUpPage';
 import VendorSignUpPage from '../pages/user/VendorSignUpPage';
 import LoginPage from '../pages/user/LoginPage';
 import UserMyPageMain from '../pages/user/UserMyPageMain';
+import CategoryListPage from '../pages/user/CategotyListPage';
 
 const UserRoutes = () => {
   return (
     <Routes>
+      <Route element={<Layout />}>
+        <Route path='/categoryListPage' element={<CategoryListPage />} />
+      </Route>
+
       <Route element={<UserHeaderLayout />}>
 
         <Route path='/signUpTypeChoicePage' element={<SignUpTypeChoice />} />
