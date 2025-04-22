@@ -32,14 +32,6 @@
   margin-bottom: 15px;
 }
 
-.myMenuTitle {
-  font-size: 14px;
-  font-weight: bold;
-  color: #495057;
-  margin-bottom: 12px;
-  text-align: center;
-}
-
 .menuList {
   list-style: none;
   padding: 0;
@@ -71,6 +63,8 @@
 .logoutButtonContainer {
   padding-top: 15px;
   border-top: 1px solid #e9ecef;
+  color: #495057;
+  font-size: 14px;
   text-align: center;
 }
 

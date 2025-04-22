@@ -40,6 +40,7 @@
     display: flex;
     align-items: center;
     position: relative; /* 드롭다운 위치 조정을 위해 추가 */
+    border-radius: 25px;
 }
 
 .profileButton {
@@ -50,7 +51,7 @@
     cursor: pointer;
     margin-left: 20px;
     padding: 8px 12px;
-    border-radius: 4px;
+    border-radius: 25px;
     transition: background-color 0.2s;
 }
 
