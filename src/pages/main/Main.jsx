@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import styles from "../assets/css/main/Main.module.css";
+import SideNavigation from "./SideNavigation";
+import styles from "../../assets/css/main/Main.module.css";
 
-const Main = ({ activeMenu, handleMenuChange }) => {
-  const [activeTab, setActiveTab] = useState("장애인 채용");
+const Main = () => {
 
   return (
     <div>
@@ -53,19 +53,19 @@ const Main = ({ activeMenu, handleMenuChange }) => {
           </div>
 
           {/* 맞춤 공고 섹션 */}
-          <section className={styles.mainSection}>
+          <section id="recommended-jobs" className={styles.mainSection}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>
                 차은우님이 꼭 봐야 할 공고
               </h2>
-              <Link to="#" className={styles.viewAll}>
+              {/* <Link to="#" className={styles.viewAll}>
                 내 조건 정보 입력하기
-              </Link>
+              </Link> */}
             </div>
 
             <div className={styles.cardGrid}>
               {/* 채용 카드 1 */}
-              <div className={styles.card}>
+              <div className={`${styles.card} ${styles.topBorderedCard}`}>
                 <img
                   src="/images/쿠팡로고.png"
                   alt="쿠팡로고"
@@ -102,7 +102,7 @@ const Main = ({ activeMenu, handleMenuChange }) => {
               </div>
 
               {/* 채용 카드 2 */}
-              <div className={styles.card}>
+              <div className={`${styles.card} ${styles.topBorderedCard}`}>
                 <img
                   src="/images/쿠팡로고.png"
                   alt="쿠팡로고"
@@ -139,7 +139,7 @@ const Main = ({ activeMenu, handleMenuChange }) => {
               </div>
 
               {/* 채용 카드 3 */}
-              <div className={styles.card}>
+              <div className={`${styles.card} ${styles.topBorderedCard}`}>
                 <img
                   src="/images/SC제일은행로고.png"
                   alt="SC제일은행로고"
@@ -168,6 +168,43 @@ const Main = ({ activeMenu, handleMenuChange }) => {
                   </div>
                   <div>
                     <span>~05.08(목)</span>
+                    <button className={styles.likeButton}>♡</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* 채용 카드 4 */}
+              <div className={`${styles.card} ${styles.topBorderedCard}`}>
+                <img
+                  src="/images/삼성로고.png"
+                  alt="삼성로고"
+                  className={styles.cardCompanyLogo}
+                />
+                <h3 className={styles.cardTitle}>
+                  시스템 소프트웨어 개발 엔지니어 채용
+                </h3>
+                <p className={styles.cardCompany}>삼성전자(주)</p>
+                <div className={styles.cardTags}>
+                  <span className={styles.cardTag}>
+                    <i>📍</i> 경기/수원
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>🏢</i> 신입/경력
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>♿</i> 대졸 ↑
+                  </span>
+                </div>
+                <div className={styles.cardBottom}>
+                  <div>
+                    <span
+                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
+                    >
+                      인기공고 주간 TOP10
+                    </span>
+                  </div>
+                  <div>
+                    <span>~05.15(수)</span>
                     <button className={styles.likeButton}>♡</button>
                   </div>
                 </div>
@@ -176,12 +213,9 @@ const Main = ({ activeMenu, handleMenuChange }) => {
           </section>
 
           {/* 최고의 인기 공고 */}
-          <section className={styles.mainSection}>
+          <section id="popular-jobs" className={styles.mainSection}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>최고의 인기 공고</h2>
-              <Link to="#" className={styles.viewAll}>
-                내 조건 정보 입력하기
-              </Link>
             </div>
 
             <div className={styles.cardGrid}>
@@ -289,6 +323,43 @@ const Main = ({ activeMenu, handleMenuChange }) => {
                   </div>
                   <div>
                     <span>~05.08(목)</span>
+                    <button className={styles.likeButton}>♡</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* 채용 카드 4 */}
+              <div className={styles.card}>
+                <img
+                  src="/images/삼성로고.png"
+                  alt="삼성로고"
+                  className={styles.cardCompanyLogo}
+                />
+                <h3 className={styles.cardTitle}>
+                  시스템 소프트웨어 개발 엔지니어 채용
+                </h3>
+                <p className={styles.cardCompany}>삼성전자(주)</p>
+                <div className={styles.cardTags}>
+                  <span className={styles.cardTag}>
+                    <i>📍</i> 경기/수원
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>🏢</i> 신입/경력
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>♿</i> 대졸 ↑
+                  </span>
+                </div>
+                <div className={styles.cardBottom}>
+                  <div>
+                    <span
+                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
+                    >
+                      인기공고 주간 TOP10
+                    </span>
+                  </div>
+                  <div>
+                    <span>~05.15(수)</span>
                     <button className={styles.likeButton}>♡</button>
                   </div>
                 </div>
@@ -297,12 +368,9 @@ const Main = ({ activeMenu, handleMenuChange }) => {
           </section>
 
           {/* 요즘 주목받는 공고 */}
-          <section className={styles.mainSection}>
+          <section id="trending-jobs" className={styles.mainSection}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>요즘 주목받는 공고</h2>
-              <Link to="#" className={styles.viewAll}>
-                내 조건 정보 입력하기
-              </Link>
             </div>
 
             <div className={styles.cardGrid}>
@@ -414,9 +482,51 @@ const Main = ({ activeMenu, handleMenuChange }) => {
                   </div>
                 </div>
               </div>
+
+              {/* 채용 카드 4 */}
+              <div className={styles.card}>
+                <img
+                  src="/images/삼성로고.png"
+                  alt="삼성로고"
+                  className={styles.cardCompanyLogo}
+                />
+                <h3 className={styles.cardTitle}>
+                  시스템 소프트웨어 개발 엔지니어 채용
+                </h3>
+                <p className={styles.cardCompany}>삼성전자(주)</p>
+                <div className={styles.cardTags}>
+                  <span className={styles.cardTag}>
+                    <i>📍</i> 경기/수원
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>🏢</i> 신입/경력
+                  </span>
+                  <span className={styles.cardTag}>
+                    <i>♿</i> 대졸 ↑
+                  </span>
+                </div>
+                <div className={styles.cardBottom}>
+                  <div>
+                    <span
+                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
+                    >
+                      인기공고 주간 TOP10
+                    </span>
+                  </div>
+                  <div>
+                    <span>~05.15(수)</span>
+                    <button className={styles.likeButton}>♡</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         </main>
+
+        {/* 사이드 내비게이션 */}
+        <SideNavigation />
+
+        {/* 챗봇 */}
         <div className={styles.chatbotContainer}>
           <img
             src="/images/chatbot.png"
