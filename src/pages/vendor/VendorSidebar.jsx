@@ -51,7 +51,7 @@ const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
             알림 설정
           </Link>
         </li>
-        <li className={styles.logoutItem}>로그아웃</li>
+        <li className={styles.logoutItem}><Link to="/">로그아웃</Link></li>
       </ul>
     </div>
   );
