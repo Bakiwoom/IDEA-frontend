@@ -1,0 +1,132 @@
+@charset "UTF-8";
+
+.container{
+    /* background-color: rgb(219, 255, 243); */
+    width: 100%;
+    min-height: 100%;
+    padding-left: 40px;
+    box-sizing: border-box;
+}
+
+.topBox{
+    display: flex;
+    padding-top: 50px;
+}
+
+/*프로필 공간*/
+.profileContainer{
+    background-color:#fff;
+    width: 360px;
+    min-height: 230px;
+    border-radius: 5px;
+}
+
+/*지원현황 수치 공간*/
+.numberBox{
+    background-color:#fff;
+    width: 570px;
+    margin-left: 40px;
+    min-height: 230px;
+    border-radius: 5px;
+}
+
+/*프로필 내용*/
+.profileFlexBox{
+    display: flex;
+    /* justify-content: space-between; */
+    height: calc(230px - 100px);
+    /* background-color: aqua; */
+    margin-top: 25px;
+    padding-left: 45px;
+}
+.profileImgBox{
+    width: 110px;
+    height: 120px;
+    border-radius: 40%;
+    border: 1px solid var(--login-hiddenfont-color);
+}
+.profileTextBox{
+    padding-left: 20px;
+    margin-top: 25px;
+}
+.name{
+    font-size: 20px;
+}
+.state{
+    font-size: 13px;
+    color: rgb(255, 57, 57);
+}
+
+.profileItemBox{
+    padding: 5px 20px 0 40px;
+}
+.profileItem ul{
+    display: flex;
+    justify-content: space-between;
+}
+.profileItem li:first-child{
+    font-weight: bold;
+    font-size: 15px;
+}
+.profileItem span{
+    color: rgb(47, 51, 255);
+    padding-right: 5px;
+}
+
+
+/*지원현황 수치 내용*/
+.numberTitleBox{
+    width: 90%;
+    margin: 0 auto;
+    font-size: 25px;
+    padding: 10px 0 10px 0;
+    border-bottom: 2px solid var(--login-hiddenfont-color);
+}
+.numberTextBox{
+    display: flex;
+    width: 90%;
+    margin: auto;
+    gap: 1;
+}
+.number{
+    width: 256px;
+    height: 100px;
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+}
+.numberLine{
+    border-right: 2px solid #dadada;
+}
+.count{
+    font-size: 25px;
+    font-weight: bold;
+}
+.numberName{
+    font-size: 13px;
+    margin-top: 5px;
+    color: var(--login-hiddenfont-color);
+}
+
+/*지원내역 리스트*/
+.listBox{
+    width: 970px;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 5px;
+    margin-top: 20px;
+    padding: 15px 0 0 25px;
+}
+.listBox h3{
+    width: 98%;
+    font-size: 25px;
+    padding-bottom: 5px;
+    /* border-bottom: 1px solid var(--login-hiddenfont-color); */
+}
+.listBox table{
+    margin-top: 25px;
+    width: 98%;
+}
+.listBox table button{
+    cursor: pointer;
+}

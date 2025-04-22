@@ -1,0 +1,68 @@
+/* 공통 스타일 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 헤더 스타일 */
+.header {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.headerLeft{
+    /* background-color: aqua; */
+}
+.headerLeft span{
+    padding-left: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.logo {
+    font-size: 40px;
+    font-weight: bold;
+    color: #4263eb;
+    text-decoration: none;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+}
+
+.profileButton {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.profileImage {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #adb5bd;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.userName {
+  font-size: 14px;
+}
