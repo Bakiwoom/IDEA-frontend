@@ -12,7 +12,7 @@ const Header = () => {
         <div className={styles.headerRight}>
           <button className={styles.profileButton}>
             <div className={styles.profileImage}>차</div>
-            <span>차은우님</span>
+            <span className={styles.userName}>차은우님</span>
           </button>
         </div>
       </div>
