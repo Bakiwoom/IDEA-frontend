@@ -15,10 +15,10 @@ const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
             className={styles.menuLink}
             onClick={() => handleMenuChange("job-management")}
           >
-            공고 관리
+            지원자 관리
           </Link>
         </li>
-        <li
+        {/* <li
           className={activeMenu === "applicant-management" ? styles.active : ""}
         >
           <Link
@@ -28,7 +28,7 @@ const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
           >
             지원자 관리
           </Link>
-        </li>
+        </li> */}
         <li className={activeMenu === "info-management" ? styles.active : ""}>
           <Link
             to="/vendor/info/management"
