@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "../assets/css/layout/Header.module.css";
 
+import { USER_MYPAGE_MAIN } from "../routes/contantsRoutes";
+
 const Header = ({type}) => {
   
   let title = '';
@@ -35,7 +37,7 @@ const Header = ({type}) => {
         <div className={styles.headerRight}>
           <button className={styles.profileButton}>
             <div className={styles.profileImage}>차</div>
-            <span className={styles.userName}>차은우님</span>
+            <Link to={USER_MYPAGE_MAIN}><span>님</span></Link>
           </button>
         </div>
       </div>

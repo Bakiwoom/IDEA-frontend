@@ -1,0 +1,46 @@
+@charset "UTF-8";
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.nav {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.navContainer {
+    display: flex;
+    align-items: center;
+}
+
+.menuButton {
+    background: none;
+    border: none;
+    font-size: 20px;
+    padding: 15px 15px 15px 0;
+    cursor: pointer;
+}
+
+.navMenu {
+    display: flex;
+    list-style: none;
+}
+
+.navMenu li {
+    margin-right: 20px;
+}
+
+.navMenu a {
+    display: block;
+    padding: 15px 10px;
+    text-decoration: none;
+    color: #495057;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.navMenu a.active {
+    color: #4263eb;
+    border-bottom: 2px solid #4263eb;
+}
