@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import SideNavigation from "./SideNavigation";
 import styles from "../../assets/css/main/Main.module.css";
 
+import { CATEGORY_PAGE } from "../../routes/contantsRoutes";
+
 const Main = () => {
 
   return (
@@ -15,7 +17,7 @@ const Main = () => {
             <button className={styles.menuButton}>☰</button>
             <ul className={styles.navMenu}>
               <li>
-                <Link to="/vendor/sidebar" className={styles.active}>
+                <Link to={CATEGORY_PAGE} className={styles.active}>
                   채용정보
                 </Link>
               </li>
