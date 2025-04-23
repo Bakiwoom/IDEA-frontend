@@ -145,9 +145,9 @@ const InfoManagement = () => {
       <div className={styles.mainContent}>
         <div className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>내 정보 관리</h1>
-          <button className={styles.actionButton} onClick={handleSubmit}>
+          {/* <button className={styles.actionButton} onClick={handleSubmit}>
             저장
-          </button>
+          </button> */}
         </div>
 
         {/* 정보 완성도 표시 */}

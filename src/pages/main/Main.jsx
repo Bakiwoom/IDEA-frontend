@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import SideNavigation from "./SideNavigation";
 import styles from "../../assets/css/main/Main.module.css";
 
+import { CATEGORY_PAGE } from "../../routes/contantsRoutes";
+
 const Main = () => {
 
   return (
@@ -15,7 +17,7 @@ const Main = () => {
             <button className={styles.menuButton}>☰</button>
             <ul className={styles.navMenu}>
               <li>
-                <Link to="#" className={styles.active}>
+                <Link to={CATEGORY_PAGE} className={styles.active}>
                   채용정보
                 </Link>
               </li>
@@ -82,16 +84,13 @@ const Main = () => {
                   <span className={styles.cardTag}>
                     <i>🏢</i> 신입/경력
                   </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 학력무관
-                  </span>
                 </div>
                 <div className={styles.cardBottom}>
                   <div>
                     <span
                       className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
                     >
-                      인기공고 주간 TOP100
+                      시각장애
                     </span>
                   </div>
                   <div>
@@ -119,16 +118,13 @@ const Main = () => {
                   <span className={styles.cardTag}>
                     <i>🏢</i> 신입/경력
                   </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 학력무관
-                  </span>
                 </div>
                 <div className={styles.cardBottom}>
                   <div>
                     <span
                       className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
                     >
-                      마감임박 스크랩 지원 TOP100
+                      청각장애
                     </span>
                   </div>
                   <div>
@@ -154,16 +150,13 @@ const Main = () => {
                   <span className={styles.cardTag}>
                     <i>🏢</i> 신입/경력
                   </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 초대졸 ↑
-                  </span>
                 </div>
                 <div className={styles.cardBottom}>
                   <div>
                     <span
                       className={`${styles.cardBadge} ${styles.cardBadgeNew}`}
                     >
-                      취업축하금
+                      지체장애
                     </span>
                   </div>
                   <div>
@@ -191,16 +184,13 @@ const Main = () => {
                   <span className={styles.cardTag}>
                     <i>🏢</i> 신입/경력
                   </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 대졸 ↑
-                  </span>
                 </div>
                 <div className={styles.cardBottom}>
                   <div>
                     <span
                       className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
                     >
-                      인기공고 주간 TOP10
+                      내부기관장애
                     </span>
                   </div>
                   <div>
@@ -237,16 +227,13 @@ const Main = () => {
                   <span className={styles.cardTag}>
                     <i>🏢</i> 신입/경력
                   </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 학력무관
-                  </span>
                 </div>
                 <div className={styles.cardBottom}>
                   <div>
                     <span
                       className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
                     >
-                      인기공고 주간 TOP100
+                      시각장애
                     </span>
                   </div>
                   <div>
@@ -274,16 +261,13 @@ const Main = () => {
                   <span className={styles.cardTag}>
                     <i>🏢</i> 신입/경력
                   </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 학력무관
-                  </span>
                 </div>
                 <div className={styles.cardBottom}>
                   <div>
                     <span
                       className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
                     >
-                      마감임박 스크랩 지원 TOP100
+                      청각장애
                     </span>
                   </div>
                   <div>
@@ -309,16 +293,13 @@ const Main = () => {
                   <span className={styles.cardTag}>
                     <i>🏢</i> 신입/경력
                   </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 초대졸 ↑
-                  </span>
                 </div>
                 <div className={styles.cardBottom}>
                   <div>
                     <span
                       className={`${styles.cardBadge} ${styles.cardBadgeNew}`}
                     >
-                      취업축하금
+                      지체장애
                     </span>
                   </div>
                   <div>
@@ -346,16 +327,13 @@ const Main = () => {
                   <span className={styles.cardTag}>
                     <i>🏢</i> 신입/경력
                   </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 대졸 ↑
-                  </span>
                 </div>
                 <div className={styles.cardBottom}>
                   <div>
                     <span
                       className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
                     >
-                      인기공고 주간 TOP10
+                      내부기관장애
                     </span>
                   </div>
                   <div>
@@ -392,16 +370,13 @@ const Main = () => {
                   <span className={styles.cardTag}>
                     <i>🏢</i> 신입/경력
                   </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 학력무관
-                  </span>
                 </div>
                 <div className={styles.cardBottom}>
                   <div>
                     <span
                       className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
                     >
-                      인기공고 주간 TOP100
+                      시각장애
                     </span>
                   </div>
                   <div>
@@ -429,16 +404,13 @@ const Main = () => {
                   <span className={styles.cardTag}>
                     <i>🏢</i> 신입/경력
                   </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 학력무관
-                  </span>
                 </div>
                 <div className={styles.cardBottom}>
                   <div>
                     <span
                       className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
                     >
-                      마감임박 스크랩 지원 TOP100
+                     청각장애
                     </span>
                   </div>
                   <div>
@@ -464,16 +436,13 @@ const Main = () => {
                   <span className={styles.cardTag}>
                     <i>🏢</i> 신입/경력
                   </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 초대졸 ↑
-                  </span>
                 </div>
                 <div className={styles.cardBottom}>
                   <div>
                     <span
                       className={`${styles.cardBadge} ${styles.cardBadgeNew}`}
                     >
-                      취업축하금
+                      지체장애
                     </span>
                   </div>
                   <div>
@@ -501,16 +470,13 @@ const Main = () => {
                   <span className={styles.cardTag}>
                     <i>🏢</i> 신입/경력
                   </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 대졸 ↑
-                  </span>
                 </div>
                 <div className={styles.cardBottom}>
                   <div>
                     <span
                       className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
                     >
-                      인기공고 주간 TOP10
+                      내부기관장애
                     </span>
                   </div>
                   <div>

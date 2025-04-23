@@ -29,14 +29,12 @@ const UserHeaderLayout = () => {
             {showFullLayout &&(
                 <>
                     <Navbar />
-                    
                     <div style={{display:"flex",width:"1200px", margin:"0 auto", minHeight:"calc(100vh - 130px)", boxSizing:"border-box"}}>
                         <UserSidebar />
                         <div style={{ width:"calc(1200px - 170px)", boxSizing:"border-box"}}>
                             <Outlet />
                         </div>
                     </div>
-                    
                 </>
             )}
 
