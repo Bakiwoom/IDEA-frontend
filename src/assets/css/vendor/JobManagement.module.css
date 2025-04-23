@@ -31,7 +31,7 @@
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 10px 24px;
+  padding: 10px 20px;
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.2s;
@@ -46,7 +46,7 @@
   color: #222;
   border: none;
   border-radius: 8px;
-  padding: 8px 18px;
+  padding: 7px 11px;
   font-size: 0.97rem;
   cursor: pointer;
   margin-right: 4px;
@@ -88,7 +88,7 @@
 .statusBadge {
   display: inline-block;
   border-radius: 6px;
-  padding: 2px 12px;
+  padding: 7px 10px;
   font-size: 0.95rem;
   font-weight: 600;
 }

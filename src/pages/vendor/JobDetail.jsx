@@ -5,7 +5,13 @@ import styles from "../../assets/css/vendor/JobDetail.module.css";
 import VendorSidebar from "./VendorSidebar";
 
 const JobDetail = () => {
+  const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState("job-management");
+
+  // 지원자 상세보기 버튼 클릭 핸들러
+  const handleViewDetail = () => {
+    navigate(`/vendor/applicant/management`);
+  };
 
   // 메뉴 변경 핸들러
   const handleMenuChange = (menuId) => {
@@ -23,7 +29,15 @@ const JobDetail = () => {
 
       <section className={styles.mainContent}>
         <div className={styles.jobSection}>
-          <div className={styles.jobTitle}>[공고] 웹 접근성 담당자 채용</div>
+          <div className={styles.jobTitle}>
+            <div>[공고] 웹 접근성 담당자 채용</div>
+            <button
+              className={styles.btnPrimary}
+              onClick={() => handleViewDetail()}
+            >
+              지원자 상세보기
+            </button>
+          </div>
           <table className={styles.table}>
             <thead>
               <tr>

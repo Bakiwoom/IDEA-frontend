@@ -81,7 +81,7 @@ const ApplicantManagement = () => {
         >
           <div className={styles.pageHeader}>
             <h1 className={styles.pageTitle}>지원자 관리</h1>
-            <button className={styles.actionButton}>+ 면접 일정 등록</button>
+            {/* <button className={styles.actionButton}>+ 면접 일정 등록</button> */}
           </div>
 
           {/* 필터 섹션 */}
