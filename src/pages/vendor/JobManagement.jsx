@@ -5,8 +5,8 @@ import styles from "../../assets/css/vendor/JobManagement.module.css";
 import VendorSidebar from "./VendorSidebar";
 
 const JobManagement = () => {
+  const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState("job-management");
-  const navigate = useNavigate(); // useNavigate 훅 사용
 
   // 메뉴 변경 핸들러
   const handleMenuChange = (menuId) => {
@@ -30,7 +30,7 @@ const JobManagement = () => {
       <section className={styles.mainContent}>
         <div className={styles.mainHeader}>
           <h1>내 공고 관리</h1>
-          <button className={styles.btnPrimary}>+ 새 공고 등록</button>
+          {/* <button className={styles.btnPrimary}>+ 새 공고 등록</button> */}
         </div>
         <table className={styles.table}>
           <thead>
