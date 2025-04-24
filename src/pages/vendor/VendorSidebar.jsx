@@ -43,13 +43,13 @@ const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
             activeMenu === "notification-settings" ? styles.active : ""
           }
         >
-          <Link
+          {/* <Link
             to="/vendor/notification/settings"
             className={styles.menuLink}
             onClick={() => handleMenuChange("notification-settings")}
           >
             알림 설정
-          </Link>
+          </Link> */}
         </li>
         <li className={styles.logoutItem}><Link to="/">로그아웃</Link></li>
       </ul>

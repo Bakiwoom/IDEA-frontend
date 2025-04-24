@@ -151,7 +151,7 @@ const InfoManagement = () => {
         </div>
 
         {/* 정보 완성도 표시 */}
-        <div className={styles.completionStatus}>
+        {/* <div className={styles.completionStatus}>
           <div className={styles.completionBar}>
             <div className={styles.completionProgress}></div>
           </div>
@@ -161,7 +161,7 @@ const InfoManagement = () => {
               인증 완료
             </span>
           </div>
-        </div>
+        </div> */}
 
         {/* 탭 네비게이션 */}
         <div className={styles.tabs}>
@@ -181,14 +181,14 @@ const InfoManagement = () => {
           >
             담당자 정보
           </div>
-          <div
+          {/* <div
             className={`${styles.tab} ${
               activeTab === "employment-status" ? styles.active : ""
             }`}
             onClick={() => handleTabChange("employment-status")}
           >
             장애인 고용 현황
-          </div>
+          </div> */}
           <div
             className={`${styles.tab} ${
               activeTab === "account-settings" ? styles.active : ""
@@ -465,7 +465,7 @@ const InfoManagement = () => {
           </div>
         </div>
 
-        {/* 장애인 고용 현황 탭 */}
+        {/* 장애인 고용 현황 탭
         <div
           className={`${styles.tabContent} ${
             activeTab === "employment-status" ? styles.active : ""
@@ -704,7 +704,7 @@ const InfoManagement = () => {
               </select>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* 계정 설정 탭 */}
         <div
