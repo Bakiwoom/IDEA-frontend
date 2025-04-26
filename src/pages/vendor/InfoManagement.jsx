@@ -7,22 +7,24 @@ import VendorSidebar from "./VendorSidebar";
 const InfoManagement = () => {
   const [activeMenu, setActiveMenu] = useState("info-management");
   const [activeTab, setActiveTab] = useState("company-info");
+  const navigate = useNavigate();
+  //const token = localStorage.getItem('token'); // JWT 토큰 가져오기
 
   const [companyInfo, setCompanyInfo] = useState({
-    name: "(주)디어테크",
-    businessNumber: "123-45-67890",
-    businessType: "정보통신업",
-    size: "중견기업",
-    foundingYear: "2020",
-    employeeCount: "350",
-    address: "서울시 강남구 테헤란로 123, 7층",
-    phone: "02-1234-5678",
-    email: "contact@deartech.co.kr",
-    website: "https://www.deartech.co.kr",
+    name: "",
+    businessNumber: "",
+    businessType: "",
+    size: "",
+    foundingYear: "",
+    employeeCount: "",
+    address: "",
+    phone: "",
+    email: "",
+    website: "",
     logo: null,
-    intro:
-      "(주)디어테크는 AI 기술을 활용하여 사회적 가치를 창출하는 기업입니다. 장애인 고용 및 복지 향상을 위한 혁신적인 서비스를 개발하고 있습니다.",
+    intro: "",
   });
+
 
   const [managerInfo, setManagerInfo] = useState({
     name: "홍길동",
@@ -76,61 +78,88 @@ const InfoManagement = () => {
     setActiveTab(tabId);
   };
 
-  // 회사 정보 업데이트 핸들러
-  const handleCompanyInfoChange = (e) => {
-    const { id, value, files } = e.target;
-    if (id === "company-logo" && files && files[0]) {
-      setCompanyInfo({ ...companyInfo, logo: files[0] });
+  // 회사 정보 업데이트 핸들러 (커리 함수 방식)
+  const handleCompanyInfoChange = (field) => (e) => {
+    if (field === 'logo' && e.target.files && e.target.files[0]) {
+      setCompanyInfo({ ...companyInfo, logo: e.target.files[0] });
     } else {
-      const fieldName = id.replace("company-", "").replace("-", "");
-      setCompanyInfo({ ...companyInfo, [fieldName]: value });
+      setCompanyInfo({ ...companyInfo, [field]: e.target.value });
     }
   };
 
-  // 담당자 정보 업데이트 핸들러
-  const handleManagerInfoChange = (e) => {
-    const { id, value, checked, type } = e.target;
-    const fieldName = id.replace("manager-", "");
-    if (type === "checkbox") {
-      setManagerInfo({ ...managerInfo, [fieldName]: checked });
+  // 담당자 정보 업데이트 핸들러 (커리 함수 방식)
+  const handleManagerInfoChange = (field) => (e) => {
+    if (field === 'receiveNotifications') {
+      setManagerInfo({ ...managerInfo, [field]: e.target.checked });
     } else {
-      setManagerInfo({ ...managerInfo, [fieldName]: value });
+      setManagerInfo({ ...managerInfo, [field]: e.target.value });
     }
   };
 
-  // 고용 정보 업데이트 핸들러
-  const handleEmploymentInfoChange = (e) => {
-    const { id, value, checked, type } = e.target;
+  // 계정 정보 업데이트 핸들러 (커리 함수 방식)
+  const handleAccountInfoChange = (field) => (e) => {
+    setAccountInfo({ ...accountInfo, [field]: e.target.value });
+  };
 
-    if (type === "checkbox") {
-      setEmploymentInfo({
-        ...employmentInfo,
-        benefits: {
-          ...employmentInfo.benefits,
-          [id]: checked,
+  // 기업 정보 저장 핸들러
+  const handleCompanyInfoSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+
+      // 기업 정보 데이터 추가
+      formData.append('name', companyInfo.name);
+      formData.append('businessNumber', companyInfo.businessNumber);
+      formData.append('businessType', companyInfo.businessType);
+      formData.append('size', companyInfo.size);
+      formData.append('foundingYear', companyInfo.foundingYear);
+      formData.append('employeeCount', companyInfo.employeeCount);
+      formData.append('address', companyInfo.address);
+      formData.append('phone', companyInfo.phone);
+      formData.append('email', companyInfo.email);
+      formData.append('website', companyInfo.website);
+      formData.append('intro', companyInfo.intro);
+
+      console.log("=== FormData 내용 확인 ===");
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+
+      // 로고 파일이 있는 경우에만 추가
+      if (companyInfo.logo) {
+        formData.append('logo', companyInfo.logo);
+      }
+
+      const response = await axios({
+        method: 'post',
+        url: `${process.env.REACT_APP_API_URL}/api/companies/me/company/save`,
+        headers: {
+          //Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
         },
+        data: formData
       });
-    } else {
-      const fieldName = id.replace("disabled-", "").replace("-count", "");
-      setEmploymentInfo({
-        ...employmentInfo,
-        [fieldName]: type === "number" ? parseInt(value) : value,
-      });
-    }
-  };
 
-  // 계정 정보 업데이트 핸들러
-  const handleAccountInfoChange = (e) => {
-    const { id, value } = e.target;
-    const fieldName = id.replace("-password", "Password").replace("login-", "");
-    setAccountInfo({ ...accountInfo, [fieldName]: value });
+      if (response.data.result === "success") {
+        alert("기업 정보가 저장되었습니다.");
+      } else {
+        alert("기업 정보 저장에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("기업 정보 저장 실패:", error);
+      alert("기업 정보 저장 중 오류가 발생했습니다.");
+    }
   };
 
   // 폼 제출 핸들러
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 여기에 데이터 저장 로직 추가
-    alert("변경사항이 저장되었습니다.");
+    if (activeTab === "company-info") {
+      handleCompanyInfoSubmit(e);
+    } else {
+      alert("해당 기능은 아직 구현되지 않았습니다.");
+    }
   };
 
   return (
@@ -145,54 +174,28 @@ const InfoManagement = () => {
       <div className={styles.mainContent}>
         <div className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>내 정보 관리</h1>
-          {/* <button className={styles.actionButton} onClick={handleSubmit}>
-            저장
-          </button> */}
         </div>
-
-        {/* 정보 완성도 표시 */}
-        {/* <div className={styles.completionStatus}>
-          <div className={styles.completionBar}>
-            <div className={styles.completionProgress}></div>
-          </div>
-          <div className={styles.completionText}>
-            프로필 완성도: <strong>65%</strong> | 인증 상태:
-            <span className={`${styles.statusBadge} ${styles.statusVerified}`}>
-              인증 완료
-            </span>
-          </div>
-        </div> */}
 
         {/* 탭 네비게이션 */}
         <div className={styles.tabs}>
           <div
-            className={`${styles.tab} ${
-              activeTab === "company-info" ? styles.active : ""
-            }`}
+            className={`${styles.tab} ${activeTab === "company-info" ? styles.active : ""
+              }`}
             onClick={() => handleTabChange("company-info")}
           >
             기업 정보
           </div>
           <div
-            className={`${styles.tab} ${
-              activeTab === "manager-info" ? styles.active : ""
-            }`}
+            className={`${styles.tab} ${activeTab === "manager-info" ? styles.active : ""
+              }`}
             onClick={() => handleTabChange("manager-info")}
           >
             담당자 정보
           </div>
-          {/* <div
-            className={`${styles.tab} ${
-              activeTab === "employment-status" ? styles.active : ""
-            }`}
-            onClick={() => handleTabChange("employment-status")}
-          >
-            장애인 고용 현황
-          </div> */}
+
           <div
-            className={`${styles.tab} ${
-              activeTab === "account-settings" ? styles.active : ""
-            }`}
+            className={`${styles.tab} ${activeTab === "account-settings" ? styles.active : ""
+              }`}
             onClick={() => handleTabChange("account-settings")}
           >
             계정 설정
@@ -201,9 +204,8 @@ const InfoManagement = () => {
 
         {/* 기업 정보 탭 */}
         <div
-          className={`${styles.tabContent} ${
-            activeTab === "company-info" ? styles.active : ""
-          }`}
+          className={`${styles.tabContent} ${activeTab === "company-info" ? styles.active : ""
+            }`}
           id="company-info"
         >
           <div className={styles.infoBox}>
@@ -224,7 +226,7 @@ const InfoManagement = () => {
                   type="text"
                   id="company-name"
                   value={companyInfo.name}
-                  onChange={handleCompanyInfoChange}
+                  onChange={handleCompanyInfoChange('name')}
                 />
               </div>
               <div className={styles.formGroup}>
@@ -233,13 +235,8 @@ const InfoManagement = () => {
                   type="text"
                   id="business-number"
                   value={companyInfo.businessNumber}
-                  disabled
+                  onChange={handleCompanyInfoChange('businessNumber')}
                 />
-                <span
-                  className={`${styles.statusBadge} ${styles.statusVerified}`}
-                >
-                  인증완료
-                </span>
               </div>
             </div>
             <div className={styles.formRow}>
@@ -250,7 +247,7 @@ const InfoManagement = () => {
                 <select
                   id="business-type"
                   value={companyInfo.businessType}
-                  onChange={handleCompanyInfoChange}
+                  onChange={handleCompanyInfoChange('businessType')}
                 >
                   <option>선택하세요</option>
                   <option value="제조업">제조업</option>
@@ -268,7 +265,7 @@ const InfoManagement = () => {
                 <select
                   id="company-size"
                   value={companyInfo.size}
-                  onChange={handleCompanyInfoChange}
+                  onChange={handleCompanyInfoChange('size')}
                 >
                   <option>선택하세요</option>
                   <option value="소기업">소기업</option>
@@ -285,7 +282,7 @@ const InfoManagement = () => {
                   type="text"
                   id="founding-year"
                   value={companyInfo.foundingYear}
-                  onChange={handleCompanyInfoChange}
+                  onChange={handleCompanyInfoChange('foundingYear')}
                 />
               </div>
               <div className={styles.formGroup}>
@@ -296,7 +293,7 @@ const InfoManagement = () => {
                   type="number"
                   id="employee-count"
                   value={companyInfo.employeeCount}
-                  onChange={handleCompanyInfoChange}
+                  onChange={handleCompanyInfoChange('employeeCount')}
                 />
               </div>
             </div>
@@ -308,7 +305,7 @@ const InfoManagement = () => {
                 type="text"
                 id="company-address"
                 value={companyInfo.address}
-                onChange={handleCompanyInfoChange}
+                onChange={handleCompanyInfoChange('address')}
               />
             </div>
             <div className={styles.formRow}>
@@ -320,7 +317,7 @@ const InfoManagement = () => {
                   type="text"
                   id="company-phone"
                   value={companyInfo.phone}
-                  onChange={handleCompanyInfoChange}
+                  onChange={handleCompanyInfoChange('phone')}
                 />
               </div>
               <div className={styles.formGroup}>
@@ -331,7 +328,7 @@ const InfoManagement = () => {
                   type="email"
                   id="company-email"
                   value={companyInfo.email}
-                  onChange={handleCompanyInfoChange}
+                  onChange={handleCompanyInfoChange('email')}
                 />
               </div>
             </div>
@@ -346,7 +343,7 @@ const InfoManagement = () => {
                 type="url"
                 id="company-website"
                 value={companyInfo.website}
-                onChange={handleCompanyInfoChange}
+                onChange={handleCompanyInfoChange('website')}
               />
             </div>
             <div className={styles.formRow}>
@@ -355,7 +352,7 @@ const InfoManagement = () => {
                 <input
                   type="file"
                   id="company-logo"
-                  onChange={handleCompanyInfoChange}
+                  onChange={handleCompanyInfoChange('logo')}
                 />
                 <div className={styles.inputHelp}>
                   JPG, PNG 파일만 가능 (최대 2MB)
@@ -374,7 +371,7 @@ const InfoManagement = () => {
                 id="company-intro"
                 rows="4"
                 value={companyInfo.intro}
-                onChange={handleCompanyInfoChange}
+                onChange={handleCompanyInfoChange('intro')}
               ></textarea>
             </div>
           </div>
@@ -382,9 +379,8 @@ const InfoManagement = () => {
 
         {/* 담당자 정보 탭 */}
         <div
-          className={`${styles.tabContent} ${
-            activeTab === "manager-info" ? styles.active : ""
-          }`}
+          className={`${styles.tabContent} ${activeTab === "manager-info" ? styles.active : ""
+            }`}
           id="manager-info"
         >
           <div className={styles.formSection}>
@@ -398,7 +394,7 @@ const InfoManagement = () => {
                   type="text"
                   id="manager-name"
                   value={managerInfo.name}
-                  onChange={handleManagerInfoChange}
+                  onChange={handleManagerInfoChange('name')}
                 />
               </div>
               <div className={styles.formGroup}>
@@ -409,7 +405,7 @@ const InfoManagement = () => {
                   type="text"
                   id="manager-position"
                   value={managerInfo.position}
-                  onChange={handleManagerInfoChange}
+                  onChange={handleManagerInfoChange('position')}
                 />
               </div>
             </div>
@@ -422,7 +418,7 @@ const InfoManagement = () => {
                   type="text"
                   id="manager-phone"
                   value={managerInfo.phone}
-                  onChange={handleManagerInfoChange}
+                  onChange={handleManagerInfoChange('phone')}
                 />
               </div>
               <div className={styles.formGroup}>
@@ -433,7 +429,7 @@ const InfoManagement = () => {
                   type="email"
                   id="manager-email"
                   value={managerInfo.email}
-                  onChange={handleManagerInfoChange}
+                  onChange={handleManagerInfoChange('email')}
                 />
               </div>
             </div>
@@ -443,7 +439,7 @@ const InfoManagement = () => {
                 type="text"
                 id="manager-department"
                 value={managerInfo.department}
-                onChange={handleManagerInfoChange}
+                onChange={handleManagerInfoChange('department')}
               />
             </div>
             <div className={styles.formGroup}>
@@ -451,12 +447,7 @@ const InfoManagement = () => {
                 <input
                   type="checkbox"
                   checked={managerInfo.receiveNotifications}
-                  onChange={(e) =>
-                    setManagerInfo({
-                      ...managerInfo,
-                      receiveNotifications: e.target.checked,
-                    })
-                  }
+                  onChange={handleManagerInfoChange('receiveNotifications')}
                   style={{ width: "auto", marginRight: "8px" }}
                 />
                 담당자 정보로 알림 수신 (이메일, SMS)
@@ -465,252 +456,10 @@ const InfoManagement = () => {
           </div>
         </div>
 
-        {/* 장애인 고용 현황 탭
-        <div
-          className={`${styles.tabContent} ${
-            activeTab === "employment-status" ? styles.active : ""
-          }`}
-          id="employment-status"
-        >
-          <div className={styles.infoBox}>
-            장애인 고용 현황 정보는 더 정확한 혜택 분석에 활용됩니다. 정확한
-            정보를 입력할수록 맞춤형 혜택 정보를 받아보실 수 있습니다.
-          </div>
-
-          <div className={styles.formSection}>
-            <h2 className={styles.sectionTitle}>장애인 고용 현황</h2>
-            <div className={styles.formRow}>
-              <div className={styles.formGroup}>
-                <label htmlFor="disabled-employee-count">
-                  현재 장애인 고용 인원{" "}
-                  <span className={styles.requiredMark}>*</span>
-                </label>
-                <input
-                  type="number"
-                  id="disabled-employee-count"
-                  value={employmentInfo.currentEmployed}
-                  onChange={handleEmploymentInfoChange}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="mandatory-count">의무 고용 인원</label>
-                <input
-                  type="number"
-                  id="mandatory-count"
-                  value={employmentInfo.requiredEmployed}
-                  disabled
-                />
-                <div className={styles.inputHelp}>
-                  전체 임직원 수 기준으로 자동 계산됩니다 (3.1%)
-                </div>
-              </div>
-            </div>
-            <div className={styles.formRow}>
-              <div className={styles.formGroup}>
-                <label htmlFor="employment-rate">장애인 고용률</label>
-                <input
-                  type="text"
-                  id="employment-rate"
-                  value={employmentInfo.employmentRate}
-                  disabled
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="shortage">미달 인원</label>
-                <input
-                  type="number"
-                  id="shortage"
-                  value={employmentInfo.shortage}
-                  disabled
-                />
-              </div>
-            </div>
-
-            <h3 className={styles.subSectionTitle}>고용 유형별 현황</h3>
-            <div className={styles.formRow}>
-              <div className={styles.formGroup}>
-                <label htmlFor="fulltime-count">정규직</label>
-                <input
-                  type="number"
-                  id="fulltime-count"
-                  value={employmentInfo.fulltime}
-                  onChange={handleEmploymentInfoChange}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="contract-count">계약직</label>
-                <input
-                  type="number"
-                  id="contract-count"
-                  value={employmentInfo.contract}
-                  onChange={handleEmploymentInfoChange}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="parttime-count">시간제</label>
-                <input
-                  type="number"
-                  id="parttime-count"
-                  value={employmentInfo.parttime}
-                  onChange={handleEmploymentInfoChange}
-                />
-              </div>
-            </div>
-
-            <h3 className={styles.subSectionTitle}>장애 유형별 현황</h3>
-            <div className={styles.formRow}>
-              <div className={styles.formGroup}>
-                <label htmlFor="physical-count">지체장애</label>
-                <input
-                  type="number"
-                  id="physical-count"
-                  value={employmentInfo.physical}
-                  onChange={handleEmploymentInfoChange}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="visual-count">시각장애</label>
-                <input
-                  type="number"
-                  id="visual-count"
-                  value={employmentInfo.visual}
-                  onChange={handleEmploymentInfoChange}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="hearing-count">청각장애</label>
-                <input
-                  type="number"
-                  id="hearing-count"
-                  value={employmentInfo.hearing}
-                  onChange={handleEmploymentInfoChange}
-                />
-              </div>
-            </div>
-            <div className={styles.formRow}>
-              <div className={styles.formGroup}>
-                <label htmlFor="intellectual-count">지적장애</label>
-                <input
-                  type="number"
-                  id="intellectual-count"
-                  value={employmentInfo.intellectual}
-                  onChange={handleEmploymentInfoChange}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="mental-count">정신장애</label>
-                <input
-                  type="number"
-                  id="mental-count"
-                  value={employmentInfo.mental}
-                  onChange={handleEmploymentInfoChange}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="developmental-count">발달장애</label>
-                <input
-                  type="number"
-                  id="developmental-count"
-                  value={employmentInfo.developmental}
-                  onChange={handleEmploymentInfoChange}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.formSection}>
-            <h2 className={styles.sectionTitle}>혜택 현황</h2>
-            <div className={styles.formGroup}>
-              <label>현재 받고 있는 장애인 고용 관련 혜택</label>
-              <div className={styles.checkboxGroup}>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    id="incentive"
-                    checked={employmentInfo.benefits.incentive}
-                    onChange={handleEmploymentInfoChange}
-                    style={{ width: "auto", marginRight: "8px" }}
-                  />
-                  고용장려금
-                </label>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    id="taxCredit"
-                    checked={employmentInfo.benefits.taxCredit}
-                    onChange={handleEmploymentInfoChange}
-                    style={{ width: "auto", marginRight: "8px" }}
-                  />
-                  장애인 고용 세액공제
-                </label>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    id="facility"
-                    checked={employmentInfo.benefits.facility}
-                    onChange={handleEmploymentInfoChange}
-                    style={{ width: "auto", marginRight: "8px" }}
-                  />
-                  편의시설 지원금
-                </label>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    id="jobCoach"
-                    checked={employmentInfo.benefits.jobCoach}
-                    onChange={handleEmploymentInfoChange}
-                    style={{ width: "auto", marginRight: "8px" }}
-                  />
-                  직무지도원 지원
-                </label>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    id="support"
-                    checked={employmentInfo.benefits.support}
-                    onChange={handleEmploymentInfoChange}
-                    style={{ width: "auto", marginRight: "8px" }}
-                  />
-                  근로지원인 지원
-                </label>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    id="commuting"
-                    checked={employmentInfo.benefits.commuting}
-                    onChange={handleEmploymentInfoChange}
-                    style={{ width: "auto", marginRight: "8px" }}
-                  />
-                  통근 지원
-                </label>
-              </div>
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="preferred-benefit">
-                우선적으로 받고 싶은 혜택
-              </label>
-              <select
-                id="preferred-benefit"
-                value={employmentInfo.preferredBenefit}
-                onChange={handleEmploymentInfoChange}
-              >
-                <option value="">선택하세요</option>
-                <option value="tax">세액공제/세금감면</option>
-                <option value="subsidy">인건비 지원</option>
-                <option value="facility">시설/장비 지원</option>
-                <option value="training">직무훈련 지원</option>
-                <option value="support">근로지원인/직무지도원</option>
-                <option value="consulting">컨설팅 지원</option>
-              </select>
-            </div>
-          </div>
-        </div> */}
-
         {/* 계정 설정 탭 */}
         <div
-          className={`${styles.tabContent} ${
-            activeTab === "account-settings" ? styles.active : ""
-          }`}
+          className={`${styles.tabContent} ${activeTab === "account-settings" ? styles.active : ""
+            }`}
           id="account-settings"
         >
           <div className={styles.formSection}>
@@ -732,7 +481,7 @@ const InfoManagement = () => {
                   id="current-password"
                   placeholder="현재 비밀번호 입력"
                   value={accountInfo.currentPassword}
-                  onChange={handleAccountInfoChange}
+                  onChange={handleAccountInfoChange('currentPassword')}
                 />
               </div>
               <div className={styles.formGroup}>
@@ -742,7 +491,7 @@ const InfoManagement = () => {
                   id="new-password"
                   placeholder="새 비밀번호 입력"
                   value={accountInfo.newPassword}
-                  onChange={handleAccountInfoChange}
+                  onChange={handleAccountInfoChange('newPassword')}
                 />
                 <div className={styles.inputHelp}>
                   영문, 숫자, 특수문자 조합 8자 이상
@@ -757,7 +506,7 @@ const InfoManagement = () => {
                   id="confirm-password"
                   placeholder="새 비밀번호 재입력"
                   value={accountInfo.confirmPassword}
-                  onChange={handleAccountInfoChange}
+                  onChange={handleAccountInfoChange('confirmPassword')}
                 />
               </div>
               <div
@@ -777,7 +526,7 @@ const InfoManagement = () => {
                 type="email"
                 id="login-email"
                 value={accountInfo.loginEmail}
-                onChange={handleAccountInfoChange}
+                onChange={handleAccountInfoChange('loginEmail')}
               />
               <div className={styles.inputHelp}>
                 계정 관련 알림 및 로그인에 사용됩니다
