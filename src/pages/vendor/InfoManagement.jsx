@@ -25,6 +25,10 @@ const InfoManagement = () => {
     intro: "",
   });
 
+  // useEffect 추가 - 컴포넌트 마운트 시 회사 정보 불러오기
+  useEffect(() => {
+    getCompanyDetail();
+  }, []);
 
   const [managerInfo, setManagerInfo] = useState({
     name: "홍길동",
@@ -81,7 +85,7 @@ const InfoManagement = () => {
   // 회사 정보 업데이트 핸들러 (커리 함수 방식)
   const handleCompanyInfoChange = (field) => (e) => {
     if (field === 'logo' && e.target.files && e.target.files[0]) {
-      setCompanyInfo({ ...companyInfo, logo: e.target.files[0] });
+      setCompanyInfo({ ...companyInfo, logoFile: e.target.files[0] });
     } else {
       setCompanyInfo({ ...companyInfo, [field]: e.target.value });
     }
@@ -127,8 +131,8 @@ const InfoManagement = () => {
       }
 
       // 로고 파일이 있는 경우에만 추가
-      if (companyInfo.logo) {
-        formData.append('logo', companyInfo.logo);
+      if (companyInfo.logoFile) {
+        formData.append('logo', companyInfo.logoFile);
       }
 
       const response = await axios({
@@ -159,6 +163,50 @@ const InfoManagement = () => {
       handleCompanyInfoSubmit(e);
     } else {
       alert("해당 기능은 아직 구현되지 않았습니다.");
+    }
+  };
+
+  // 회사 정보 가져오기 함수 수정
+  const getCompanyDetail = async () => {
+    //const token = localStorage.getItem("token");
+    
+    try {
+      const response = await axios({
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/api/companies/me/company/detail`,
+        responseType: "json",
+        // headers: {
+        //   Authorization: `Bearer ${token}`
+        // }
+      });
+  
+      if (response.data.result === "success") {
+        const detail = response.data.apiData;
+        
+        console.log(detail); // 데이터 확인 로그
+        
+        // 회사 정보 설정 - null 값은 빈 문자열로 처리
+        setCompanyInfo({
+          name: detail.name || "",
+          businessNumber: detail.businessNumber || "",
+          businessType: detail.businessType || "",
+          size: detail.size || "",
+          foundingYear: detail.foundingYear || "",
+          employeeCount: detail.employeeCount || "",
+          address: detail.address || "",
+          phone: detail.phone || "",
+          email: detail.email || "",
+          website: detail.website || "",
+          logo: detail.logo || null,
+          intro: detail.intro || "",
+        });
+        
+      } else {
+        console.log("회사 정보를 찾을 수 없습니다.");
+      }
+    } catch (error) {
+      console.error("회사 정보 불러오기 실패:", error);
+      // 오류 발생 시 조용히 처리 (필요한 경우 에러 상태를 설정할 수 있음)
     }
   };
 
@@ -227,6 +275,7 @@ const InfoManagement = () => {
                   id="company-name"
                   value={companyInfo.name}
                   onChange={handleCompanyInfoChange('name')}
+                  placeholder="기업명을 입력하세요"
                 />
               </div>
               <div className={styles.formGroup}>
@@ -236,6 +285,7 @@ const InfoManagement = () => {
                   id="business-number"
                   value={companyInfo.businessNumber}
                   onChange={handleCompanyInfoChange('businessNumber')}
+                  placeholder="사업자등록번호를 입력하세요"
                 />
               </div>
             </div>
@@ -249,7 +299,7 @@ const InfoManagement = () => {
                   value={companyInfo.businessType}
                   onChange={handleCompanyInfoChange('businessType')}
                 >
-                  <option>선택하세요</option>
+                  <option value="">선택하세요</option>
                   <option value="제조업">제조업</option>
                   <option value="정보통신업">정보통신업</option>
                   <option value="서비스업">서비스업</option>
@@ -267,7 +317,7 @@ const InfoManagement = () => {
                   value={companyInfo.size}
                   onChange={handleCompanyInfoChange('size')}
                 >
-                  <option>선택하세요</option>
+                  <option value="">선택하세요</option>
                   <option value="소기업">소기업</option>
                   <option value="중기업">중기업</option>
                   <option value="중견기업">중견기업</option>
@@ -283,6 +333,7 @@ const InfoManagement = () => {
                   id="founding-year"
                   value={companyInfo.foundingYear}
                   onChange={handleCompanyInfoChange('foundingYear')}
+                  placeholder="설립년도를 입력하세요"
                 />
               </div>
               <div className={styles.formGroup}>
@@ -294,6 +345,7 @@ const InfoManagement = () => {
                   id="employee-count"
                   value={companyInfo.employeeCount}
                   onChange={handleCompanyInfoChange('employeeCount')}
+                  placeholder="임직원 수를 입력하세요"
                 />
               </div>
             </div>
@@ -306,6 +358,7 @@ const InfoManagement = () => {
                 id="company-address"
                 value={companyInfo.address}
                 onChange={handleCompanyInfoChange('address')}
+                placeholder="회사 주소를 입력하세요"
               />
             </div>
             <div className={styles.formRow}>
@@ -318,6 +371,7 @@ const InfoManagement = () => {
                   id="company-phone"
                   value={companyInfo.phone}
                   onChange={handleCompanyInfoChange('phone')}
+                  placeholder="대표 연락처를 입력하세요"
                 />
               </div>
               <div className={styles.formGroup}>
@@ -329,6 +383,7 @@ const InfoManagement = () => {
                   id="company-email"
                   value={companyInfo.email}
                   onChange={handleCompanyInfoChange('email')}
+                  placeholder="대표 이메일을 입력하세요"
                 />
               </div>
             </div>
@@ -344,6 +399,7 @@ const InfoManagement = () => {
                 id="company-website"
                 value={companyInfo.website}
                 onChange={handleCompanyInfoChange('website')}
+                placeholder="회사 웹사이트 URL을 입력하세요"
               />
             </div>
             <div className={styles.formRow}>
@@ -361,7 +417,19 @@ const InfoManagement = () => {
               <div className={styles.formGroup}>
                 <label>현재 로고</label>
                 <div className={styles.logoPreview}>
-                  <span>로고 없음</span>
+                  {companyInfo.logo && typeof companyInfo.logo === 'string' ? (
+                    <img 
+                      src={companyInfo.logo} 
+                      alt="회사 로고" 
+                      style={{ 
+                        maxWidth: '200px', 
+                        maxHeight: '100px', 
+                        objectFit: 'contain' 
+                      }} 
+                    />
+                  ) : (
+                    <span>로고 없음</span>
+                  )}
                 </div>
               </div>
             </div>
@@ -372,6 +440,7 @@ const InfoManagement = () => {
                 rows="4"
                 value={companyInfo.intro}
                 onChange={handleCompanyInfoChange('intro')}
+                placeholder="회사 소개를 입력하세요"
               ></textarea>
             </div>
           </div>
