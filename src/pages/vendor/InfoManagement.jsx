@@ -83,7 +83,7 @@ const InfoManagement = () => {
     setAccountInfo({ ...accountInfo, [field]: e.target.value });
   };
 
-  // 기업 정보 저장 핸들러
+  // 기업 정보 수정 핸들러 (수정)
   const handleCompanyInfoSubmit = async (e) => {
     e.preventDefault();
 
@@ -99,8 +99,8 @@ const InfoManagement = () => {
       formData.append('address', companyInfo.address);
       formData.append('phone', companyInfo.phone);
       formData.append('email', companyInfo.email);
-      formData.append('website', companyInfo.website);
-      formData.append('intro', companyInfo.intro);
+      formData.append('website', companyInfo.website || '');
+      formData.append('intro', companyInfo.intro || '');
 
       if (companyInfo.logoFile) {
         formData.append('logo', companyInfo.logoFile);
@@ -108,22 +108,41 @@ const InfoManagement = () => {
 
       const response = await axios({
         method: 'post',
-        url: `${process.env.REACT_APP_API_URL}/api/companies/me/company/save`,
+        url: `${process.env.REACT_APP_API_URL}/api/companies/me/company/update`,
         headers: {
+          //Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
         },
         data: formData
       });
 
       if (response.data.result === "success") {
-        alert("기업 정보가 저장되었습니다.");
+        alert("기업 정보가 수정되었습니다.");
+        // 수정 후 다시 정보 불러오기
+        getCompanyDetail();
       } else {
-        alert("기업 정보 저장에 실패했습니다.");
+        alert("기업 정보 수정에 실패했습니다.");
       }
     } catch (error) {
-      console.error("기업 정보 저장 실패:", error);
-      alert("기업 정보 저장 중 오류가 발생했습니다.");
+      console.error("기업 정보 수정 실패:", error);
+      if (error.response?.status === 404) {
+        alert("회사 정보가 존재하지 않습니다. 먼저 등록해주세요.");
+      } else {
+        alert("기업 정보 수정 중 오류가 발생했습니다.");
+      }
     }
+  };
+
+  // 담당자 정보 수정 핸들러
+  const handleManagerInfoSubmit = async (e) => {
+    e.preventDefault();
+    alert("담당자 정보 수정 기능은 준비 중입니다.");
+  };
+
+  // 계정 정보 수정 핸들러
+  const handleAccountSettingsSubmit = async (e) => {
+    e.preventDefault();
+    alert("계정 설정 기능은 준비 중입니다.");
   };
 
   // 폼 제출 핸들러
@@ -131,8 +150,10 @@ const InfoManagement = () => {
     e.preventDefault();
     if (activeTab === "company-info") {
       handleCompanyInfoSubmit(e);
-    } else {
-      alert("해당 기능은 아직 구현되지 않았습니다.");
+    } else if (activeTab === "manager-info") {
+      handleManagerInfoSubmit(e);
+    } else if (activeTab === "account-settings") {
+      handleAccountSettingsSubmit(e);
     }
   };
 
@@ -143,6 +164,9 @@ const InfoManagement = () => {
         method: 'get',
         url: `${process.env.REACT_APP_API_URL}/api/companies/me/company/detail`,
         responseType: "json",
+        // headers: {
+        //   Authorization: `Bearer ${token}`
+        // }
       });
   
       if (response.data.result === "success") {
@@ -165,6 +189,10 @@ const InfoManagement = () => {
       }
     } catch (error) {
       console.error("회사 정보 불러오기 실패:", error);
+      if (error.response?.status === 404) {
+        // 회사 정보가 없는 경우 (신규 회원)
+        console.log("회사 정보가 없습니다. 새로 등록해주세요.");
+      }
     }
   };
 
@@ -226,9 +254,17 @@ const InfoManagement = () => {
         )}
 
         <div className={styles.buttonRow}>
-          <button className={styles.buttonSecondary}>취소</button>
-          <button className={styles.actionButton} onClick={handleSubmit}>
-            변경사항 저장
+          <button 
+            className={styles.buttonSecondary}
+            onClick={() => navigate(-1)}
+          >
+            취소
+          </button>
+          <button 
+            className={styles.actionButton} 
+            onClick={handleSubmit}
+          >
+            {activeTab === "company-info" ? "기업 정보 수정" : "변경사항 저장"}
           </button>
         </div>
       </div>
