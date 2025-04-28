@@ -29,12 +29,12 @@ const InfoManagement = () => {
   });
 
   const [managerInfo, setManagerInfo] = useState({
-    name: "홍길동",
-    position: "인사팀장",
-    phone: "010-9876-5432",
-    email: "hong@deartech.co.kr",
-    department: "인사팀",
-    receiveNotifications: true,
+    name: "",
+    position: "",
+    phone: "",
+    email: "",
+    department: "",
+    // receiveNotifications: true,
   });
 
   const [accountInfo, setAccountInfo] = useState({
@@ -45,9 +45,10 @@ const InfoManagement = () => {
     loginEmail: "admin@deartech.co.kr",
   });
 
-  // useEffect 추가 - 컴포넌트 마운트 시 회사 정보 불러오기
+  // useEffect 추가 - 컴포넌트 마운트 시 회사 정보와 담당자 정보 불러오기
   useEffect(() => {
     getCompanyDetail();
+    getManagerDetail();
   }, []);
 
   // 메뉴 변경 핸들러
@@ -70,12 +71,18 @@ const InfoManagement = () => {
   };
 
   // 담당자 정보 업데이트 핸들러
+  // const handleManagerInfoChange = (field) => (e) => {
+  //   if (field === 'receiveNotifications') {
+  //     setManagerInfo({ ...managerInfo, [field]: e.target.checked });
+  //   } else {
+  //     setManagerInfo({ ...managerInfo, [field]: e.target.value });
+  //   }
+  // };
+
+  // 담당자 정보 업데이트 핸들러
   const handleManagerInfoChange = (field) => (e) => {
-    if (field === 'receiveNotifications') {
-      setManagerInfo({ ...managerInfo, [field]: e.target.checked });
-    } else {
-      setManagerInfo({ ...managerInfo, [field]: e.target.value });
-    }
+    // receiveNotifications 관련 코드 제거
+    setManagerInfo({ ...managerInfo, [field]: e.target.value });
   };
 
   // 계정 정보 업데이트 핸들러
@@ -88,8 +95,31 @@ const InfoManagement = () => {
     e.preventDefault();
 
     try {
-      const formData = new FormData();
+
+      // 필수 항목 검증
+      if (!companyInfo.name || !companyInfo.businessNumber || !companyInfo.businessType ||
+        !companyInfo.size || !companyInfo.foundingYear || !companyInfo.employeeCount ||
+        !companyInfo.address || !companyInfo.phone || !companyInfo.email) {
+        alert("필수 항목을 모두 입력해주세요.");
+        return;
+      }
+
+      // 이메일 형식 검사
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(companyInfo.email)) {
+        alert("유효한 이메일 주소를 입력해주세요.");
+        return;
+      }
+
+      // 전화번호 형식 검사
+      const phoneRegex = /^[0-9-]+$/;
+      if (!phoneRegex.test(companyInfo.phone)) {
+        alert("유효한 전화번호를 입력해주세요.");
+        return;
+      }
       
+      const formData = new FormData();
+
       formData.append('name', companyInfo.name);
       formData.append('businessNumber', companyInfo.businessNumber);
       formData.append('businessType', companyInfo.businessType);
@@ -136,7 +166,55 @@ const InfoManagement = () => {
   // 담당자 정보 수정 핸들러
   const handleManagerInfoSubmit = async (e) => {
     e.preventDefault();
-    alert("담당자 정보 수정 기능은 준비 중입니다.");
+
+    try {
+      // 담당자 정보의 유효성 검사
+      if (!managerInfo.name || !managerInfo.position || !managerInfo.phone || !managerInfo.email) {
+        alert("필수 항목을 모두 입력해주세요.");
+        return;
+      }
+
+      // 이메일 형식 검사
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(managerInfo.email)) {
+        alert("유효한 이메일 주소를 입력해주세요.");
+        return;
+      }
+
+      // 전화번호 형식 검사 (간단한 예시)
+      const phoneRegex = /^[0-9-]+$/;
+      if (!phoneRegex.test(managerInfo.phone)) {
+        alert("유효한 전화번호를 입력해주세요.");
+        return;
+      }
+
+      const response = await axios({
+        method: 'post',
+        url: `${process.env.REACT_APP_API_URL}/api/companies/me/manager/update`,
+        headers: {
+          //Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        data: {
+          name: managerInfo.name,
+          position: managerInfo.position,
+          phone: managerInfo.phone,
+          email: managerInfo.email,
+          department: managerInfo.department || '',
+        }
+      });
+
+      if (response.data.result === "success") {
+        alert("담당자 정보가 성공적으로 저장되었습니다.");
+        // 수정 후 다시 정보 불러오기
+        getManagerDetail();
+      } else {
+        alert("담당자 정보 저장에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("담당자 정보 처리 실패:", error);
+      alert("담당자 정보 처리 중 오류가 발생했습니다.");
+    }
   };
 
   // 계정 정보 수정 핸들러
@@ -168,10 +246,10 @@ const InfoManagement = () => {
         //   Authorization: `Bearer ${token}`
         // }
       });
-  
+
       if (response.data.result === "success") {
         const detail = response.data.apiData;
-        
+
         setCompanyInfo({
           name: detail.name || "",
           businessNumber: detail.businessNumber || "",
@@ -192,6 +270,50 @@ const InfoManagement = () => {
       if (error.response?.status === 404) {
         // 회사 정보가 없는 경우 (신규 회원)
         console.log("회사 정보가 없습니다. 새로 등록해주세요.");
+      }
+    }
+  };
+
+  // 담당자 정보 가져오기 함수
+  const getManagerDetail = async () => {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: `${process.env.REACT_APP_API_URL}/api/companies/me/manager/detail`,
+        responseType: "json",
+        // headers: {
+        //   Authorization: `Bearer ${token}`
+        // }
+      });
+
+      if (response.data.result === "success") {
+        const detail = response.data.apiData;
+
+        setManagerInfo({
+          name: detail.name || "",
+          position: detail.position || "",
+          phone: detail.phone || "",
+          email: detail.email || "",
+          department: detail.department || "",
+          // receiveNotifications: detail.receiveNotifications !== undefined 
+          //   ? detail.receiveNotifications 
+          //   : true, // 기본값으로 true 설정
+        });
+      }
+    } catch (error) {
+      console.error("담당자 정보 불러오기 실패:", error);
+      if (error.response?.status === 404) {
+        // 담당자 정보가 없는 경우 (신규 정보)
+        console.log("담당자 정보가 없습니다. 새로 등록해주세요.");
+        // 기본값으로 초기화
+        setManagerInfo({
+          name: "",
+          position: "",
+          phone: "",
+          email: "",
+          department: "",
+          // receiveNotifications: true,
+        });
       }
     }
   };
@@ -254,17 +376,21 @@ const InfoManagement = () => {
         )}
 
         <div className={styles.buttonRow}>
-          <button 
+          <button
             className={styles.buttonSecondary}
             onClick={() => navigate(-1)}
           >
             취소
           </button>
-          <button 
-            className={styles.actionButton} 
+          <button
+            className={styles.actionButton}
             onClick={handleSubmit}
           >
-            {activeTab === "company-info" ? "기업 정보 수정" : "변경사항 저장"}
+            {activeTab === "company-info"
+              ? "기업 정보 수정"
+              : activeTab === "manager-info"
+                ? "담당자 정보 저장"
+                : "변경사항 저장"}
           </button>
         </div>
       </div>
