@@ -67,7 +67,7 @@ const ManagerInfoTab = ({ managerInfo, handleChange, styles }) => {
             placeholder="부서를 입력하세요"
           />
         </div>
-        <div className={styles.formGroup}>
+        {/* <div className={styles.formGroup}>
           <label>
             <input
               type="checkbox"
@@ -77,7 +77,7 @@ const ManagerInfoTab = ({ managerInfo, handleChange, styles }) => {
             />
             담당자 정보로 알림 수신 (이메일, SMS)
           </label>
-        </div>
+        </div> */}
       </div>
     </div>
   );
