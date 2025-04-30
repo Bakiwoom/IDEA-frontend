@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../../assets/css/vendor/ApplicantManagement.module.css";
-import VendorSidebar from "./VendorSidebar";
+import VendorSidebar from "./CompanySidebar";
 
 const ApplicantManagement = () => {
   const [activeMenu, setActiveMenu] = useState("applicant-management");
