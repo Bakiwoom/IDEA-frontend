@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import styles from "../../assets/css/vendor/InfoManagement.module.css";
-import VendorSidebar from "./VendorSidebar";
+import VendorSidebar from "./CompanySidebar";
 import CompanyInfoTab from "./tabs/CompanyInfoTab";
 import ManagerInfoTab from "./tabs/ManagerInfoTab";
 import AccountSettingsTab from "./tabs/AccountSettingsTab";

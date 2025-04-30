@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../../assets/css/vendor/JobDetail.module.css";
-import VendorSidebar from "./VendorSidebar";
+import VendorSidebar from "./CompanySidebar";
 
 const JobDetail = () => {
   const navigate = useNavigate();
