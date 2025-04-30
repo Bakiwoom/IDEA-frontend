@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import styles from "../../assets/css/vendor/VendorSidebar.module.css";
+import styles from "../../assets/css/vendor/CompanySidebar.module.css";
 
 const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
   const location = useLocation();
