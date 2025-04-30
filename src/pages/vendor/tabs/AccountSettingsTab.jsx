@@ -1,6 +1,7 @@
 import React from "react";
 
 const AccountSettingsTab = ({ accountInfo, handleChange, styles }) => {
+
   return (
     <div className={`${styles.tabContent} ${styles.active}`}>
       <div className={styles.formSection}>
@@ -50,36 +51,12 @@ const AccountSettingsTab = ({ accountInfo, handleChange, styles }) => {
               onChange={handleChange('confirmPassword')}
             />
           </div>
-          <div
-            className={styles.formGroup}
-            style={{ display: "flex", alignItems: "flex-end" }}
-          >
-            <button className={styles.actionButton}>비밀번호 변경</button>
+          <div className={styles.formGroup} style={{ visibility: "hidden" }}>
+            {/* 이 부분은 레이아웃 균형을 위해 비워둠 */}
           </div>
         </div>
-      </div>
 
-      <div className={styles.formSection}>
-        <h2 className={styles.sectionTitle}>계정 관리</h2>
-        <div className={styles.formGroup}>
-          <label htmlFor="login-email">로그인 이메일 변경</label>
-          <input
-            type="email"
-            id="login-email"
-            value={accountInfo.loginEmail}
-            onChange={handleChange('loginEmail')}
-          />
-          <div className={styles.inputHelp}>
-            계정 관련 알림 및 로그인에 사용됩니다
-          </div>
-        </div>
-        <div className={styles.formGroup}>
-          <div className={styles.warningBox}>
-            계정 삭제 시 모든 정보가 영구적으로 삭제되며 복구할 수 없습니다.
-            진행 중인 채용 공고와 지원자 정보도 모두 삭제됩니다.
-          </div>
-          <button className={styles.deleteButton}>계정 삭제 요청</button>
-        </div>
+        {/* 에러와 성공 메시지는 더 이상 여기서 표시하지 않음 - InfoManagement.js의 alert로 대체 */}
       </div>
     </div>
   );
