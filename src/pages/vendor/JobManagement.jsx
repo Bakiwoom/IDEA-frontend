@@ -16,7 +16,7 @@ const JobManagement = () => {
 
   // 상세보기 버튼 클릭 핸들러
   const handleViewDetail = (jobId) => {
-    navigate(`/vendor/job/management/detail/${jobId}`);
+    navigate(`/company/job/management/detail/${jobId}`);
   };
 
   return (
