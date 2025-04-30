@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../../assets/css/vendor/JobDetail.module.css";
-import VendorSidebar from "./CompanySidebar";
+import CompanySidebar from "./CompanySidebar";
 
 const JobDetail = () => {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ const JobDetail = () => {
 
   // 지원자 상세보기 버튼 클릭 핸들러
   const handleViewDetail = () => {
-    navigate(`/vendor/applicant/management`);
+    navigate(`/company/applicant/management`);
   };
 
   // 메뉴 변경 핸들러
@@ -22,7 +22,7 @@ const JobDetail = () => {
   return (
     <div className={styles.mypageWrap}>
       {/* 사이드바 컴포넌트 사용 */}
-      <VendorSidebar
+      <CompanySidebar
         activeMenu={activeMenu}
         handleMenuChange={handleMenuChange}
       />

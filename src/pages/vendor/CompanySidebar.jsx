@@ -11,7 +11,7 @@ const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
       <ul className={styles.sidebarMenu}>
         <li className={activeMenu === "job-management" ? styles.active : ""}>
           <Link
-            to="/vendor/job/management"
+            to="/company/job/management"
             className={styles.menuLink}
             onClick={() => handleMenuChange("job-management")}
           >
@@ -22,7 +22,7 @@ const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
           className={activeMenu === "applicant-management" ? styles.active : ""}
         >
           <Link
-            to="/vendor/applicant/management"
+            to="/company/applicant/management"
             className={styles.menuLink}
             onClick={() => handleMenuChange("applicant-management")}
           >
@@ -31,7 +31,7 @@ const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
         </li> */}
         <li className={activeMenu === "info-management" ? styles.active : ""}>
           <Link
-            to="/vendor/info/management"
+            to="/company/info/management"
             className={styles.menuLink}
             onClick={() => handleMenuChange("info-management")}
           >
