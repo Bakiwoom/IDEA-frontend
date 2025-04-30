@@ -6,58 +6,40 @@ import VendorSidebar from "./CompanySidebar";
 
 const ApplicantManagement = () => {
   const [activeMenu, setActiveMenu] = useState("applicant-management");
-  const [applicants, setApplicants] = useState([
-    {
-      id: 1,
-      name: "김장애",
-      phone: "010-1234-5678",
-      position: "웹 개발자 채용",
-      disability: "지체장애 3급",
-      applyDate: "2025-04-15",
-      status: "검토중",
-      benefits: 5,
-    },
-    {
-      id: 2,
-      name: "이지원",
-      phone: "010-2345-6789",
-      position: "웹 개발자 채용",
-      disability: "시각장애 2급",
-      applyDate: "2025-04-14",
-      status: "서류통과",
-      benefits: 7,
-    },
-    {
-      id: 3,
-      name: "박지민",
-      phone: "010-3456-7890",
-      position: "프론트엔드 개발자",
-      disability: "청각장애 2급",
-      applyDate: "2025-04-13",
-      status: "면접예정",
-      benefits: 4,
-    },
-    {
-      id: 4,
-      name: "최현우",
-      phone: "010-4567-8901",
-      position: "백엔드 개발자",
-      disability: "지체장애 4급",
-      applyDate: "2025-04-10",
-      status: "합격",
-      benefits: 6,
-    },
-    {
-      id: 5,
-      name: "정민지",
-      phone: "010-5678-9012",
-      position: "웹 디자이너",
-      disability: "지적장애 3급",
-      applyDate: "2025-04-09",
-      status: "불합격",
-      benefits: 3,
-    },
-  ]);
+  const [applicants, setApplicants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // 로컬 스토리지에서 토큰 가져오기 (주석 처리)
+  // const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    // 지원자 목록 데이터 가져오기
+    const fetchApplicants = async () => {
+      try {
+        setLoading(true);
+        
+        // 토큰 인증 부분 주석 처리
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/companies/me/applications`);
+        
+        // 백엔드 응답 구조에 맞게 데이터 추출
+        if (response.data && response.data.result === "success") {
+          console.log('API 응답 데이터:', response.data);
+          setApplicants(response.data.apiData || []);
+        } else {
+          throw new Error(response.data?.message || "데이터를 불러오는데 실패했습니다.");
+        }
+        
+        setLoading(false);
+      } catch (err) {
+        console.error("지원자 목록을 불러오는데 실패했습니다:", err);
+        setError(err.message || "지원자 목록을 불러오는데 실패했습니다.");
+        setLoading(false);
+      }
+    };
+
+    fetchApplicants();
+  }, []);
 
   // 메뉴 변경 핸들러
   const handleMenuChange = (menuId) => {
@@ -65,6 +47,7 @@ const ApplicantManagement = () => {
     // 메뉴 변경 시 필요한 라우팅 로직 추가 가능
   };
 
+  // 아래 코드 생략 (변경 없음)
   return (
     <>
       <div className={styles.container}>
@@ -81,7 +64,6 @@ const ApplicantManagement = () => {
         >
           <div className={styles.pageHeader}>
             <h1 className={styles.pageTitle}>지원자 관리</h1>
-            {/* <button className={styles.actionButton}>+ 면접 일정 등록</button> */}
           </div>
 
           {/* 필터 섹션 */}
@@ -91,13 +73,11 @@ const ApplicantManagement = () => {
                 <label htmlFor="job-filter">공고별 필터</label>
                 <select id="job-filter">
                   <option>모든 공고</option>
-                  <option>웹 개발자 채용</option>
-                  <option>프론트엔드 개발자</option>
-                  <option>백엔드 개발자</option>
-                  <option>웹 디자이너</option>
+                  <option>최신순</option>
+                  <option>오래된 순</option>
                 </select>
               </div>
-              <div className={styles.formGroup}>
+              {/* <div className={styles.formGroup}>
                 <label htmlFor="status-filter">지원 상태별 필터</label>
                 <select id="status-filter">
                   <option>모든 상태</option>
@@ -107,13 +87,13 @@ const ApplicantManagement = () => {
                   <option>합격</option>
                   <option>불합격</option>
                 </select>
-              </div>
+              </div> */}
               <div className={styles.formGroup}>
                 <label htmlFor="search">검색</label>
                 <input
                   type="text"
                   id="search"
-                  placeholder="이름, 이메일 등으로 검색"
+                  placeholder="검색어를 입력하세요."
                 />
               </div>
             </div>
@@ -121,73 +101,44 @@ const ApplicantManagement = () => {
 
           {/* 지원자 목록 테이블 */}
           <div className={styles.tableContainer}>
-            <table className={styles.tableContent}>
-              <thead className={styles.tableHead}>
-                <tr>
-                  <th>프로필</th>
-                  <th>지원 공고</th>
-                  <th>장애 유형/등급</th>
-                  <th>지원일자</th>
-                  <th>상태</th>
-                  <th>적합 혜택 수</th>
-                  <th>액션</th>
-                </tr>
-              </thead>
-              <tbody className={styles.tableBody}>
-                {applicants.map((applicant) => (
-                  <tr key={applicant.id}>
-                    <td>
-                      {applicant.name}
-                      <br />
-                      {applicant.phone}
-                    </td>
-                    <td>{applicant.position}</td>
-                    <td>{applicant.disability}</td>
-                    <td>{applicant.applyDate}</td>
-                    <td>
-                      <span
-                        className={`${styles.statusBadge} ${
-                          applicant.status === "불합격"
-                            ? styles.statusClosed
-                            : applicant.status === "검토중"
-                            ? styles.statusReview
-                            : styles.statusOpen
-                        }`}
-                      >
-                        {applicant.status}
-                      </span>
-                    </td>
-                    <td>{applicant.benefits}</td>
-                    <td className={styles.actionCell}>
-                      <button className={styles.actionButtonSmall}>
-                        상세보기
-                      </button>
-                      <button className={styles.actionButtonSmall}>
-                        상태변경
-                      </button>
-                      <button className={styles.actionButtonSmall}>
-                        메시지
-                      </button>
-                    </td>
+            {loading ? (
+              <p>로딩 중...</p>
+            ) : error ? (
+              <p className={styles.errorMessage}>{error}</p>
+            ) : (
+              <table className={styles.tableContent}>
+                <thead className={styles.tableHead}>
+                  <tr>
+                    <th>프로필</th>
+                    <th>지원 공고</th>
+                    <th>장애 유형/등급</th>
+                    <th>지원일자</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* 액션 버튼 섹션 */}
-          <div className={styles.formSection}>
-            <div className={styles.formRow}>
-              <button className={styles.actionButtonSmall}>
-                선택 지원자 면접 일정 등록
-              </button>
-              <button className={styles.actionButtonSmall}>
-                선택 지원자 상태 일괄 변경
-              </button>
-              <button className={styles.actionButtonSmall}>
-                혜택 리포트 일괄 생성
-              </button>
-            </div>
+                </thead>
+                <tbody className={styles.tableBody}>
+                  {applicants && applicants.length > 0 ? (
+                    applicants.map((applicant) => (
+                      <tr key={applicant.applicationId}>
+                        <td>
+                          {applicant.userName}
+                          <br />
+                          {applicant.userPhone}
+                        </td>
+                        <td>{applicant.jobTitle}</td>
+                        <td>{applicant.disabilityType}</td>
+                        <td>{applicant.appliedDate}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" className={styles.noData}>
+                        지원자 데이터가 없습니다.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>
