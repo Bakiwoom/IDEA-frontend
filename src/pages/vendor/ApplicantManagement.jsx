@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../../assets/css/vendor/ApplicantManagement.module.css";
 import VendorSidebar from "./CompanySidebar";
@@ -9,6 +8,11 @@ const ApplicantManagement = () => {
   const [applicants, setApplicants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // 필터와 검색을 위한 상태 추가
+  const [sortOrder, setSortOrder] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredApplicants, setFilteredApplicants] = useState([]);
   
   // 로컬 스토리지에서 토큰 가져오기 (주석 처리)
   // const token = localStorage.getItem('token');
@@ -41,10 +45,44 @@ const ApplicantManagement = () => {
     fetchApplicants();
   }, []);
 
+  // 필터링과 정렬 로직 추가
+  useEffect(() => {
+    let result = [...applicants];
+
+    // 검색 필터링
+    if (searchTerm) {
+      result = result.filter(applicant => 
+        applicant.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        applicant.userPhone.includes(searchTerm) ||
+        applicant.jobTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        applicant.disabilityType.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // 정렬
+    if (sortOrder === "latest") {
+      result.sort((a, b) => new Date(b.appliedDate) - new Date(a.appliedDate));
+    } else if (sortOrder === "oldest") {
+      result.sort((a, b) => new Date(a.appliedDate) - new Date(b.appliedDate));
+    }
+
+    setFilteredApplicants(result);
+  }, [applicants, sortOrder, searchTerm]);
+
   // 메뉴 변경 핸들러
   const handleMenuChange = (menuId) => {
     setActiveMenu(menuId);
     // 메뉴 변경 시 필요한 라우팅 로직 추가 가능
+  };
+
+  // 정렬 변경 핸들러
+  const handleSortChange = (e) => {
+    setSortOrder(e.target.value);
+  };
+
+  // 검색어 변경 핸들러
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
   };
 
   // 아래 코드 생략 (변경 없음)
@@ -71,29 +109,24 @@ const ApplicantManagement = () => {
             <div className={styles.formRow}>
               <div className={styles.formGroup}>
                 <label htmlFor="job-filter">공고별 필터</label>
-                <select id="job-filter">
-                  <option>모든 공고</option>
-                  <option>최신순</option>
-                  <option>오래된 순</option>
+                <select 
+                  id="job-filter"
+                  value={sortOrder}
+                  onChange={handleSortChange}
+                >
+                  <option value="all">모든 공고</option>
+                  <option value="latest">최신순</option>
+                  <option value="oldest">오래된 순</option>
                 </select>
               </div>
-              {/* <div className={styles.formGroup}>
-                <label htmlFor="status-filter">지원 상태별 필터</label>
-                <select id="status-filter">
-                  <option>모든 상태</option>
-                  <option>검토중</option>
-                  <option>서류통과</option>
-                  <option>면접예정</option>
-                  <option>합격</option>
-                  <option>불합격</option>
-                </select>
-              </div> */}
               <div className={styles.formGroup}>
                 <label htmlFor="search">검색</label>
                 <input
                   type="text"
                   id="search"
                   placeholder="검색어를 입력하세요."
+                  value={searchTerm}
+                  onChange={handleSearchChange}
                 />
               </div>
             </div>
@@ -116,8 +149,8 @@ const ApplicantManagement = () => {
                   </tr>
                 </thead>
                 <tbody className={styles.tableBody}>
-                  {applicants && applicants.length > 0 ? (
-                    applicants.map((applicant) => (
+                  {filteredApplicants && filteredApplicants.length > 0 ? (
+                    filteredApplicants.map((applicant) => (
                       <tr key={applicant.applicationId}>
                         <td>
                           {applicant.userName}
