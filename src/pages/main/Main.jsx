@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import SideNavigation from "./SideNavigation";
 import styles from "../../assets/css/main/Main.module.css";
+import { useChat } from "../../contexts/ChatContext";
 
 import { CATEGORY_PAGE } from "../../routes/contantsRoutes";
 
 const Main = () => {
+  const { openChat, isOpen } = useChat();
 
   return (
     <div>
@@ -493,13 +495,15 @@ const Main = () => {
         <SideNavigation />
 
         {/* 챗봇 */}
-        <div className={styles.chatbotContainer}>
-          <img
-            src="/images/chatbot.png"
-            alt="챗봇"
-            className={styles.chatbotIcon}
-          />
-        </div>
+        {!isOpen && (
+          <div className={styles.chatbotContainer} onClick={openChat} style={{ cursor: 'pointer' }}>
+            <img
+              src="/images/chatbot.png"
+              alt="챗봇"
+              className={styles.chatbotIcon}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
