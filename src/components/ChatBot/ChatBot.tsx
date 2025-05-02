@@ -169,7 +169,7 @@ const ChatInput = memo(({
         <button
           type="submit"
           disabled={isLoading || !inputMessage.trim()}
-          className={styles.sendButton}
+          className={`${styles.sendButton} ${inputMessage.trim() ? styles.active : ''}`}
           aria-label="메시지 전송"
         >
           전송

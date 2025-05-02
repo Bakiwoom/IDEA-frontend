@@ -109,6 +109,8 @@
   padding: 16px;
   border-bottom: 1px solid #e5e7eb;
   background: white;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
 
 .headerContent {
@@ -163,6 +165,7 @@
   padding: 16px;
   border-top: 1px solid #e5e7eb;
   background: white;
+  border: none;
 }
 
 .chatbotWrapper {
@@ -476,6 +479,14 @@
   cursor: not-allowed;
 }
 
+.sendButton.active {
+  background-color: #1976d2;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  border: none;
+}
+
 /* 다크 모드 스타일 */
 [data-theme='dark'] .header {
   background-color: var(--bg-dark);
@@ -513,17 +524,22 @@
 }
 
 [data-theme='dark'] .inputWrapper {
-  background-color: var(--bg-dark);
+  background-color: #232b36 !important;
   border-color: var(--border-color);
   border-radius: 1rem;
 }
 
 [data-theme='dark'] .input {
-  color: var(--text-primary);
+  background: #232b36 !important;
+  color: #fff !important;
+  caret-color: #fff !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 [data-theme='dark'] .input::placeholder {
-  color: #6b7280;
+  color: #b0b8c1;
 }
 
 [data-theme='dark'] .loadingDots {
@@ -572,7 +588,7 @@
 
 /* 포커스 표시 */
 .input:focus, .sendButton:focus, .closeButton:focus {
-  outline: 2px solid #2563eb;
+  outline: none;
   outline-offset: 2px;
 }
 
