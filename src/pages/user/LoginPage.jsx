@@ -29,7 +29,7 @@ const LoginPage = () => {
                         <div className={styles.tabsBox}>
                             <ul>
                                 <li className={selectTab === 'user' ? styles.activeTab : ''} onClick={()=>handleClick('user')}>개인회원</li>
-                                <li className={selectTab === 'vendor' ? styles.activeTab : ''} onClick={()=>handleClick('vendor')}>기업회원</li>
+                                <li className={selectTab === 'company' ? styles.activeTab : ''} onClick={()=>handleClick('company')}>기업회원</li>
                             </ul>
                         </div>
                         <div className={styles.inputBox}>

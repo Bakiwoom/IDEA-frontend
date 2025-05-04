@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "../assets/css/main/ProfileDropdown.module.css";
 
-import { USER_MYPAGE_MAIN } from "../routes/contantsRoutes";
+import { USER_MYPAGE_MAIN,EDIT_PAGE } from "../routes/contantsRoutes";
 
 const ProfileDropdown = ({type}) => {
   let title = "";

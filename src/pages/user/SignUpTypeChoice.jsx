@@ -27,7 +27,7 @@ const SignUpTypeChoice = () => {
                   <div className={styles.tabs}>
                       <ul>
                         <li className={selectTab === "user" ? styles.activeTab : ""} onClick={()=>handleTabClick("user")}>개인회원</li>
-                        <li className={selectTab === "vendor" ? styles.activeTab : ""} onClick={()=>handleTabClick("vendor")}>기업회원</li>
+                        <li className={selectTab === "company" ? styles.activeTab : ""} onClick={()=>handleTabClick("company")}>기업회원</li>
                       </ul>
                   </div>
                   <div className={styles.socialChoose}>
@@ -47,7 +47,7 @@ const SignUpTypeChoice = () => {
                   <div className={styles.signUpButtonBox}>
                     <button type="button">
                       <Link to={selectTab === "user" ? USER_SIGNUP_PAGE
-                                : selectTab === "vendor" ? VENDOR_SIGNUP_PAGE
+                                : selectTab === "company" ? VENDOR_SIGNUP_PAGE
                                 : USER_SIGNUP_PAGE}> 회원가입 하러가기</Link>
                     </button>
                   </div>

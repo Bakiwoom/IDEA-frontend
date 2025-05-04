@@ -102,6 +102,7 @@
     background-color: var(--logo-color);
     border-radius: 6px;
     color: #fff;
+    cursor: pointer;
 }
 .submitBtn:hover{
     background-color: var(--login-button-hover-color);
