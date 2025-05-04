@@ -2,6 +2,7 @@ import React from "react";
 
 import styles from "../../assets/css/user/UserSidebar.module.css";
 import { Link } from "react-router-dom";
+import { USER_MYPAGE_MAIN, EDIT_PAGE } from "../../routes/contantsRoutes";
 
 const UserSidebar = () =>{
     return(
@@ -10,9 +11,9 @@ const UserSidebar = () =>{
                 <p className={styles.title}>마이페이지</p>
                 <div className={styles.liBox}>
                     <ul>
-                        <Link to="#"><li>홈</li></Link>
+                        <Link to={USER_MYPAGE_MAIN}><li>홈</li></Link>
                         <Link to="#"><li>지원내역</li></Link>
-                        <Link to="#"><li>내정보 수정 </li></Link>
+                        <Link to={EDIT_PAGE}><li>내정보 수정 </li></Link>
                         <Link to="#"><li>로그아웃</li></Link>
                     </ul>
                 </div>
