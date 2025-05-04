@@ -1,9 +1,212 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import SideNavigation from "./SideNavigation";
 import styles from "../../assets/css/main/Main.module.css";
+import { CATEGORY_PAGE } from "../../routes/contantsRoutes";
 
 const Main = () => {
+  const [recommendedJobs, setRecommendedJobs] = useState([]);
+  const [popularJobs, setPopularJobs] = useState([]);
+  const [trendingJobs, setTrendingJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [bookmarks, setBookmarks] = useState(new Set());
+  
+  // 토큰 가져오기
+  const token = localStorage.getItem('token');
+  const userName = localStorage.getItem('userName') || '사용자';
+
+  useEffect(() => {
+    const fetchAllJobs = async () => {
+      try {
+        setLoading(true);
+        
+        // 인기 공고 가져오기 (인증 필요 없음)
+        const popularResponse = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/main/popular`
+        );
+        
+        // 주목받는 공고 가져오기 (인증 필요 없음)
+        const trendingResponse = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/main/trending`
+        );
+        
+        if (popularResponse.data.result === "success") {
+          setPopularJobs(popularResponse.data.apiData || []);
+        }
+        
+        if (trendingResponse.data.result === "success") {
+          setTrendingJobs(trendingResponse.data.apiData || []);
+        }
+        
+        // 맞춤 공고는 로그인한 경우에만 가져오기
+        if (token) {
+          const recommendedResponse = await axios.get(
+            `${process.env.REACT_APP_API_URL}/api/main/recommended`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+          
+          if (recommendedResponse.data.result === "success") {
+            setRecommendedJobs(recommendedResponse.data.apiData || []);
+          }
+        }
+        
+        setLoading(false);
+      } catch (err) {
+        console.error("채용공고를 불러오는데 실패했습니다:", err);
+        setError("채용공고를 불러오는데 실패했습니다.");
+        setLoading(false);
+      }
+    };
+
+    const fetchUserBookmarks = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/main/bookmarks/user`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+        
+        if (response.data.result === "success") {
+          const bookmarkJobIds = response.data.apiData.map(bookmark => bookmark.jobId);
+          setBookmarks(new Set(bookmarkJobIds));
+        }
+      } catch (err) {
+        console.error("북마크를 불러오는데 실패했습니다:", err);
+      }
+    };
+
+    fetchAllJobs();
+    if (token) {
+      fetchUserBookmarks();
+    }
+  }, [token]);
+
+  // 북마크 토글
+  const toggleBookmark = async (jobId) => {
+    try {
+      if (!token) {
+        alert("로그인이 필요한 서비스입니다.");
+        return;
+      }
+
+      if (bookmarks.has(jobId)) {
+        // 북마크 제거
+        await axios.delete(
+          `${process.env.REACT_APP_API_URL}/api/main/bookmarks/${jobId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+        setBookmarks(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(jobId);
+          return newSet;
+        });
+      } else {
+        // 북마크 추가
+        await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/main/bookmarks`,
+          { jobId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+        setBookmarks(prev => new Set([...prev, jobId]));
+      }
+      
+      // 공고 데이터 새로고침 (북마크 카운트 업데이트를 위해)
+      // fetchAllJobs()를 직접 호출하는 대신 상태를 업데이트하여 리렌더링
+      // 또는 별도의 API 호출로 카운트만 업데이트
+    } catch (err) {
+      console.error("북마크 처리에 실패했습니다:", err);
+      alert("북마크 처리에 실패했습니다.");
+    }
+  };
+
+  // 마감일 포맷팅
+  const formatDeadline = (deadline) => {
+    if (!deadline) return '';
+    
+    const today = new Date();
+    const deadlineDate = new Date(deadline);
+    const diffTime = deadlineDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 0) return '마감';
+    if (diffDays === 0) return 'D-Day';
+    if (diffDays <= 7) return `D-${diffDays}`;
+    
+    return `~${(deadlineDate.getMonth() + 1).toString().padStart(2, '0')}.${deadlineDate.getDate().toString().padStart(2, '0')}`;
+  };
+
+  // 채용 카드 컴포넌트
+  const JobCard = ({ job, isTopBordered = false }) => {
+    return (
+      <div className={`${styles.card} ${isTopBordered ? styles.topBorderedCard : ''}`}>
+        <img
+          src={job.companyLogo || "/images/default-company-logo.png"}
+          alt={`${job.companyName} 로고`}
+          className={styles.cardCompanyLogo}
+        />
+        <h3 className={styles.cardTitle}>{job.title}</h3>
+        <p className={styles.cardCompany}>{job.companyName}</p>
+        <div className={styles.cardTags}>
+          <span className={styles.cardTag}>
+            <i>📍</i> {job.location}
+          </span>
+          <span className={styles.cardTag}>
+            <i>🏢</i> {job.experienceLevel || "경력무관"}
+          </span>
+        </div>
+        <div className={styles.cardBottom}>
+          <div>
+            <span className={`${styles.cardBadge} ${styles.cardBadgeHot}`}>
+              {job.disabilityTypeName || "장애무관"}
+            </span>
+          </div>
+          <div>
+            <span>{formatDeadline(job.deadline)}</span>
+            <button 
+              className={styles.likeButton}
+              onClick={() => toggleBookmark(job.jobId)}
+            >
+              {bookmarks.has(job.jobId) ? '♥' : '♡'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  if (loading) {
+    return (
+      <div className={styles.loadingContainer}>
+        <p>채용공고를 불러오는 중입니다...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.errorContainer}>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>다시 시도</button>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -15,25 +218,10 @@ const Main = () => {
             <button className={styles.menuButton}>☰</button>
             <ul className={styles.navMenu}>
               <li>
-                <Link to="#" className={styles.active}>
+                <Link to={CATEGORY_PAGE} className={styles.active}>
                   채용정보
                 </Link>
               </li>
-              {/* <li>
-                <Link to="#">혜택 시뮬레이션</Link>
-              </li>
-              <li>
-                <Link to="#">맞춤 공고</Link>
-              </li>
-              <li>
-                <Link to="#">혜택 안내</Link>
-              </li>
-              <li>
-                <Link to="#">북마크</Link>
-              </li>
-              <li>
-                <Link to="#">내 혜택 리포트</Link>
-              </li> */}
             </ul>
           </div>
         </nav>
@@ -46,171 +234,28 @@ const Main = () => {
             <p>
               장애인 구직자를 위한 맞춤형 혜택 정보와 채용 공고를 확인하세요.
             </p>
-            {/* <button className={styles.mainButton}>
-              나의 혜택 시뮬레이션 하기
-            </button>
-            <button className={styles.outlineButton}>맞춤 공고 보기</button> */}
           </div>
 
           {/* 맞춤 공고 섹션 */}
-          <section id="recommended-jobs" className={styles.mainSection}>
-            <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>
-                차은우님이 꼭 봐야 할 공고
-              </h2>
-              {/* <Link to="#" className={styles.viewAll}>
-                내 조건 정보 입력하기
-              </Link> */}
-            </div>
-
-            <div className={styles.cardGrid}>
-              {/* 채용 카드 1 */}
-              <div className={`${styles.card} ${styles.topBorderedCard}`}>
-                <img
-                  src="/images/쿠팡로고.png"
-                  alt="쿠팡로고"
-                  className={styles.cardCompanyLogo}
-                />
-                <h3 className={styles.cardTitle}>
-                  [쿠팡 CFS] 지역허브 셀러보상 전문가 림핑크룸 정규직 채용
-                </h3>
-                <p className={styles.cardCompany}>쿠팡풀필먼트서비스(주)</p>
-                <div className={styles.cardTags}>
-                  <span className={styles.cardTag}>
-                    <i>📍</i> 경기/인천
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>🏢</i> 신입/경력
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 학력무관
-                  </span>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div>
-                    <span
-                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
-                    >
-                      인기공고 주간 TOP100
-                    </span>
-                  </div>
-                  <div>
-                    <span>~04.30(화)</span>
-                    <button className={styles.likeButton}>♡</button>
-                  </div>
-                </div>
+          {token && (
+            <section id="recommended-jobs" className={styles.mainSection}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>
+                  {userName}님이 꼭 봐야 할 공고
+                </h2>
               </div>
 
-              {/* 채용 카드 2 */}
-              <div className={`${styles.card} ${styles.topBorderedCard}`}>
-                <img
-                  src="/images/쿠팡로고.png"
-                  alt="쿠팡로고"
-                  className={styles.cardCompanyLogo}
-                />
-                <h3 className={styles.cardTitle}>
-                  쿠팡이츠서비스 CXM 대규모 채용
-                </h3>
-                <p className={styles.cardCompany}>쿠팡(주)</p>
-                <div className={styles.cardTags}>
-                  <span className={styles.cardTag}>
-                    <i>📍</i> 경기/인천
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>🏢</i> 신입/경력
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 학력무관
-                  </span>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div>
-                    <span
-                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
-                    >
-                      마감임박 스크랩 지원 TOP100
-                    </span>
-                  </div>
-                  <div>
-                    <span>D-3</span>
-                    <button className={styles.likeButton}>♡</button>
-                  </div>
-                </div>
+              <div className={styles.cardGrid}>
+                {recommendedJobs.length > 0 ? (
+                  recommendedJobs.map(job => (
+                    <JobCard key={job.jobId} job={job} isTopBordered={true} />
+                  ))
+                ) : (
+                  <p className={styles.noDataMessage}>맞춤 공고가 없습니다.</p>
+                )}
               </div>
-
-              {/* 채용 카드 3 */}
-              <div className={`${styles.card} ${styles.topBorderedCard}`}>
-                <img
-                  src="/images/SC제일은행로고.png"
-                  alt="SC제일은행로고"
-                  className={styles.cardCompanyLogo}
-                />
-                <h3 className={styles.cardTitle}>소프트웨어 기술지원 채용</h3>
-                <p className={styles.cardCompany}>(주)디에이씨</p>
-                <div className={styles.cardTags}>
-                  <span className={styles.cardTag}>
-                    <i>📍</i> 서울전체
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>🏢</i> 신입/경력
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 초대졸 ↑
-                  </span>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div>
-                    <span
-                      className={`${styles.cardBadge} ${styles.cardBadgeNew}`}
-                    >
-                      취업축하금
-                    </span>
-                  </div>
-                  <div>
-                    <span>~05.08(목)</span>
-                    <button className={styles.likeButton}>♡</button>
-                  </div>
-                </div>
-              </div>
-
-              {/* 채용 카드 4 */}
-              <div className={`${styles.card} ${styles.topBorderedCard}`}>
-                <img
-                  src="/images/삼성로고.png"
-                  alt="삼성로고"
-                  className={styles.cardCompanyLogo}
-                />
-                <h3 className={styles.cardTitle}>
-                  시스템 소프트웨어 개발 엔지니어 채용
-                </h3>
-                <p className={styles.cardCompany}>삼성전자(주)</p>
-                <div className={styles.cardTags}>
-                  <span className={styles.cardTag}>
-                    <i>📍</i> 경기/수원
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>🏢</i> 신입/경력
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 대졸 ↑
-                  </span>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div>
-                    <span
-                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
-                    >
-                      인기공고 주간 TOP10
-                    </span>
-                  </div>
-                  <div>
-                    <span>~05.15(수)</span>
-                    <button className={styles.likeButton}>♡</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
+            </section>
+          )}
 
           {/* 최고의 인기 공고 */}
           <section id="popular-jobs" className={styles.mainSection}>
@@ -219,151 +264,13 @@ const Main = () => {
             </div>
 
             <div className={styles.cardGrid}>
-              {/* 채용 카드 1 */}
-              <div className={styles.card}>
-                <img
-                  src="/images/쿠팡로고.png"
-                  alt="쿠팡로고"
-                  className={styles.cardCompanyLogo}
-                />
-                <h3 className={styles.cardTitle}>
-                  [쿠팡 CFS] 지역허브 셀러보상 전문가 림핑크룸 정규직 채용
-                </h3>
-                <p className={styles.cardCompany}>쿠팡풀필먼트서비스(주)</p>
-                <div className={styles.cardTags}>
-                  <span className={styles.cardTag}>
-                    <i>📍</i> 경기/인천
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>🏢</i> 신입/경력
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 학력무관
-                  </span>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div>
-                    <span
-                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
-                    >
-                      인기공고 주간 TOP100
-                    </span>
-                  </div>
-                  <div>
-                    <span>~04.30(화)</span>
-                    <button className={styles.likeButton}>♡</button>
-                  </div>
-                </div>
-              </div>
-
-              {/* 채용 카드 2 */}
-              <div className={styles.card}>
-                <img
-                  src="/images/쿠팡로고.png"
-                  alt="쿠팡로고"
-                  className={styles.cardCompanyLogo}
-                />
-                <h3 className={styles.cardTitle}>
-                  쿠팡이츠서비스 CXM 대규모 채용
-                </h3>
-                <p className={styles.cardCompany}>쿠팡(주)</p>
-                <div className={styles.cardTags}>
-                  <span className={styles.cardTag}>
-                    <i>📍</i> 경기/인천
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>🏢</i> 신입/경력
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 학력무관
-                  </span>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div>
-                    <span
-                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
-                    >
-                      마감임박 스크랩 지원 TOP100
-                    </span>
-                  </div>
-                  <div>
-                    <span>D-3</span>
-                    <button className={styles.likeButton}>♡</button>
-                  </div>
-                </div>
-              </div>
-
-              {/* 채용 카드 3 */}
-              <div className={styles.card}>
-                <img
-                  src="/images/SC제일은행로고.png"
-                  alt="SC제일은행로고"
-                  className={styles.cardCompanyLogo}
-                />
-                <h3 className={styles.cardTitle}>소프트웨어 기술지원 채용</h3>
-                <p className={styles.cardCompany}>(주)디에이씨</p>
-                <div className={styles.cardTags}>
-                  <span className={styles.cardTag}>
-                    <i>📍</i> 서울전체
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>🏢</i> 신입/경력
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 초대졸 ↑
-                  </span>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div>
-                    <span
-                      className={`${styles.cardBadge} ${styles.cardBadgeNew}`}
-                    >
-                      취업축하금
-                    </span>
-                  </div>
-                  <div>
-                    <span>~05.08(목)</span>
-                    <button className={styles.likeButton}>♡</button>
-                  </div>
-                </div>
-              </div>
-
-              {/* 채용 카드 4 */}
-              <div className={styles.card}>
-                <img
-                  src="/images/삼성로고.png"
-                  alt="삼성로고"
-                  className={styles.cardCompanyLogo}
-                />
-                <h3 className={styles.cardTitle}>
-                  시스템 소프트웨어 개발 엔지니어 채용
-                </h3>
-                <p className={styles.cardCompany}>삼성전자(주)</p>
-                <div className={styles.cardTags}>
-                  <span className={styles.cardTag}>
-                    <i>📍</i> 경기/수원
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>🏢</i> 신입/경력
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 대졸 ↑
-                  </span>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div>
-                    <span
-                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
-                    >
-                      인기공고 주간 TOP10
-                    </span>
-                  </div>
-                  <div>
-                    <span>~05.15(수)</span>
-                    <button className={styles.likeButton}>♡</button>
-                  </div>
-                </div>
-              </div>
+              {popularJobs.length > 0 ? (
+                popularJobs.map(job => (
+                  <JobCard key={job.jobId} job={job} />
+                ))
+              ) : (
+                <p className={styles.noDataMessage}>인기 공고가 없습니다.</p>
+              )}
             </div>
           </section>
 
@@ -374,151 +281,13 @@ const Main = () => {
             </div>
 
             <div className={styles.cardGrid}>
-              {/* 채용 카드 1 */}
-              <div className={styles.card}>
-                <img
-                  src="/images/쿠팡로고.png"
-                  alt="쿠팡로고"
-                  className={styles.cardCompanyLogo}
-                />
-                <h3 className={styles.cardTitle}>
-                  [쿠팡 CFS] 지역허브 셀러보상 전문가 림핑크룸 정규직 채용
-                </h3>
-                <p className={styles.cardCompany}>쿠팡풀필먼트서비스(주)</p>
-                <div className={styles.cardTags}>
-                  <span className={styles.cardTag}>
-                    <i>📍</i> 경기/인천
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>🏢</i> 신입/경력
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 학력무관
-                  </span>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div>
-                    <span
-                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
-                    >
-                      인기공고 주간 TOP100
-                    </span>
-                  </div>
-                  <div>
-                    <span>~04.30(화)</span>
-                    <button className={styles.likeButton}>♡</button>
-                  </div>
-                </div>
-              </div>
-
-              {/* 채용 카드 2 */}
-              <div className={styles.card}>
-                <img
-                  src="/images/쿠팡로고.png"
-                  alt="쿠팡로고"
-                  className={styles.cardCompanyLogo}
-                />
-                <h3 className={styles.cardTitle}>
-                  쿠팡이츠서비스 CXM 대규모 채용
-                </h3>
-                <p className={styles.cardCompany}>쿠팡(주)</p>
-                <div className={styles.cardTags}>
-                  <span className={styles.cardTag}>
-                    <i>📍</i> 경기/인천
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>🏢</i> 신입/경력
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 학력무관
-                  </span>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div>
-                    <span
-                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
-                    >
-                      마감임박 스크랩 지원 TOP100
-                    </span>
-                  </div>
-                  <div>
-                    <span>D-3</span>
-                    <button className={styles.likeButton}>♡</button>
-                  </div>
-                </div>
-              </div>
-
-              {/* 채용 카드 3 */}
-              <div className={styles.card}>
-                <img
-                  src="/images/SC제일은행로고.png"
-                  alt="SC제일은행로고"
-                  className={styles.cardCompanyLogo}
-                />
-                <h3 className={styles.cardTitle}>소프트웨어 기술지원 채용</h3>
-                <p className={styles.cardCompany}>(주)디에이씨</p>
-                <div className={styles.cardTags}>
-                  <span className={styles.cardTag}>
-                    <i>📍</i> 서울전체
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>🏢</i> 신입/경력
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 초대졸 ↑
-                  </span>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div>
-                    <span
-                      className={`${styles.cardBadge} ${styles.cardBadgeNew}`}
-                    >
-                      취업축하금
-                    </span>
-                  </div>
-                  <div>
-                    <span>~05.08(목)</span>
-                    <button className={styles.likeButton}>♡</button>
-                  </div>
-                </div>
-              </div>
-
-              {/* 채용 카드 4 */}
-              <div className={styles.card}>
-                <img
-                  src="/images/삼성로고.png"
-                  alt="삼성로고"
-                  className={styles.cardCompanyLogo}
-                />
-                <h3 className={styles.cardTitle}>
-                  시스템 소프트웨어 개발 엔지니어 채용
-                </h3>
-                <p className={styles.cardCompany}>삼성전자(주)</p>
-                <div className={styles.cardTags}>
-                  <span className={styles.cardTag}>
-                    <i>📍</i> 경기/수원
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>🏢</i> 신입/경력
-                  </span>
-                  <span className={styles.cardTag}>
-                    <i>♿</i> 대졸 ↑
-                  </span>
-                </div>
-                <div className={styles.cardBottom}>
-                  <div>
-                    <span
-                      className={`${styles.cardBadge} ${styles.cardBadgeHot}`}
-                    >
-                      인기공고 주간 TOP10
-                    </span>
-                  </div>
-                  <div>
-                    <span>~05.15(수)</span>
-                    <button className={styles.likeButton}>♡</button>
-                  </div>
-                </div>
-              </div>
+              {trendingJobs.length > 0 ? (
+                trendingJobs.map(job => (
+                  <JobCard key={job.jobId} job={job} />
+                ))
+              ) : (
+                <p className={styles.noDataMessage}>주목받는 공고가 없습니다.</p>
+              )}
             </div>
           </section>
         </main>

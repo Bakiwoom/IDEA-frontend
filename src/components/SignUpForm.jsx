@@ -109,7 +109,6 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
         onSubmit(data);
     };
 
-    
     return(
         <>
             <div className={styles.container}>

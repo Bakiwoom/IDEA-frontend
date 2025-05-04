@@ -1,17 +1,15 @@
 @charset "UTF-8";
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+
+/* 네비게이션 스타일 */
 .nav {
-    background-color: #fff;
+    background-color: #ffffff;
     border-bottom: 1px solid #e9ecef;
 }
 
 .navContainer {
     display: flex;
-    align-items: center;
+    width: 1160px;
+    margin: 0 auto;
 }
 
 .menuButton {
@@ -22,9 +20,14 @@
     cursor: pointer;
 }
 
+.menuButton:hover {
+    color: #4263eb;
+}
+
 .navMenu {
     display: flex;
     list-style: none;
+    font-weight: bold;
 }
 
 .navMenu li {
@@ -36,11 +39,9 @@
     padding: 15px 10px;
     text-decoration: none;
     color: #495057;
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 17px;
 }
 
-.navMenu a.active {
+.navMenu a:hover {
     color: #4263eb;
-    border-bottom: 2px solid #4263eb;
 }

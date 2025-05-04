@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import styles from "../../assets/css/vendor/VendorSidebar.module.css";
+import styles from "../../assets/css/vendor/CompanySidebar.module.css";
 
 const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
   const location = useLocation();
@@ -11,27 +11,27 @@ const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
       <ul className={styles.sidebarMenu}>
         <li className={activeMenu === "job-management" ? styles.active : ""}>
           <Link
-            to="/vendor/job/management"
+            to="/company/job/management"
             className={styles.menuLink}
             onClick={() => handleMenuChange("job-management")}
           >
-            공고 관리
+            내 공고 관리
           </Link>
         </li>
-        <li
+        {/* <li
           className={activeMenu === "applicant-management" ? styles.active : ""}
         >
           <Link
-            to="/vendor/applicant/management"
+            to="/company/applicant/management"
             className={styles.menuLink}
             onClick={() => handleMenuChange("applicant-management")}
           >
             지원자 관리
           </Link>
-        </li>
+        </li> */}
         <li className={activeMenu === "info-management" ? styles.active : ""}>
           <Link
-            to="/vendor/info/management"
+            to="/company/info/management"
             className={styles.menuLink}
             onClick={() => handleMenuChange("info-management")}
           >
@@ -43,15 +43,15 @@ const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
             activeMenu === "notification-settings" ? styles.active : ""
           }
         >
-          <Link
+          {/* <Link
             to="/vendor/notification/settings"
             className={styles.menuLink}
             onClick={() => handleMenuChange("notification-settings")}
           >
             알림 설정
-          </Link>
+          </Link> */}
         </li>
-        <li className={styles.logoutItem}>로그아웃</li>
+        <li className={styles.logoutItem}><Link to="/">로그아웃</Link></li>
       </ul>
     </div>
   );

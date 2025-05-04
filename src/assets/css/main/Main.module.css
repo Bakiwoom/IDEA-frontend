@@ -35,9 +35,14 @@ body {
     cursor: pointer;
 }
 
+.menuButton:hover {
+    color: #4263eb;
+}
+
 .navMenu {
     display: flex;
     list-style: none;
+    font-weight: bold;
 }
 
 .navMenu li {
@@ -50,12 +55,10 @@ body {
     text-decoration: none;
     color: #495057;
     font-size: 17px;
-    font-weight: 500;
 }
 
-.navMenu a.active {
+.navMenu a:hover {
     color: #4263eb;
-    /* border-bottom: 2px solid #4263eb; */
 }
 
 /* 배너 스타일 */
