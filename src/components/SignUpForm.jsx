@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { Route } from "react-router-dom";
+import axios from "axios";
 
 import styles from "../assets/css/user/SignUpForm.module.css";
 
-const SignUpForm = ({userType,fields,onSubmit}) =>{
+const apiUrl = process.env.REACT_APP_API_URL;
 
+const SignUpForm = ({userType,fields,onSubmit}) =>{
+    
     // 약관 동의사항 항목
     const userCheckboxItems = [
         {name:'allAgree', label:'전체 동의'}
@@ -21,10 +24,11 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
 
     const checkBoxItems = userType === 'user' ? userCheckboxItems : companyCheckboxItems;
     const [formData, setFormData] = useState({});
+
+    const [idCheck, setIdCheck] = useState('');
     
     useEffect(()=>{
-        //console.log(fields);
-        //console.log(userType);
+        
     },[]);
 
 
@@ -35,6 +39,43 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
             ...prev,
             [name] : files ? files[0] : value 
         }))
+    };
+
+    //id 중복체크
+    const handleIdCheck = async ()=>{
+        const id = formData.id;
+
+        if(!id || id.trim() === ''){
+            alert("ID를 입력해주세요.")
+            return;
+        }
+
+        try {
+            const response = await axios({
+              method: "get",
+              url: `${apiUrl}/api/checkId`,
+              params: { id: id },
+              responseType: "json"
+            });
+        
+            if (response.data.result === "success") {
+              setIdCheck({message: "인증완료", type: "success"});
+            } else {
+              setIdCheck({message: "사용 불가능한 아이디 입니다.", type:"fail"});
+            }
+        
+          } catch (error) {
+            console.error("아이디 중복 확인 중 오류:", error);
+            alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+          }
+    };
+
+    //id체크여부 글씨class명주기
+    const idCheckClass = () =>{
+        switch(idCheck.type){
+            case 'success' : return styles.successIdCheck;
+            case 'fail' : return styles.failIdCheck;
+        }
     };
 
     //이용약관 체크
@@ -79,6 +120,13 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
     const handleFormSubmit = (e) =>{
         e.preventDefault();
 
+        if(!idCheck){
+            alert("ID 중복체크를 해주세요.")
+            return;
+        }else if(idCheck.type === 'fail'){
+            alert("아이디를 확인해주세요.")
+        }
+
         //빈값 체크
         for (let field of fields){
             const value = formData[field.name];
@@ -86,7 +134,7 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
             //사진파일:null, 입력값:빈문자열 체크
             const isEmpty = field.type === 'file' ? !value : !value || value.trim() === '';
 
-            if(isEmpty && field.name !== 'obstacle'){
+            if (isEmpty && field.name !== 'disabilityType' && field.name !== 'obstacle') {
                 alert(`${field.label}을(를) 입력해주세요.`);
                 return;
             }
@@ -106,7 +154,8 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
         for(let key in formData){
             data.append(key,formData[key]);
         }
-        onSubmit(data);
+
+        onSubmit(data, userType);
     };
 
     return(
@@ -122,7 +171,7 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
                         {Array.isArray(fields) && fields.length > 0 ? (
                             fields.map((field) => (
                                 <div className={styles.inputBox} key={field.name}>
-                                    <label>{field.name !== 'obstacle' ? (
+                                    <label>{field.name !== 'obstacle' && field.name !== 'disabilityType' ? (
                                         <>
                                             {field.label}
                                             <span className={styles.required}>*</span>
@@ -132,7 +181,21 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
                                         )}
                                     </label>
 
-                                    {field.name === 'id' || field.name === 'ph' ? (
+                                    {field.type === 'select' ? (
+                                        <select
+                                            name={field.name}
+                                            value={formData[field.name] || ''}
+                                            onChange={handleChange}
+                                            className={styles.select}
+                                        >
+                                            <option value="" disabled> 장애 유형을 선택해주세요 </option>
+                                            {field.options.map((option, index) => (
+                                                <option key={index} value={option}>
+                                                    {option}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ) : field.name === 'id' || field.name === 'ph' ? (
                                         <div className={styles.inputWithButtonBox}>
                                             <input
                                                 type={field.type}
@@ -142,12 +205,11 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
                                                 className={field.type === 'file' ? styles.fileInput : styles.input}
                                                 onChange={handleChange}
                                             />
-                                            
-                                            <button type="button" className={styles.checkBtn}>
+                                            <button type="button" className={styles.checkBtn} onClick={field.name === 'id' ? handleIdCheck : undefined}>
                                                 {field.name === 'id' ? '중복체크' : '인증요청'}
                                             </button>
                                         </div>
-                                        ) : (
+                                    ) : (
                                         <input
                                             type={field.type}
                                             name={field.name}
@@ -156,6 +218,9 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
                                             className={field.type === 'file' ? styles.fileInput : styles.input}
                                             onChange={handleChange}
                                         />
+                                    )}
+                                    {field.name === 'id' && idCheck.message && (
+                                        <p className={idCheckClass()}>{idCheck.message}</p>
                                     )}
                                 </div>
                             ))

@@ -61,6 +61,13 @@
     color: var(--login-hiddenfont-color);
 }
 
+/*셀렉트바*/
+.fieldsContainer select{
+    width: 75%;
+    height: 35px;
+    font-size: 14px;
+}
+
 /*파일첨부*/
 .fileInput{
     width: 300px;
@@ -107,4 +114,17 @@
 .submitBtn:hover{
     background-color: var(--login-button-hover-color);
     transform: scale(1.03);
+}
+
+/*중복체크 멘트*/
+.successIdCheck, .failIdCheck{
+    font-size: 12px;
+    padding-top: 3px;
+}
+
+.successIdCheck{
+    color: rgb(0, 86, 214);
+}
+.failIdCheck{
+    color: rgb(255, 46, 46);
 }
