@@ -1,13 +1,16 @@
-import { Route } from "react-router-dom";
+import {  Route } from "react-router-dom";
 import SignUpForm from "../../components/SignUpForm";
 import { type } from "@testing-library/user-event/dist/type";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const UserSignUpPage = () => {
 
+    const navigate = useNavigate();
+    
     const userFields = [
         {name:'name', label:'이름', type:'text', placeholder:'이름을 입력해주세요.'}
        ,{name:'id', label:'아이디', type:'text', placeholder:'아이디를 입력해주세요.'}
@@ -35,7 +38,13 @@ const UserSignUpPage = () => {
             }
         })
         .then((response) => {
-            console.log("회원가입 성공:", response.data);
+            if(response.data.result === 'success'){
+                alert('회원가입이 완료되었습니다.');
+                navigate('/user/loginPage');
+            }else{
+                alert("회원가입에 실패하였습니다. 다시 시도해주세요.");
+            }
+
         })
         .catch((error) => {
             console.error("회원가입 실패:", error);
