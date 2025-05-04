@@ -12,19 +12,19 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
        ,{name:'agreeTerms', label:'(필수) 이용약관 동의'}
        ,{name:'agreePrivacy', label:'(필수) 개인정보 수집 및 이용 동의'}
     ]
-   const vendorCheckboxItems = [
+   const companyCheckboxItems = [
        {name:'allAgree', label:'전체 동의'}
       ,{name:'agreeTerms', label:'(필수) 이용약관 동의'}
       ,{name:'agreePrivacy', label:'(필수) 개인정보 수집 및 이용 동의'}
       ,{name:'agreeVendorInfo', label:'(필수) 업체 정보 제공 동의'}
     ]
 
-    const checkBoxItems = userType === 'user' ? userCheckboxItems : vendorCheckboxItems;
+    const checkBoxItems = userType === 'user' ? userCheckboxItems : companyCheckboxItems;
     const [formData, setFormData] = useState({});
     
     useEffect(()=>{
-        console.log(fields);
-        console.log(userType);
+        //console.log(fields);
+        //console.log(userType);
     },[]);
 
 
@@ -36,6 +36,8 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
             [name] : files ? files[0] : value 
         }))
     };
+
+    //이용약관 체크
     const handleChecked = (e)=>{
         const {name, checked} = e.target;
 
@@ -48,7 +50,10 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
             });
 
             //formData에 체크상태 넣기
-            setFormData(newChecked);
+            setFormData((prev) =>({
+                ...prev,
+                ...newChecked,
+            }));
 
         }else{
             // 개별항목체크
@@ -74,6 +79,29 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
     const handleFormSubmit = (e) =>{
         e.preventDefault();
 
+        //빈값 체크
+        for (let field of fields){
+            const value = formData[field.name];
+
+            //사진파일:null, 입력값:빈문자열 체크
+            const isEmpty = field.type === 'file' ? !value : !value || value.trim() === '';
+
+            if(isEmpty && field.name !== 'obstacle'){
+                alert(`${field.label}을(를) 입력해주세요.`);
+                return;
+            }
+        }
+
+        //체크박스 빈값 확인
+        const requiredCheckboxes = checkBoxItems.filter(item => item.name !== 'allAgree');
+
+        for (let checkbox of requiredCheckboxes) {
+            if (!formData[checkbox.name]) {
+                alert('필수이용약관에 동의해주세요.');
+                return;
+            }
+        }
+
         const data = new FormData();
         for(let key in formData){
             data.append(key,formData[key]);
@@ -81,6 +109,8 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
         onSubmit(data);
     };
 
+
+    
     return(
         <>
             <div className={styles.container}>
