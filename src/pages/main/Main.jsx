@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import SideNavigation from "./SideNavigation";
 import styles from "../../assets/css/main/Main.module.css";
+import Chatbot from "../../components/Chatbot/Chatbot";
 
 import { CATEGORY_PAGE } from "../../routes/contantsRoutes";
 
 const Main = () => {
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
   return (
     <div>
@@ -488,18 +490,27 @@ const Main = () => {
             </div>
           </section>
         </main>
+        {/* 챗봇 플로팅 버튼 */}
+        {!isChatbotOpen && (
+          <div 
+            className={`floating-chatbot-btn`}
+            onClick={() => setIsChatbotOpen(true)}
+          >
+            <img
+              src="/images/chatbot.png"
+              alt="챗봇"
+              style={{ width: '40px', height: '40px' }}
+            />
+          </div>
+        )}
 
+        {/* 챗봇 UI */}
+        {isChatbotOpen && <Chatbot onClose={() => setIsChatbotOpen(false)} />}
+          
         {/* 사이드 내비게이션 */}
         <SideNavigation />
 
-        {/* 챗봇 */}
-        <div className={styles.chatbotContainer}>
-          <img
-            src="/images/chatbot.png"
-            alt="챗봇"
-            className={styles.chatbotIcon}
-          />
-        </div>
+        
       </div>
     </div>
   );
