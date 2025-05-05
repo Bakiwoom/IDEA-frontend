@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import styles from '../../assets/css/user/LoginPage.module.css';
 import kakaoIcon from "../../assets/images/kakao.png";
@@ -12,6 +13,8 @@ import {SIGNUP_PAGE} from '../../routes/contantsRoutes';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const LoginPage = () => {
+
+    const navigate = useNavigate();
 
     const [selectTab, setSelectTab] = useState("user");
     const [id, setId] = useState('');
@@ -37,15 +40,18 @@ const LoginPage = () => {
             headers: { "Content-Type": "application/json; charset=utf-8" },
             data: loginVo,
             responseType: "json",
+            
           })
             .then((response) => {
               console.log(response);
 
               if(response.data.result === 'success'){
+                const token = response.headers['authorization']?.split(" ")[1];
 
-                const token = response.headers["authorization"]?.split(" ")[1];
                 localStorage.setItem('token', token);
                 localStorage.setItem('authUser', JSON.stringify({memberId: response.data.apiData.memberId}));
+
+                navigate('/');
               }else{
                 alert('아이디,비밀번호를 다시 확인해주세요.');
               }
