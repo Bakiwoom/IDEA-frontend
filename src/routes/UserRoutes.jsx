@@ -8,6 +8,7 @@ import VendorSignUpPage from '../pages/user/VendorSignUpPage';
 import LoginPage from '../pages/user/LoginPage';
 import UserMyPageMain from '../pages/user/UserMyPageMain';
 import CategoryListPage from '../pages/user/CategotyListPage';
+import UserEditPage from '../pages/user/UserEditPage';
 
 const UserRoutes = () => {
   return (
@@ -23,6 +24,8 @@ const UserRoutes = () => {
         <Route path='/vendorSignUpPage' element={<VendorSignUpPage />} />
         <Route path='/loginPage' element={<LoginPage />} />
         <Route path='/mypage/userMyPageMain' element={<UserMyPageMain />} />
+        <Route path='/mypage/userEditPage' element={<UserEditPage />} />
+        
 
       </Route>
     </Routes>

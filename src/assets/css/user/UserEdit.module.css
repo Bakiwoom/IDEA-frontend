@@ -1,0 +1,103 @@
+@charset "UTF-8";
+
+.container{
+    /* background-color: aqua; */
+    padding-left: 40px;
+    padding-top: 50px;
+    width: 100%;
+    min-height: 800px
+}
+
+.title{
+    font-size: 25px;
+    font-weight: bold
+}
+.intro{
+    font-size: 13px;
+    padding-top: 5px;
+}
+
+/*정보입력 테이블*/
+.inputContainer{
+    /* background-color: antiquewhite; */
+    width: 100%;
+    margin-top: 25px;
+    text-align: left;
+    
+    border-top: 2px solid #000;
+}
+.inputContainer table{
+    /* background-color: aquamarine; */
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.inputContainer table th,td{
+    height: 60px;
+    border: 1px solid #ececec;
+}
+
+.inputContainer table th{
+    padding: 0 30px;
+    width: 20%;
+    background-color: #fff;
+    font-size: 14px;
+}
+.inputContainer table td{
+    font-size: 14px;
+    padding-left: 8px;
+}
+
+.inputContainer table input{
+    width: 300px;
+    padding: 5px;
+}
+
+/*생년월일 셀렉트바*/
+.birthSelectBar{
+    display: flex;
+    gap: 8px;
+}
+.birthSelectBar select{
+    height: 35px;
+    margin: auto 0;
+    width: 200px;
+    padding-left: 10px;
+}
+
+/*버튼*/
+.buttonBox{
+    /* background-color: bisque; */
+    margin-top: 100px;
+    text-align: center;
+}
+.buttonBox button{
+    padding: 5px 5px;
+    width: 100px;
+    margin-right: 20px;
+    cursor: pointer;
+    font-size: 15px;
+    height: 45px;
+    width: 150px;
+    border-radius: 5px;
+}
+
+.fixbtn{
+    background-color: var(--logo-color);
+    border: none;
+    color: #fff;
+}
+.fixbtn:hover{
+    background-color: var(--login-button-hover-color);
+    transform: scale(1.03);
+}
+
+.cancelbtn{
+    background-color: #d4d4d4;
+    border: 1px solid #d4d4d4;
+    color: #fff;
+}
+.cancelbtn:hover{
+    background-color: #b3b3b3;
+    transform: scale(1.03);
+}
