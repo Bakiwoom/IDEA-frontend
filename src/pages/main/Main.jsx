@@ -12,34 +12,33 @@ const Main = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [bookmarks, setBookmarks] = useState(new Set());
-  
+
   // 토큰 가져오기
   const token = localStorage.getItem('token');
-  const userName = localStorage.getItem('userName') || '사용자';
 
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
         setLoading(true);
-        
+
         // 인기 공고 가져오기 (인증 필요 없음)
         const popularResponse = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/main/popular`
         );
-        
+
         // 주목받는 공고 가져오기 (인증 필요 없음)
         const trendingResponse = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/main/trending`
         );
-        
+
         if (popularResponse.data.result === "success") {
           setPopularJobs(popularResponse.data.apiData || []);
         }
-        
+
         if (trendingResponse.data.result === "success") {
           setTrendingJobs(trendingResponse.data.apiData || []);
         }
-        
+
         // 맞춤 공고는 로그인한 경우에만 가져오기
         if (token) {
           const recommendedResponse = await axios.get(
@@ -50,12 +49,14 @@ const Main = () => {
               }
             }
           );
-          
+
+          console.log('추천 공고 API 데이터:', recommendedResponse.data.apiData);
+
           if (recommendedResponse.data.result === "success") {
             setRecommendedJobs(recommendedResponse.data.apiData || []);
           }
         }
-        
+
         setLoading(false);
       } catch (err) {
         console.error("채용공고를 불러오는데 실패했습니다:", err);
@@ -74,7 +75,7 @@ const Main = () => {
             }
           }
         );
-        
+
         if (response.data.result === "success") {
           const bookmarkJobIds = response.data.apiData.map(bookmark => bookmark.jobId);
           setBookmarks(new Set(bookmarkJobIds));
@@ -126,7 +127,7 @@ const Main = () => {
         );
         setBookmarks(prev => new Set([...prev, jobId]));
       }
-      
+
       // 공고 데이터 새로고침 (북마크 카운트 업데이트를 위해)
       // fetchAllJobs()를 직접 호출하는 대신 상태를 업데이트하여 리렌더링
       // 또는 별도의 API 호출로 카운트만 업데이트
@@ -139,16 +140,16 @@ const Main = () => {
   // 마감일 포맷팅
   const formatDeadline = (deadline) => {
     if (!deadline) return '';
-    
+
     const today = new Date();
     const deadlineDate = new Date(deadline);
     const diffTime = deadlineDate - today;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays < 0) return '마감';
     if (diffDays === 0) return 'D-Day';
     if (diffDays <= 7) return `D-${diffDays}`;
-    
+
     return `~${(deadlineDate.getMonth() + 1).toString().padStart(2, '0')}.${deadlineDate.getDate().toString().padStart(2, '0')}`;
   };
 
@@ -179,7 +180,7 @@ const Main = () => {
           </div>
           <div>
             <span>{formatDeadline(job.deadline)}</span>
-            <button 
+            <button
               className={styles.likeButton}
               onClick={() => toggleBookmark(job.jobId)}
             >
@@ -241,7 +242,7 @@ const Main = () => {
             <section id="recommended-jobs" className={styles.mainSection}>
               <div className={styles.sectionHeader}>
                 <h2 className={styles.sectionTitle}>
-                  {userName}님이 꼭 봐야 할 공고
+                  {recommendedJobs[0].userName || '사용자'}님이 꼭 봐야 할 공고
                 </h2>
               </div>
 
