@@ -14,6 +14,7 @@
   --message-bot-text: #1F2937;
   --slider-bg: #34D399;
   --slider-text: #ffffff;
+  --card-bg: #ffffff;
 }
 
 /* 글자 크기 스케일 */
@@ -833,4 +834,44 @@
   color: var(--message-user-text);
   border-radius: 1.25rem;
   border-bottom-right-radius: 0.5rem;
+}
+
+.expertCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.expertCard {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid var(--border-color);
+}
+
+.expertCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.expertIcon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.expertCard h3 {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.expertCard p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
 } 

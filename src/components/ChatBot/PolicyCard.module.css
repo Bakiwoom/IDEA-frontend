@@ -1,23 +1,308 @@
 .card {
   position: relative;
   width: 100%;
-  background: #fff;
+  background: var(--card-bg, #fff);
   border-radius: 12px;
-  padding: 0;
-  margin: 8px 0;
-  cursor: pointer;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-color, #e0e0e0);
   overflow: hidden;
-  min-height: 200px;
 }
 
 .card.expanded {
-  min-height: 400px;
+  min-height: 300px;
 }
 
 .card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.cardHeader {
+  margin-bottom: 1rem;
+}
+
+.cardType {
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary, #333);
+  margin: 0.5rem 0;
+  line-height: 1.4;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #666);
+  margin-top: 0.25rem;
+}
+
+.cardContent {
+  position: relative;
+}
+
+.summary {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #666);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.details {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color, #e0e0e0);
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.detailsContent {
+  font-size: 1rem;
+  color: var(--text-primary, #333);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  white-space: pre-line;
+  letter-spacing: 0.01rem;
+}
+
+.source {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, #e0e0e0);
+}
+
+.sourceLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color, #4263eb);
+  text-decoration: none;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--bg-light, #f8f9fa);
+  transition: all 0.2s ease;
+  border: 1px solid rgba(66, 99, 235, 0.2);
+}
+
+.sourceLink:hover {
+  background: var(--primary-color, #4263eb);
+  color: white;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--primary-color, #4263eb);
+  background: var(--bg-light, #f8f9fa);
+  border: 1px solid var(--primary-color, #4263eb);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  background: var(--primary-color, #4263eb);
+  color: white;
+}
+
+.expandButton {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #0055ff;
+  background-color: var(--primary-color, #4263eb);
+  border: 1px solid var(--primary-color, #4263eb);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.expandButton:hover {
+  background: #3251d4;
+  color: white;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.expandButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 99, 235, 0.4);
+}
+
+/* 배지 스타일 */
+[class*="badge"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badgePolicy {
+  background-color: #e7f5ff;
+  color: #1971c2;
+}
+
+.badgeEmployment {
+  background-color: #ebfbee;
+  color: #2b8a3e;
+}
+
+.badgeWelfare {
+  background-color: #fff3bf;
+  color: #e67700;
+}
+
+.badgeStartup {
+  background-color: #f3f0ff;
+  color: #5f3dc4;
+}
+
+.badgeMedical {
+  background-color: #ffe3e3;
+  color: #c92a2a;
+}
+
+.badgeEducation {
+  background-color: #e7f5ff;
+  color: #1971c2;
+}
+
+.badgeCounseling {
+  background-color: #f3f0ff;
+  color: #5f3dc4;
+}
+
+.badgeDefault {
+  background-color: #f1f3f5;
+  color: #495057;
+}
+
+/* 다크 모드 스타일 */
+[data-theme='dark'] .card {
+  background: var(--bg-dark, #1f2937);
+  border-color: var(--border-color-dark, #374151);
+}
+
+[data-theme='dark'] .title {
+  color: var(--text-primary-dark, #f3f4f6);
+}
+
+[data-theme='dark'] .subtitle {
+  color: var(--text-secondary-dark, #9ca3af);
+}
+
+[data-theme='dark'] .summary {
+  color: var(--text-secondary-dark, #9ca3af);
+}
+
+[data-theme='dark'] .details {
+  background: #2d3748;
+  border-color: var(--border-color-dark, #374151);
+}
+
+[data-theme='dark'] .detailsContent {
+  color: var(--text-primary-dark, #f3f4f6);
+}
+
+[data-theme='dark'] .sourceLink {
+  background: #2d3748;
+  color: var(--primary-color-dark, #60a5fa);
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+[data-theme='dark'] .sourceLink:hover {
+  background: var(--primary-color-dark, #60a5fa);
+  color: var(--text-primary-dark, #f3f4f6);
+}
+
+[data-theme='dark'] .button {
+  background: #2d3748;
+  color: var(--primary-color-dark, #60a5fa);
+  border-color: var(--primary-color-dark, #60a5fa);
+}
+
+[data-theme='dark'] .button:hover {
+  background: var(--primary-color-dark, #60a5fa);
+  color: var(--text-primary-dark, #f3f4f6);
+}
+
+[data-theme='dark'] .expandButton {
+  color: var(--text-primary-dark, #f3f4f6);
+  border-color: var(--primary-color-dark, #60a5fa);
+  background-color: var(--primary-color-dark, #60a5fa);
+}
+
+[data-theme='dark'] .expandButton:hover {
+  background: #4e8ed7;
+  color: var(--text-primary-dark, #f3f4f6);
+}
+
+/* 다크 모드 배지 스타일 */
+[data-theme='dark'] .badgePolicy {
+  background-color: rgba(25, 113, 194, 0.2);
+  color: #74c0fc;
+}
+
+[data-theme='dark'] .badgeEmployment {
+  background-color: rgba(43, 138, 62, 0.2);
+  color: #8ce99a;
+}
+
+[data-theme='dark'] .badgeWelfare {
+  background-color: rgba(230, 119, 0, 0.2);
+  color: #ffd43b;
+}
+
+[data-theme='dark'] .badgeStartup {
+  background-color: rgba(95, 61, 196, 0.2);
+  color: #b197fc;
+}
+
+[data-theme='dark'] .badgeMedical {
+  background-color: rgba(201, 42, 42, 0.2);
+  color: #ffa8a8;
+}
+
+[data-theme='dark'] .badgeEducation {
+  background-color: rgba(25, 113, 194, 0.2);
+  color: #74c0fc;
+}
+
+[data-theme='dark'] .badgeCounseling {
+  background-color: rgba(95, 61, 196, 0.2);
+  color: #b197fc;
+}
+
+[data-theme='dark'] .badgeDefault {
+  background-color: rgba(73, 80, 87, 0.2);
+  color: #adb5bd;
 }
 
 .imageContainer {
@@ -36,94 +321,11 @@
   object-fit: cover;
 }
 
-.cardContent {
-  padding: 16px;
-}
-
-.title {
-  font-size: 18px;
-  font-weight: 700;
-  color: #333;
-  margin: 0 0 12px 0;
-  line-height: 1.4;
-}
-
-.summary {
-  font-size: 14px;
-  color: #666;
-  margin: 0 0 16px 0;
-  line-height: 1.6;
-}
-
-.details {
-  display: none;
-  font-size: 14px;
-  color: #444;
-  margin: 16px 0;
-  line-height: 1.6;
-}
-
-.expanded .details {
-  display: block;
-}
-
-.source {
-  font-size: 12px;
-  color: #888;
-  margin-top: 16px;
-  padding-top: 12px;
+.cardFooter {
+  padding: 12px 16px;
   border-top: 1px solid #eee;
-}
-
-.source a {
-  color: #666;
-  text-decoration: none;
   display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.source a:hover {
-  color: #1a73e8;
-}
-
-[data-theme='dark'] .card {
-  background: #2d2d2d;
-  border-color: #404040;
-}
-
-[data-theme='dark'] .imageContainer {
-  background: #404040;
-}
-
-[data-theme='dark'] .title {
-  color: #fff;
-}
-
-[data-theme='dark'] .summary {
-  color: #bbb;
-}
-
-[data-theme='dark'] .details {
-  color: #ddd;
-}
-
-[data-theme='dark'] .source {
-  color: #888;
-  border-top-color: #404040;
-}
-
-[data-theme='dark'] .source a {
-  color: #aaa;
-}
-
-[data-theme='dark'] .source a:hover {
-  color: #4d9eff;
-}
-
-.card:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #1a73e8;
+  justify-content: flex-end;
 }
 
 .cardBadge {
@@ -133,21 +335,6 @@
   font-size: 12px;
   font-weight: 500;
   margin-bottom: 8px;
-}
-
-.badgepolicy {
-  background-color: #e7f5ff;
-  color: #1971c2;
-}
-
-.badgejob {
-  background-color: #ebfbee;
-  color: #2b8a3e;
-}
-
-.badgewelfare {
-  background-color: #fff3bf;
-  color: #e67700;
 }
 
 .cardSummary {
@@ -182,44 +369,7 @@
   justify-content: flex-end;
 }
 
-.expandButton {
-  position: absolute;
-  bottom: 3rem;
-  right: 1rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  color: #4263eb;
-  background: transparent;
-  border: 1px solid #4263eb;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.expandButton:hover {
-  background: #4263eb;
-  color: white;
-}
-
-.expanded .expandButton {
-  bottom: 1rem;
-}
-
-[data-theme='dark'] .expandButton {
-  color: #60a5fa;
-  border-color: #60a5fa;
-}
-
-[data-theme='dark'] .expandButton:hover {
-  background: #60a5fa;
-  color: #1f2937;
-}
-
-/* 다크 모드 스타일 */
-[data-theme='dark'] .cardFooter {
-  border-color: var(--border-dark);
-}
-
-[data-theme='dark'] .sourceLink {
-  color: var(--primary-color-dark);
+.card:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #1a73e8;
 } 

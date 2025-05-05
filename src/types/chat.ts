@@ -2,22 +2,41 @@ export interface Message {
   id: string;
   content: string;
   sender: 'user' | 'bot';
+  role: 'user' | 'assistant';
   timestamp: Date;
-  role?: string;
   cards?: PolicyCard[];
+  actionCards?: ExpertCard[];
+}
+
+export interface PolicyCardButton {
+  type: 'link' | 'tel' | 'email' | 'share';
+  label: string;
+  value: string;
 }
 
 export interface PolicyCard {
   id: string;
   title: string;
+  subtitle?: string;
   summary: string;
-  type: 'policy' | 'job' | 'welfare';
+  type: 'policy' | 'employment' | 'welfare' | 'startup' | 'medical' | 'education' | 'counseling';
   details: string;
   imageUrl?: string;
   source?: {
-    url: string;
-    name: string;
+    url?: string;
+    name?: string;
+    email?: string;
+    phone?: string;
   };
+  buttons?: PolicyCardButton[];
+}
+
+export interface ExpertCard {
+  id: string;
+  title: string;
+  expert_type: string;
+  description: string;
+  icon?: string;
 }
 
 export type ChatRole = 'user' | 'assistant';

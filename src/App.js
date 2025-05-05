@@ -6,7 +6,7 @@ import CompanyRoutes from "./routes/CompanyRoutes.jsx";
 import AdminRoutes from "./routes/AdminRoutes";
 import Layout from "./components/Layout";
 import CompanyLayout from "./components/CompanyLayout.jsx";
-import ChatBot from './components/ChatBot/ChatBot';
+import ChatBot from './components/Chatbot/ChatBot';
 import { ChatProvider } from './contexts/ChatContext';
 
 import "./assets/css/all.css";

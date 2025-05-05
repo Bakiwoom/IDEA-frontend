@@ -4,7 +4,7 @@ import { useChat } from '../../contexts/ChatContext';
 import styles from './ChatBot.module.css';
 import { format } from 'date-fns';
 import { ChatBotIcon } from '../Icons/ChatBotIcon';
-import PolicyCard from './PolicyCard';
+import PolicyCard from '../Chatbot/PolicyCard';
 
 // Message 컴포넌트를 분리하고 메모이제이션 적용
 const ChatMessage = memo(({ message, isUser }: { message: Message; isUser: boolean }) => {
@@ -14,6 +14,25 @@ const ChatMessage = memo(({ message, isUser }: { message: Message; isUser: boole
   const [currentTranslate, setCurrentTranslate] = useState(0);
   const [prevTranslate, setPrevTranslate] = useState(0);
   const cardsViewportRef = useRef<HTMLDivElement>(null);
+
+  // 카드 데이터 디버깅
+  useEffect(() => {
+    if (message.cards && message.cards.length > 0) {
+      console.log('메시지에 카드 데이터 있음:', message.cards);
+    }
+  }, [message.cards]);
+
+  // 정규식을 사용하여 '---'나 '###정보 카드' 같은 구분자가 있는 경우 메시지 내용에서 분리
+  const getCleanMessage = (content: string) => {
+    // 구분자로 분리되어 있는 경우 첫 번째 부분만 반환
+    if (content.includes('---')) {
+      return content.split('---')[0].trim();
+    }
+    if (content.includes('###정보 카드')) {
+      return content.split('###정보 카드')[0].trim();
+    }
+    return content;
+  };
 
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
     setIsDragging(true);
@@ -85,20 +104,26 @@ const ChatMessage = memo(({ message, isUser }: { message: Message; isUser: boole
     return () => window.removeEventListener('resize', handleResize);
   }, [currentCardIndex, message.cards]);
 
+  const cleanContent = getCleanMessage(message.content);
+
   return (
     <div className={`${styles.messageWrapper} ${isUser ? styles.userMessage : styles.botMessage}`}>
-      <div className={styles.messageRow}>
-        {!isUser && <ChatBotIcon />}
-        <div className={styles.message}>
-          <div className={styles.messageContent}>
-            {message.content}
+      {/* 메시지 말풍선 부분 */}
+      {cleanContent && (
+        <div className={styles.messageRow}>
+          {!isUser && <ChatBotIcon />}
+          <div className={styles.message}>
+            <div className={styles.messageContent}>
+              {cleanContent}
+            </div>
+          </div>
+          <div className={styles.timestamp}>
+            {format(new Date(message.timestamp), 'HH:mm')}
           </div>
         </div>
-        <div className={styles.timestamp}>
-          {format(new Date(message.timestamp), 'HH:mm')}
-        </div>
-      </div>
+      )}
       
+      {/* 카드 부분 - 별도 UI로 표시 */}
       {message.cards && message.cards.length > 0 && (
         <div className={styles.cardsContainer}>
           <div
@@ -113,7 +138,7 @@ const ChatMessage = memo(({ message, isUser }: { message: Message; isUser: boole
             onTouchEnd={handleDragEnd}
           >
             {message.cards.map((card) => (
-              <div key={card.id} className={styles.cardItem}>
+              <div key={card.id || Math.random().toString()} className={styles.cardItem}>
                 <PolicyCard card={card} isDragging={isDragging} />
               </div>
             ))}
@@ -139,17 +164,19 @@ ChatMessage.displayName = 'ChatMessage';
 // 입력 컴포넌트 분리
 const ChatInput = memo(({ 
   isLoading, 
-  onSendMessage 
+  onSendMessage,
+  currentExpertType 
 }: { 
   isLoading: boolean;
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string, expertType: string) => void;
+  currentExpertType: string;
 }) => {
   const [inputMessage, setInputMessage] = useState('');
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (inputMessage.trim() && !isLoading) {
-      onSendMessage(inputMessage.trim());
+    if (inputMessage.trim() && !isLoading && currentExpertType) {
+      onSendMessage(inputMessage.trim(), currentExpertType);
       setInputMessage('');
     }
   };
@@ -163,12 +190,12 @@ const ChatInput = memo(({
           onChange={(e) => setInputMessage(e.target.value)}
           placeholder="메시지를 입력하세요..."
           className={styles.input}
-          disabled={isLoading}
+          disabled={isLoading || !currentExpertType}
           aria-label="메시지 입력"
         />
         <button
           type="submit"
-          disabled={isLoading || !inputMessage.trim()}
+          disabled={isLoading || !inputMessage.trim() || !currentExpertType}
           className={`${styles.sendButton} ${inputMessage.trim() ? styles.active : ''}`}
           aria-label="메시지 전송"
         >
@@ -182,7 +209,7 @@ const ChatInput = memo(({
 ChatInput.displayName = 'ChatInput';
 
 const ChatBot: React.FC = () => {
-  const { isOpen, messages, isLoading, closeChat, sendMessage } = useChat();
+  const { isOpen, messages, isLoading, closeChat, sendMessage, startChat, setMessages } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -206,10 +233,20 @@ const ChatBot: React.FC = () => {
     height: localStorage.getItem('chatHeight') || '600px'
   });
 
+  const [currentExpertType, setCurrentExpertType] = useState<string>('');
+
   useEffect(() => {
     if (isOpen) {
       setIsAnimating(true);
       setIsClosing(false);
+      startChat(); // 채팅 시작 시 전문가 카드 로드
+    }
+  }, [isOpen, startChat]);
+
+  // 채팅 시작 시 한 번만 실행되는 useEffect
+  useEffect(() => {
+    if (isOpen && messages.length === 0) {
+      startChat();
     }
   }, [isOpen]);
 
@@ -273,6 +310,28 @@ const ChatBot: React.FC = () => {
     setIsDarkMode(prev => !prev);
   };
 
+  const handleExpertSelect = (expertType: string) => {
+    setCurrentExpertType(expertType);
+    const expertIntro: Record<string, string> = {
+      '장애인 취업': '안녕하세요, 장애인 취업 전문가입니다. 취업 준비, 직업 상담, 일자리 매칭 등 장애인 취업과 관련된 모든 것을 도와드립니다. 어떤 도움이 필요하신가요?',
+      '장애인 복지': '안녕하세요, 장애인 복지 전문가입니다. 장애인 수당, 지원금, 혜택 등 복지 정책에 대해 상세히 안내해드립니다. 어떤 복지 혜택에 대해 알고 싶으신가요?',
+      '장애인 창업': '안녕하세요, 장애인 창업 지원 전문가입니다. 창업 준비, 사업자 등록, 창업 지원금 등 창업과 관련된 모든 것을 도와드립니다. 어떤 창업 지원에 대해 알고 싶으신가요?',
+      '장애인 의료': '안녕하세요, 장애인 의료 전문가입니다. 의료비 지원, 재활치료, 보조기기 지원 등 의료 관련 혜택에 대해 안내해드립니다. 어떤 의료 지원에 대해 알고 싶으신가요?',
+      '장애인 교육': '안녕하세요, 장애인 교육 전문가입니다. 교육 지원금, 특수교육, 평생교육 등 교육 관련 혜택에 대해 안내해드립니다. 어떤 교육 지원에 대해 알고 싶으신가요?',
+      '전문 상담': '안녕하세요, 장애인 전문 상담사입니다. 심리 상담, 진로 상담, 가족 상담 등 다양한 상담 서비스를 제공합니다. 어떤 상담이 필요하신가요?'
+    };
+    setMessages(prev => [
+      ...prev,
+      {
+        id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(),
+        content: expertIntro[expertType] || '안녕하세요, 어떤 도움이 필요하신가요?',
+        sender: 'bot',
+        role: 'assistant',
+        timestamp: new Date(),
+      }
+    ]);
+  };
+
   if (!isOpen && !isAnimating) return null;
 
   return (
@@ -330,11 +389,27 @@ const ChatBot: React.FC = () => {
         aria-live="polite"
       >
         {messages.map((message: Message) => (
-          <ChatMessage 
-            key={message.id} 
-            message={message} 
-            isUser={message.sender === 'user'} 
-          />
+          <div key={message.id}>
+            <ChatMessage 
+              message={message} 
+              isUser={message.sender === 'user'} 
+            />
+            {message.actionCards && message.actionCards.length > 0 && (
+              <div className={styles.expertCards}>
+                {message.actionCards.map((card) => (
+                  <div
+                    key={card.id}
+                    className={styles.expertCard}
+                    onClick={() => handleExpertSelect(card.expert_type)}
+                  >
+                    <div className={styles.expertIcon}>{card.icon}</div>
+                    <h3>{card.title}</h3>
+                    <p>{card.description}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         ))}
         {isLoading && (
           <div className={styles.loadingWrapper} aria-label="메시지 전송 중">
@@ -348,7 +423,11 @@ const ChatBot: React.FC = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      <ChatInput isLoading={isLoading} onSendMessage={sendMessage} />
+      <ChatInput 
+        isLoading={isLoading} 
+        onSendMessage={sendMessage} 
+        currentExpertType={currentExpertType}
+      />
 
       <div className={styles.resizeHandle} onMouseDown={(e) => {
         e.preventDefault();
