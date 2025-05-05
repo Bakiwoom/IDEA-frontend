@@ -145,15 +145,31 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [conversationHistory, setConversationHistory] = useState<Message[]>([]);
 
   const openChat = () => setIsOpen(true);
-  const closeChat = () => setIsOpen(false);
+  const closeChat = () => {
+    setIsOpen(false);
+    // 대화 종료 시 대화 내용 저장
+    if (messages.length > 0) {
+      localStorage.setItem('last_conversation', JSON.stringify(messages));
+    }
+  };
 
   const startChat = async () => {
     if (messages.length > 0) return;
     
     setIsLoading(true);
     try {
+      // 이전 대화 내용 불러오기
+      const savedConversation = localStorage.getItem('last_conversation');
+      if (savedConversation) {
+        const parsedMessages = JSON.parse(savedConversation);
+        setMessages(parsedMessages);
+        setConversationHistory(parsedMessages);
+        return;
+      }
+
       const response = await fetch('http://localhost:8082/api/chatbot/start', {
         method: 'POST',
         headers: {
@@ -169,15 +185,17 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         sender: 'bot',
         role: 'assistant',
         timestamp: new Date(),
-        actionCards: data.action_cards
+        actionCards: data.action_cards,
+        exampleQuestions: data.example_questions
       };
 
       setMessages([welcomeMessage]);
+      setConversationHistory([welcomeMessage]);
     } catch (error) {
       console.error('Error starting chat:', error);
       const errorMessage: Message = {
         id: uuidv4(),
-        content: '죄송합니다. 채팅을 시작하는 중 오류가 발생했습니다.',
+        content: '죄송합니다. 채팅을 시작하는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
         sender: 'bot',
         role: 'assistant',
         timestamp: new Date(),
@@ -201,12 +219,18 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       role: 'user',
       timestamp: new Date(),
     };
+
+    // 사용자 메시지 추가
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
 
     try {
-      // 이전 대화 내용을 포함한 메시지 배열 생성
-      const conversationHistory = messages.concat(userMessage).map(msg => ({
+      // 대화 이력 업데이트
+      const updatedHistory: Message[] = [...conversationHistory, userMessage];
+      setConversationHistory(updatedHistory);
+
+      // API 요청을 위한 대화 이력 포맷팅
+      const formattedHistory = updatedHistory.map((msg: Message) => ({
         role: msg.role,
         content: msg.content
       }));
@@ -218,13 +242,12 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          messages: conversationHistory,
+          messages: formattedHistory,
           expert_type: expertType
         })
       });
 
       const data = await response.json();
-      console.log('서버 응답 데이터:', data);
 
       // 응답 텍스트에서 카드 정보 분리
       const { cleanContent, extractedCards } = extractCardInfoFromText(data.answer || '');
@@ -239,27 +262,31 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // 서버 응답 데이터 구조 확인
       const botMessage: Message = {
         id: uuidv4(),
-        content: cleanContent || data.answer || '응답을 받지 못했습니다.',
+        content: cleanContent || data.answer || '죄송합니다. 응답을 받지 못했습니다. 잠시 후 다시 시도해 주세요.',
         sender: 'bot',
         role: 'assistant',
         timestamp: new Date(),
         cards: cardData
       };
 
-      // 로그로 카드 데이터 확인
-      console.log('최종 카드 데이터:', botMessage.cards);
-
+      // 대화 이력 업데이트
+      setConversationHistory(prev => [...prev, botMessage]);
       setMessages(prev => [...prev, botMessage]);
+
+      // 대화 내용 저장
+      localStorage.setItem('last_conversation', JSON.stringify([...updatedHistory, botMessage]));
+
     } catch (error) {
       console.error('Error sending message:', error);
       const errorMessage: Message = {
         id: uuidv4(),
-        content: '죄송합니다. 메시지 전송 중 오류가 발생했습니다.',
+        content: '죄송합니다. 메시지 전송 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
         sender: 'bot',
         role: 'assistant',
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, errorMessage]);
+      setConversationHistory(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -350,7 +377,16 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <ChatContext.Provider value={{ isOpen, messages, isLoading, openChat, closeChat, startChat, sendMessage, setMessages }}>
+    <ChatContext.Provider value={{ 
+      isOpen, 
+      messages, 
+      isLoading, 
+      openChat, 
+      closeChat, 
+      startChat, 
+      sendMessage, 
+      setMessages 
+    }}>
       {children}
     </ChatContext.Provider>
   );

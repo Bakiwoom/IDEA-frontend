@@ -6,6 +6,7 @@ export interface Message {
   timestamp: Date;
   cards?: PolicyCard[];
   actionCards?: ExpertCard[];
+  exampleQuestions?: ExpertQuestion[];
 }
 
 export interface PolicyCardButton {
@@ -37,6 +38,13 @@ export interface ExpertCard {
   expert_type: string;
   description: string;
   icon?: string;
+}
+
+export interface ExpertQuestion {
+  id: string;
+  expert_type: string;
+  question: string;
+  category?: string;
 }
 
 export type ChatRole = 'user' | 'assistant';

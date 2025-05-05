@@ -83,18 +83,18 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--primary-color, #4263eb);
   text-decoration: none;
   font-size: 0.875rem;
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
-  background: var(--bg-light, #f8f9fa);
+  color: #0055ff;
+  background-color: #ffffff;
   transition: all 0.2s ease;
   border: 1px solid rgba(66, 99, 235, 0.2);
 }
 
 .sourceLink:hover {
-  background: var(--primary-color, #4263eb);
+  background: #3251d4;
   color: white;
 }
 

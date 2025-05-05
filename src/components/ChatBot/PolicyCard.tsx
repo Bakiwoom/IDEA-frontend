@@ -1,15 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PolicyCard as PolicyCardType } from '../../types/chat';
 import styles from './PolicyCard.module.css';
 
 interface PolicyCardProps {
   card: PolicyCardType;
   isDragging?: boolean;
+  isExpanded?: boolean;
+  onExpand?: (expanded: boolean) => void;
+  dragged?: boolean;
 }
 
-const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging }) => {
+const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: expandedProp, onExpand, dragged }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+  const [dragStartX, setDragStartX] = useState<number | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof expandedProp === 'boolean') {
+      setIsExpanded(expandedProp);
+    }
+  }, [expandedProp]);
+
+  // 상세가 펼쳐질 때 카드가 화면에 보이도록 스크롤
+  useEffect(() => {
+    if (isExpanded && cardRef.current) {
+      cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [isExpanded]);
 
   // 카드 데이터 로깅
   useEffect(() => {
@@ -99,8 +117,35 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging }) => {
 
   const formattedDetails = formatDetails(details);
 
+  // 클릭/드래그 구분 핸들러
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation(); // 부모 드래그 이벤트 방지
+    setDragStartX(e.clientX);
+  };
+  const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation(); // 부모 드래그 이벤트 방지
+    if (dragStartX !== null) {
+      const moved = Math.abs(e.clientX - dragStartX);
+      if (moved < 8 && !isDragging && !dragged) { // 드래그가 아닌 경우만 상세 토글
+        const next = !isExpanded;
+        setIsExpanded(next);
+        if (onExpand) onExpand(next);
+      }
+      setDragStartX(null);
+    }
+  };
+
   return (
-    <div className={`${styles.card} ${isExpanded ? styles.expanded : ''}`}>
+    <div
+      ref={cardRef}
+      className={`${styles.card} ${isExpanded ? styles.expanded : ''}`}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      tabIndex={0}
+      role="button"
+      aria-expanded={isExpanded}
+      style={{ cursor: 'pointer' }}
+    >
       <div className={styles.cardHeader}>
         <div className={styles.cardType}>
           <span className={getCardTypeClass(type)}>
@@ -113,34 +158,40 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging }) => {
 
       <div className={styles.cardContent}>
         <div className={styles.summary}>{summary}</div>
-        
         {isExpanded && (
           <div className={styles.details}>
             <div 
               className={styles.detailsContent} 
               dangerouslySetInnerHTML={{ __html: `<p>${formattedDetails}</p>` }}
             />
-            
             {card.source && (
               <div className={styles.source}>
                 {card.source.url && (
-                  <a href={card.source.url} target="_blank" rel="noopener noreferrer" className={styles.sourceLink}>
+                  <a href={card.source.url} target="_blank" rel="noopener noreferrer" className={styles.sourceLink}
+                    onMouseDown={e => e.stopPropagation()}
+                    onMouseUp={e => e.stopPropagation()}
+                  >
                     🔗 {sourceName} 바로가기
                   </a>
                 )}
                 {card.source.email && (
-                  <a href={`mailto:${card.source.email}`} className={styles.sourceLink}>
+                  <a href={`mailto:${card.source.email}`} className={styles.sourceLink}
+                    onMouseDown={e => e.stopPropagation()}
+                    onMouseUp={e => e.stopPropagation()}
+                  >
                     📧 이메일 문의: {card.source.email}
                   </a>
                 )}
                 {card.source.phone && (
-                  <a href={`tel:${card.source.phone}`} className={styles.sourceLink}>
+                  <a href={`tel:${card.source.phone}`} className={styles.sourceLink}
+                    onMouseDown={e => e.stopPropagation()}
+                    onMouseUp={e => e.stopPropagation()}
+                  >
                     📞 전화 문의: {card.source.phone}
                   </a>
                 )}
               </div>
             )}
-
             {card.buttons && card.buttons.length > 0 && (
               <div className={styles.buttons}>
                 {card.buttons.map((btn, idx) => (
@@ -152,6 +203,8 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging }) => {
                     target={btn.type === 'link' ? '_blank' : undefined}
                     rel={btn.type === 'link' ? 'noopener noreferrer' : undefined}
                     className={styles.button}
+                    onMouseDown={e => e.stopPropagation()}
+                    onMouseUp={e => e.stopPropagation()}
                     onClick={btn.type === 'share' ? () => navigator.share?.({ title: card.title, url: card.source?.url }) : undefined}
                   >
                     {btn.label}
@@ -162,14 +215,6 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging }) => {
           </div>
         )}
       </div>
-
-      <button 
-        className={styles.expandButton}
-        onClick={() => setIsExpanded(!isExpanded)}
-        aria-expanded={isExpanded}
-      >
-        {isExpanded ? '상세 닫기' : '상세 보기'}
-      </button>
     </div>
   );
 };
