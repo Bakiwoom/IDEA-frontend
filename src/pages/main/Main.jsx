@@ -4,7 +4,6 @@ import axios from "axios";
 import SideNavigation from "./SideNavigation";
 import styles from "../../assets/css/main/Main.module.css";
 import { CATEGORY_PAGE } from "../../routes/contantsRoutes";
-import { useChat } from "../../contexts/ChatContext";
 
 const Main = () => {
   const [recommendedJobs, setRecommendedJobs] = useState([]);
@@ -16,12 +15,6 @@ const Main = () => {
 
   // 토큰 가져오기
   const token = localStorage.getItem('token');
-
-  const { openChat, isOpen } = useChat();
-
-  const authUser = JSON.parse(localStorage.getItem('authUser') || '{}');
-  const userName = authUser.userName || '사용자';
-  const userRole = authUser.role || 'user'; // 'user' or 'company'
 
   useEffect(() => {
     const fetchAllJobs = async () => {
@@ -199,18 +192,6 @@ const Main = () => {
     );
   };
 
-  // 맞춤 공고가 없을 때 대체 데이터 준비
-  const getDefaultRecommendedJobs = () => {
-    if (userRole === 'user') {
-      // TODO: 장애, 지역, 성별, 연령 기반 인기 공고(북마크/클릭수 많은 공고) API 호출 또는 필터링
-      return popularJobs.slice(0, 3); // 임시: 인기 공고 상위 3개
-    } else if (userRole === 'company') {
-      // TODO: 동종 업종, 지역 내 구직 희망자(지원의향서) API 호출 또는 필터링
-      return []; // 임시: 기업회원은 별도 컴포넌트/메시지
-    }
-    return [];
-  };
-
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -229,113 +210,98 @@ const Main = () => {
   }
 
   return (
-    <div className={styles.active} id="job-seeker-screen">
-      {/* 네비게이션 */}
-      <nav className={styles.nav}>
-        <div className={`${styles.container} ${styles.navContainer}`}>
-          <button className={styles.menuButton}>☰</button>
-          <ul className={styles.navMenu}>
-            <li>
-              <Link to={CATEGORY_PAGE} className={styles.active}>
-                채용정보
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+    <div>
+      {/* 구직자 메인화면 */}
+      <div className={styles.active} id="job-seeker-screen">
+        {/* 네비게이션 */}
+        <nav className={styles.nav}>
+          <div className={`${styles.container} ${styles.navContainer}`}>
+            <button className={styles.menuButton}>☰</button>
+            <ul className={styles.navMenu}>
+              <li>
+                <Link to={CATEGORY_PAGE} className={styles.active}>
+                  채용정보
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </nav>
 
-      {/* 메인 컨텐츠 */}
-      <main className={styles.container} style={{ paddingTop: "30px" }}>
-        {/* 배너 */}
-        <div className={styles.banner}>
-          <h1>나에게 맞는 일자리와 함께 받을 수 있는 혜택까지!</h1>
-          <p>
-            장애인 구직자를 위한 맞춤형 혜택 정보와 채용 공고를 확인하세요.
-          </p>
-        </div>
+        {/* 메인 컨텐츠 */}
+        <main className={styles.container} style={{ paddingTop: "30px" }}>
+          {/* 배너 */}
+          <div className={styles.banner}>
+            <h1>나에게 맞는 일자리와 함께 받을 수 있는 혜택까지!</h1>
+            <p>
+              장애인 구직자를 위한 맞춤형 혜택 정보와 채용 공고를 확인하세요.
+            </p>
+          </div>
 
-        {/* 맞춤 공고 섹션 */}
-        {token && (
-          <section id="recommended-jobs" className={styles.mainSection}>
+          {/* 맞춤 공고 섹션 */}
+          {token && recommendedJobs.length > 0 && (
+            <section id="recommended-jobs" className={styles.mainSection}>
+              <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>
+                  {/* 문제가 되는 부분 수정 */}
+                  {(recommendedJobs[0]?.userName || '사용자')}님이 꼭 봐야 할 공고
+                </h2>
+              </div>
+
+              <div className={styles.cardGrid}>
+                {recommendedJobs.map(job => (
+                  <JobCard key={job.jobId} job={job} isTopBordered={true} />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* 최고의 인기 공고 */}
+          <section id="popular-jobs" className={styles.mainSection}>
             <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>
-                {(recommendedJobs[0]?.userName || userName) + "님이 꼭 봐야 할 공고"}
-              </h2>
+              <h2 className={styles.sectionTitle}>최고의 인기 공고</h2>
             </div>
 
             <div className={styles.cardGrid}>
-              {recommendedJobs.length > 0 ? (
-                recommendedJobs.map(job => (
-                  <JobCard key={job.jobId} job={job} isTopBordered={true} />
+              {popularJobs.length > 0 ? (
+                popularJobs.map(job => (
+                  <JobCard key={job.jobId} job={job} />
                 ))
               ) : (
-                userRole === 'user' ? (
-                  getDefaultRecommendedJobs().length > 0 ? (
-                    getDefaultRecommendedJobs().map(job => (
-                      <JobCard key={job.jobId} job={job} isTopBordered={true} />
-                    ))
-                  ) : (
-                    <p className={styles.noDataMessage}>아직 맞춤 공고가 없습니다.<br />관심 있는 공고를 북마크해보세요!</p>
-                  )
-                ) : (
-                  <p className={styles.noDataMessage}>
-                    아직 추천할 지원의향서가 없습니다.<br />
-                    <Link to="/company/applications">지원의향서 관리 바로가기</Link>
-                  </p>
-                )
+                <p className={styles.noDataMessage}>인기 공고가 없습니다.</p>
               )}
             </div>
           </section>
-        )}
 
-        {/* 최고의 인기 공고 */}
-        <section id="popular-jobs" className={styles.mainSection}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>최고의 인기 공고</h2>
-          </div>
+          {/* 요즘 주목받는 공고 */}
+          <section id="trending-jobs" className={styles.mainSection}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>요즘 주목받는 공고</h2>
+            </div>
 
-          <div className={styles.cardGrid}>
-            {popularJobs.length > 0 ? (
-              popularJobs.map(job => (
-                <JobCard key={job.jobId} job={job} />
-              ))
-            ) : (
-              <p className={styles.noDataMessage}>인기 공고가 없습니다.</p>
-            )}
-          </div>
-        </section>
+            <div className={styles.cardGrid}>
+              {trendingJobs.length > 0 ? (
+                trendingJobs.map(job => (
+                  <JobCard key={job.jobId} job={job} />
+                ))
+              ) : (
+                <p className={styles.noDataMessage}>주목받는 공고가 없습니다.</p>
+              )}
+            </div>
+          </section>
+        </main>
 
-        {/* 요즘 주목받는 공고 */}
-        <section id="trending-jobs" className={styles.mainSection}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>요즘 주목받는 공고</h2>
-          </div>
+        {/* 사이드 내비게이션 */}
+        <SideNavigation />
 
-          <div className={styles.cardGrid}>
-            {trendingJobs.length > 0 ? (
-              trendingJobs.map(job => (
-                <JobCard key={job.jobId} job={job} />
-              ))
-            ) : (
-              <p className={styles.noDataMessage}>주목받는 공고가 없습니다.</p>
-            )}
-          </div>
-        </section>
-      </main>
-
-      {/* 사이드 내비게이션 */}
-      <SideNavigation />
-
-      {/* 챗봇 */}
-      {!isOpen && (
-        <div className={styles.chatbotContainer} onClick={openChat} style={{ cursor: 'pointer' }}>
+        {/* 챗봇 */}
+        <div className={styles.chatbotContainer}>
           <img
             src="/images/chatbot.png"
             alt="챗봇"
             className={styles.chatbotIcon}
           />
         </div>
-      )}
+      </div>
     </div>
   );
 };
