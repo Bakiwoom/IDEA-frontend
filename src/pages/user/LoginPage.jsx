@@ -10,6 +10,7 @@ import googleIcon from "../../assets/images/google.svg";
 import naverIcon from "../../assets/images/naver.svg";
 
 import {SIGNUP_PAGE} from '../../routes/contantsRoutes';
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const LoginPage = () => {
@@ -52,6 +53,7 @@ const LoginPage = () => {
                 localStorage.setItem('authUser', JSON.stringify({memberId: response.data.apiData.memberId}));
 
                 navigate('/');
+                window.location.reload();
               }else{
                 alert('아이디,비밀번호를 다시 확인해주세요.');
               }
