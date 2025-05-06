@@ -50,7 +50,11 @@ const LoginPage = () => {
                 const token = response.headers['authorization']?.split(" ")[1];
 
                 localStorage.setItem('token', token);
-                localStorage.setItem('authUser', JSON.stringify({memberId: response.data.apiData.memberId}));
+                localStorage.setItem('authUser', JSON.stringify({
+                  memberId: response.data.apiData.memberId,
+                  role: response.data.apiData.role,
+                  userName: response.data.apiData.userName
+                }));
 
                 navigate('/');
                 window.location.reload();

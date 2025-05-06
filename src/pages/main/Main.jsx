@@ -19,6 +19,10 @@ const Main = () => {
 
   const { openChat, isOpen } = useChat();
 
+  const authUser = JSON.parse(localStorage.getItem('authUser') || '{}');
+  const userName = authUser.userName || '사용자';
+  const userRole = authUser.role || 'user'; // 'user' or 'company'
+
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
@@ -195,6 +199,18 @@ const Main = () => {
     );
   };
 
+  // 맞춤 공고가 없을 때 대체 데이터 준비
+  const getDefaultRecommendedJobs = () => {
+    if (userRole === 'user') {
+      // TODO: 장애, 지역, 성별, 연령 기반 인기 공고(북마크/클릭수 많은 공고) API 호출 또는 필터링
+      return popularJobs.slice(0, 3); // 임시: 인기 공고 상위 3개
+    } else if (userRole === 'company') {
+      // TODO: 동종 업종, 지역 내 구직 희망자(지원의향서) API 호출 또는 필터링
+      return []; // 임시: 기업회원은 별도 컴포넌트/메시지
+    }
+    return [];
+  };
+
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -243,7 +259,7 @@ const Main = () => {
           <section id="recommended-jobs" className={styles.mainSection}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>
-                {recommendedJobs[0].userName || '사용자'}님이 꼭 봐야 할 공고
+                {(recommendedJobs[0]?.userName || userName) + "님이 꼭 봐야 할 공고"}
               </h2>
             </div>
 
@@ -253,7 +269,20 @@ const Main = () => {
                   <JobCard key={job.jobId} job={job} isTopBordered={true} />
                 ))
               ) : (
-                <p className={styles.noDataMessage}>맞춤 공고가 없습니다.</p>
+                userRole === 'user' ? (
+                  getDefaultRecommendedJobs().length > 0 ? (
+                    getDefaultRecommendedJobs().map(job => (
+                      <JobCard key={job.jobId} job={job} isTopBordered={true} />
+                    ))
+                  ) : (
+                    <p className={styles.noDataMessage}>아직 맞춤 공고가 없습니다.<br />관심 있는 공고를 북마크해보세요!</p>
+                  )
+                ) : (
+                  <p className={styles.noDataMessage}>
+                    아직 추천할 지원의향서가 없습니다.<br />
+                    <Link to="/company/applications">지원의향서 관리 바로가기</Link>
+                  </p>
+                )
               )}
             </div>
           </section>

@@ -326,6 +326,19 @@ const ChatBot: React.FC = () => {
   const [currentExpertType, setCurrentExpertType] = useState<string>('');
   const [showTutorial, setShowTutorial] = useState(true);
   const [isExpertBarOpen, setIsExpertBarOpen] = useState(false);
+  const [role, setRole] = useState<string>(() => {
+    const authUser = localStorage.getItem('authUser');
+    if (authUser) {
+      try {
+        const parsed = JSON.parse(authUser);
+        return parsed.role || 'user';
+      } catch {
+        return 'user';
+      }
+    }
+    return 'user';
+  });
+  const [actionCardsPatched, setActionCardsPatched] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -375,6 +388,35 @@ const ChatBot: React.FC = () => {
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    const authUser = localStorage.getItem('authUser');
+    if (authUser) {
+      try {
+        const parsed = JSON.parse(authUser);
+        console.log('authUser role:', parsed.role);
+        if (parsed.role) setRole(parsed.role);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
+
+  // 전문가 카드 데이터 예시
+  const userExpertCards = [
+    { id: 'policy', title: '정책 전문가', expert_type: '정책', description: '장애인 정책 안내', icon: '📜' },
+    { id: 'employment', title: '취업 전문가', expert_type: '장애인 취업', description: '취업 정보 제공', icon: '💼' },
+    // ... 기타 카드 ...
+  ];
+  const companyExpertCards = [
+    { id: 'employment_policy', title: '장애인 채용 정책 전문가', expert_type: '고용 정책', description: '장애인 고용 관련 법률, 제도, 지원금 안내', icon: '📑' },
+    { id: 'job_seekers', title: '장애인 구직자 현황', expert_type: '구직자 현황', description: '장애인 구직자 통계 및 현황 정보', icon: '📊' },
+    { id: 'consulting', title: '고용 컨설팅', expert_type: '고용 컨설팅', description: '장애인 고용 환경 개선, 컨설팅 안내', icon: '💼' },
+    { id: 'application_manage', title: '지원의향서 관리', expert_type: '지원의향서', description: '내 기업에 지원한 구직자 관리', icon: '📂' },
+  ];
+  const expertCards = role === 'company' ? companyExpertCards : userExpertCards;
+
+  console.log('현재 role:', role, 'expertCards:', expertCards);
+
   const scrollToBottom = (): void => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -382,6 +424,7 @@ const ChatBot: React.FC = () => {
   useEffect(() => {
     if (messages.length > 0) {
       scrollToBottom();
+      console.log('messages[0].actionCards:', messages[0].actionCards);
     }
   }, [messages]);
 
@@ -457,6 +500,16 @@ const ChatBot: React.FC = () => {
   };
 
   const getExpertGreeting = (expertType: string): string => {
+    if (role === 'company') {
+      const companyIntro: Record<string, string> = {
+        '고용 정책': '안녕하세요! 장애인 고용 정책 전문가입니다. 채용 지원금, 고용 의무 등 궁금한 점을 물어보세요.',
+        '구직자 현황': '안녕하세요! 장애인 구직자 현황 안내 전문가입니다. 지역별, 업종별 구직자 정보를 안내해드립니다.',
+        '고용 컨설팅': '안녕하세요! 고용 컨설팅 전문가입니다. 장애인 고용 환경 개선, 컨설팅 안내를 도와드립니다.',
+        '지원의향서': '안녕하세요! 지원의향서 관리 전문가입니다. 내 기업에 지원한 구직자 정보를 확인하세요.'
+      };
+      return companyIntro[expertType] || '안녕하세요! 어떤 도움이 필요하신가요?';
+    }
+    // 개인회원용 인사말(기존 코드)
     const expertIntro: Record<string, string> = {
       '장애인 취업': '안녕하세요! 장애인 취업 전문가입니다. 취업 준비부터 일자리 매칭까지, 어떤 도움이 필요하신가요?',
       '장애인 복지': '안녕하세요! 장애인 복지 전문가입니다. 장애인 수당, 지원금, 혜택 등 복지 정책에 대해 상세히 안내해드립니다.',
@@ -469,6 +522,36 @@ const ChatBot: React.FC = () => {
   };
 
   const getExampleQuestions = (expertType: string): ExpertQuestion[] => {
+    if (role === 'company') {
+      const companyQuestions: Record<string, string[]> = {
+        '고용 정책': [
+          '장애인 고용 의무 비율이 어떻게 되나요?',
+          '장애인 고용장려금 신청 방법을 알려주세요.',
+          '장애인 채용 시 정부 지원은 무엇이 있나요?'
+        ],
+        '구직자 현황': [
+          '우리 지역 장애인 구직자 현황을 알려주세요.',
+          '동종 업종 구직자 통계를 보고 싶어요.',
+          '최근 지원한 구직자 목록을 보여주세요.'
+        ],
+        '고용 컨설팅': [
+          '장애인 고용 환경 개선 컨설팅을 받고 싶어요.',
+          '장애인 채용 시 유의사항이 있나요?',
+          '고용 컨설팅 신청 방법을 알려주세요.'
+        ],
+        '지원의향서': [
+          '내 기업에 지원한 구직자 목록을 보여주세요.',
+          '지원의향서 관리 방법을 안내해 주세요.',
+          '지원자별 이력서 확인이 가능한가요?'
+        ]
+      };
+      return (companyQuestions[expertType] || []).map((question, index) => ({
+        id: `question-${index}`,
+        question,
+        expert_type: expertType
+      }));
+    }
+    // 개인회원용 예시 질문(기존 코드)
     const questions: Record<string, string[]> = {
       '정책 전문가': [
         '장애인 관련 법률은 어떤 것이 있나요?',
@@ -506,7 +589,6 @@ const ChatBot: React.FC = () => {
         '가족 상담은 어떻게 받을 수 있나요?'
       ]
     };
-
     return (questions[expertType] || []).map((question, index) => ({
       id: `question-${index}`,
       question,
@@ -538,6 +620,48 @@ const ChatBot: React.FC = () => {
     setMessages([introMessage, followUpMessage]);
     setIsExpertBarOpen(false);
   };
+
+  useEffect(() => {
+    if (
+      isOpen &&
+      !actionCardsPatched &&
+      messages.length === 1 &&
+      messages[0].actionCards &&
+      JSON.stringify(messages[0].actionCards) !== JSON.stringify(expertCards)
+    ) {
+      setMessages(prev => [
+        {
+          ...prev[0],
+          actionCards: expertCards
+        }
+      ]);
+      setActionCardsPatched(true);
+    }
+  }, [isOpen, expertCards, actionCardsPatched, messages]);
+
+  // 챗봇을 닫을 때 플래그 초기화
+  useEffect(() => {
+    if (!isOpen && actionCardsPatched) {
+      setActionCardsPatched(false);
+    }
+  }, [isOpen, actionCardsPatched]);
+
+  // role이 바뀔 때마다 messages를 올바른 actionCards로 강제 초기화
+  useEffect(() => {
+    if (isOpen) {
+      setMessages([
+        {
+          id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(),
+          content: '원하시는 서비스를 선택해주세요.',
+          sender: 'bot',
+          role: 'assistant',
+          timestamp: new Date(),
+          actionCards: role === 'company' ? companyExpertCards : userExpertCards
+        }
+      ]);
+      setActionCardsPatched(false);
+    }
+  }, [role, isOpen]);
 
   if (!isOpen && !isAnimating) return null;
 
