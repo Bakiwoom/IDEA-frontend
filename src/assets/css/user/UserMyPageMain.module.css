@@ -126,7 +126,24 @@
 .listBox table{
     margin-top: 25px;
     width: 98%;
+    border: none;
 }
+.listBox table th,td{
+    border: none;
+}
+.listBox table th{
+    background-color: rgb(236, 236, 236);
+    height: 40px;
+}
+.listBox table td{
+    font-size: 13px;
+    text-align: center;
+}
+
+
 .listBox table button{
+    cursor: pointer;
+    /* background-color: antiquewhite; */
+    color: var(--logo-color);
     cursor: pointer;
 }

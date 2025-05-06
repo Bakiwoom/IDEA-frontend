@@ -1,8 +1,15 @@
 import React from "react";
+import axios from "axios";
 
 import styles from "../../assets/css/user/UserMyPageMain.module.css";
 
+import {useAuth} from "../../contexts/user/AuthProvider";
+
 const UserMyPageMain = () =>{
+
+    const {name} = useAuth();
+
+
     return(
         <>
         <div className={styles.container}>
@@ -13,7 +20,7 @@ const UserMyPageMain = () =>{
                             <img></img>
                         </div>
                         <div className={styles.profileTextBox}>
-                            <div className={styles.name}>진소영</div>
+                            <div className={styles.name}>{name}</div>
                             <div className={styles.state}>장애인 인증완료</div>
                         </div>
                     </div>
@@ -57,7 +64,7 @@ const UserMyPageMain = () =>{
                             <th>기업명</th>
                             <th>지원일</th>
                             <th>상태</th>
-                            <th>상세</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,21 +73,21 @@ const UserMyPageMain = () =>{
                             <td>함께일해요(주)</td>
                             <td>2025-04-15</td>
                             <td>서류접수중</td>
-                            <td><button>상세보기</button></td>
+                            <td className={styles.listBtn}><button>상세보기</button></td>
                         </tr>
                         <tr>
                             <td>백엔드 개발자 채용</td>
                             <td>함께일해요(주)</td>
                             <td>2025-04-15</td>
                             <td>서류접수중</td>
-                            <td><button>상세보기</button></td>
+                            <td className={styles.listBtn}><button>상세보기</button></td>
                         </tr>
                         <tr>
                             <td>백엔드 개발자 채용</td>
                             <td>함께일해요(주)</td>
                             <td>2025-04-15</td>
                             <td>서류접수중</td>
-                            <td><button>상세보기</button></td>
+                            <td className={styles.listBtn}><button>상세보기</button></td>
                         </tr>
                     </tbody>
                 </table>
