@@ -25,7 +25,7 @@ const UserSidebar = () =>{
                         <Link to={USER_MYPAGE_MAIN}><li>홈</li></Link>
                         <Link to="#"><li>지원내역</li></Link>
                         <Link to={EDIT_PAGE}><li>내정보 수정 </li></Link>
-                        <li onClick={handleLogout}>로그아웃</li>
+                        <li className={styles.logout} onClick={handleLogout}><span>↪︎</span>로그아웃</li>
                     </ul>
                 </div>
             </div>
