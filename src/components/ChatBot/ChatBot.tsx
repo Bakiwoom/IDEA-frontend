@@ -4,7 +4,7 @@ import { useChat } from '../../contexts/ChatContext';
 import styles from './ChatBot.module.css';
 import { format } from 'date-fns';
 import { ChatBotIcon } from '../Icons/ChatBotIcon';
-import PolicyCard from '../Chatbot/PolicyCard';
+import PolicyCard from './PolicyCard';
 import ChatbotBottomMenuBar from './ChatbotBottomMenuBar';
 
 // Message 컴포넌트를 분리하고 메모이제이션 적용
