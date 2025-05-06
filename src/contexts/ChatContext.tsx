@@ -309,33 +309,40 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (parts.length > 1) {
         const cardText = parts[1].trim();
         try {
-          // 기본 카드 템플릿 생성
-          const cardTemplate = {
+          // JSON 포맷 여부 간단 체크
+          if (cardText.startsWith('{') && cardText.endsWith('}')) {
+            try {
+              const jsonData = JSON.parse(cardText);
+              extractedCards = Array.isArray(jsonData) ? jsonData : [jsonData];
+            } catch (e) {
+              console.warn('카드 JSON 파싱 실패, 기본 카드 템플릿 사용', e);
+              extractedCards = [{
+                id: uuidv4(),
+                title: '관련 정보',
+                type: 'policy',
+                summary: '챗봇이 제공하는 관련 정보입니다.',
+                details: cardText,
+              }];
+            }
+          } else {
+            // JSON이 아니면 텍스트 자체를 카드의 details로 사용
+            extractedCards = [{
+              id: uuidv4(),
+              title: '관련 정보',
+              type: 'policy',
+              summary: '챗봇이 제공하는 관련 정보입니다.',
+              details: cardText,
+            }];
+          }
+        } catch (e) {
+          console.error('카드 정보 추출 중 오류 발생', e);
+          extractedCards = [{
             id: uuidv4(),
             title: '관련 정보',
             type: 'policy',
             summary: '챗봇이 제공하는 관련 정보입니다.',
             details: cardText,
-          };
-          
-          extractedCards = [cardTemplate];
-          
-          // 만약 카드 텍스트에 JSON 형식이 포함되어 있으면 파싱 시도
-          const jsonMatch = cardText.match(/\{[\s\S]*\}/) || cardText.match(/\[[\s\S]*\]/);
-          if (jsonMatch) {
-            try {
-              const jsonData = JSON.parse(jsonMatch[0]);
-              if (Array.isArray(jsonData)) {
-                extractedCards = jsonData;
-              } else {
-                extractedCards = [jsonData];
-              }
-            } catch (e) {
-              console.warn('카드 JSON 파싱 실패, 기본 카드 템플릿 사용', e);
-            }
-          }
-        } catch (e) {
-          console.error('카드 정보 추출 중 오류 발생', e);
+          }];
         }
       }
     }

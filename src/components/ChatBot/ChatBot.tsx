@@ -257,7 +257,8 @@ const ChatInput = memo(({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (inputMessage.trim() && !isLoading && currentExpertType) {
+    if (inputMessage.trim() && !isLoading) {
+      // 현재 선택된 전문가 타입으로 메시지 전송
       onSendMessage(inputMessage.trim(), currentExpertType);
       setInputMessage('');
     }
@@ -272,12 +273,12 @@ const ChatInput = memo(({
           onChange={(e) => setInputMessage(e.target.value)}
           placeholder="메시지를 입력하세요..."
           className={styles.input}
-          disabled={isLoading || !currentExpertType}
+          disabled={isLoading}
           aria-label="메시지 입력"
         />
         <button
           type="submit"
-          disabled={isLoading || !inputMessage.trim() || !currentExpertType}
+          disabled={isLoading || !inputMessage.trim()}
           className={`${styles.sendButton} ${inputMessage.trim() ? styles.active : ''}`}
           aria-label="메시지 전송"
         >
@@ -414,11 +415,18 @@ const ChatBot: React.FC = () => {
     setShowTutorial(false);
   };
 
-  // 전문가 선택 시 인사말 개선
+  // 전문가 선택 핸들러 수정
   const handleExpertSelect = (expertType: string) => {
-    // '정책', '정책 전문가', '장애인 정책' 등 모두 '정책 전문가'로 통일
+    // 전문가 타입 정규화
     const normalizedType = ['정책', '정책 전문가', '장애인 정책'].includes(expertType) ? '정책 전문가' : expertType;
+    
+    // 현재 전문가 타입 설정
+    setCurrentExpertType(normalizedType);
+    
+    // 전문가 인사말 생성
     const introMessage = getExpertGreeting(normalizedType);
+    
+    // 예시 질문 메시지 생성
     const followUpMessage: Message = {
       id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(),
       content: '어떤 도움이 필요하신가요? 아래 예시 질문을 선택하거나 직접 질문해 주세요.',
@@ -428,6 +436,7 @@ const ChatBot: React.FC = () => {
       exampleQuestions: getExampleQuestions(normalizedType)
     };
 
+    // 메시지 추가
     setMessages(prev => [
       ...prev,
       {
@@ -439,6 +448,12 @@ const ChatBot: React.FC = () => {
       },
       followUpMessage
     ]);
+  };
+
+  // 예시 질문 클릭 핸들러 수정
+  const handleExampleQuestionClick = (question: ExpertQuestion) => {
+    setCurrentExpertType(question.expert_type);
+    sendMessage(question.question, question.expert_type);
   };
 
   const getExpertGreeting = (expertType: string): string => {
@@ -613,10 +628,7 @@ const ChatBot: React.FC = () => {
                     <button
                       key={question.id}
                       className={styles.questionButton}
-                      onClick={() => {
-                        setCurrentExpertType(question.expert_type);
-                        sendMessage(question.question, question.expert_type);
-                      }}
+                      onClick={() => handleExampleQuestionClick(question)}
                     >
                       {question.question}
                       {question.category && (
