@@ -238,22 +238,19 @@ const Main = () => {
           </div>
 
           {/* 맞춤 공고 섹션 */}
-          {token && (
+          {token && recommendedJobs.length > 0 && (
             <section id="recommended-jobs" className={styles.mainSection}>
               <div className={styles.sectionHeader}>
                 <h2 className={styles.sectionTitle}>
-                  {recommendedJobs[0].userName || '사용자'}님이 꼭 봐야 할 공고
+                  {/* 문제가 되는 부분 수정 */}
+                  {(recommendedJobs[0]?.userName || '사용자')}님이 꼭 봐야 할 공고
                 </h2>
               </div>
 
               <div className={styles.cardGrid}>
-                {recommendedJobs.length > 0 ? (
-                  recommendedJobs.map(job => (
-                    <JobCard key={job.jobId} job={job} isTopBordered={true} />
-                  ))
-                ) : (
-                  <p className={styles.noDataMessage}>맞춤 공고가 없습니다.</p>
-                )}
+                {recommendedJobs.map(job => (
+                  <JobCard key={job.jobId} job={job} isTopBordered={true} />
+                ))}
               </div>
             </section>
           )}
