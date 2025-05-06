@@ -5,30 +5,33 @@ import CompanyRoutes from "./routes/CompanyRoutes.jsx";
 import AdminRoutes from "./routes/AdminRoutes";
 import Layout from "./components/Layout";
 import CompanyLayout from "./components/CompanyLayout.jsx";
+import {AuthProvider} from "../src/contexts/user/AuthProvider.js";
 
 import "./assets/css/all.css";
 
 function App() {
   return (
     <Router>
-      <Routes>
-        {/* 푸터가 필요 없는 벤더 경로 */}
-        <Route element={<CompanyLayout />}>
-          <Route path="/company/*" element={<CompanyRoutes />} />
-        </Route>
+      <AuthProvider>
+        <Routes>
+          {/* 푸터가 필요 없는 벤더 경로 */}
+          <Route element={<CompanyLayout />}>
+            <Route path="/company/*" element={<CompanyRoutes />} />
+          </Route>
 
-        {/* 푸터가 있는 나머지 경로 */}
-        <Route element={<Layout />}>
-          {/* 메인화면 */}
-          <Route path="/" element={<Main />} />
-          {/* 관리자 라우터 */}
-          <Route path="/admin/*" element={<AdminRoutes />} />
-        </Route>
+          {/* 푸터가 있는 나머지 경로 */}
+          <Route element={<Layout />}>
+            {/* 메인화면 */}
+            <Route path="/" element={<Main />} />
+            {/* 관리자 라우터 */}
+            <Route path="/admin/*" element={<AdminRoutes />} />
+          </Route>
 
-        {/* 사용자 라우터 (layout X) */}
-        <Route path="/user/*" element={<UserRoutes />} />
+          {/* 사용자 라우터 (layout X) */}
+          <Route path="/user/*" element={<UserRoutes />} />
 
-      </Routes>
+        </Routes>
+      </AuthProvider>
     </Router>
   );
 }

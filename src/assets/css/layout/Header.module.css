@@ -107,3 +107,22 @@
         transform: translateY(0);
     }
 }
+
+/* 로그인, 회원가입 글씨*/
+.loginBox{
+    font-size: 14px;
+    display: flex;
+    gap: 5px;
+    margin-left: auto;
+}
+
+.loginBTN{
+    cursor: pointer;
+}
+.loginBTN:hover, .signupBTN:hover{
+    color: var(--logo-color);
+    font-weight: bold;
+}
+.signupBTN{
+    cursor: pointer;
+}
