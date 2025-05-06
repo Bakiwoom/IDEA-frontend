@@ -79,7 +79,7 @@ const Header = ({type}) => {
               onClick={toggleDropdown}
               ref={buttonRef}
             > 
-              <div className={styles.profileImage}>{name?.charAt(1) ?? ''}</div>
+              <div className={styles.profileImage}>{name?.charAt(0) === '(' ? name?.charAt(1) : name?.charAt(0) ?? ''}</div>
               <span className={styles.userName}>{name} 님</span>
               <span className={styles.arrowIcon}>
                 {isDropdownOpen ? "▲" : "▼"}
