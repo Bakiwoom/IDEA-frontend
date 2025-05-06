@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [authUser, setAuthUser] = useState(null);
     const [memberId, setMemberId] = useState(null);
     const [name, setName] = useState("");
+    const [role, setRole] = useState('');
 
     //로컬스토리지 정보 가져오기
     useEffect(()=>{
@@ -38,8 +39,8 @@ export const AuthProvider = ({ children }) => {
                 responseType: "json",
                 
               }).then((response) => {
-                    //console.log(response);
-                    setName(response.data.apiData);
+                    setName(response.data.apiData.name);
+                    setRole(response.data.apiData.role);
                     
                 }).catch((error) => {
                     console.error("member정보가져오기 오류:", error);
@@ -61,7 +62,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return(
-        <AuthContext.Provider value={{ authUser, memberId, name, logout }}>
+        <AuthContext.Provider value={{ authUser, memberId, name, role, logout }}>
             {children}
         </AuthContext.Provider>
     )

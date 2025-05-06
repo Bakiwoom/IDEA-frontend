@@ -20,7 +20,14 @@
     padding: 40px 0 0 0;
     font-size: 15px;
 }
+
 .liBox li{
     margin-bottom: 20px;
 }
 
+.logout{
+    margin-top: 100px;
+}
+.logout span{
+    margin-right: 5px;
+}
