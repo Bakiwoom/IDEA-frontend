@@ -19,8 +19,8 @@ function App() {
     <Router>
       <AuthProvider>
         <ChatProvider>
-          <MypageProvider>
             <ChatbotLayout>
+
               <Routes>
                 {/* 푸터가 필요 없는 벤더 경로 */}
                 <Route element={<CompanyLayout />}>
@@ -36,7 +36,6 @@ function App() {
               </Routes>
               <ChatBot />
             </ChatbotLayout>
-          </MypageProvider>
         </ChatProvider>
       </AuthProvider>
     </Router>
