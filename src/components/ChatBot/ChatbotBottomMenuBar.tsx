@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ChatbotBottomMenuBar.module.css';
-import { getExpertCardsByRole } from './expertCardData';
 import { useAuth } from '../../contexts/user/AuthProvider';
+import ExpertService from './services/ExpertService';
 
 interface Props {
   isOpen: boolean;
@@ -12,7 +12,7 @@ interface Props {
 
 const ChatbotBottomMenuBar: React.FC<Props> = ({ isOpen, onToggle, onExpertSelect, currentExpertType }) => {
   const { role } = useAuth();
-  const expertCards = getExpertCardsByRole(role);
+  const expertCards = ExpertService.getExpertCardsByRole(role);
 
   return (
     <div className={styles.menuBarWrapper}>
@@ -29,7 +29,7 @@ const ChatbotBottomMenuBar: React.FC<Props> = ({ isOpen, onToggle, onExpertSelec
             <div
               key={expert.id}
               className={styles.expertIconWrapper}
-              onClick={() => onExpertSelect(expert.title)}
+              onClick={() => onExpertSelect(expert.expert_type)}
               tabIndex={0}
               aria-label={expert.title}
             >

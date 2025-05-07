@@ -8,9 +8,8 @@ import Layout from "./components/Layout";
 import CompanyLayout from "./components/CompanyLayout.jsx";
 import ChatbotLayout from "./components/ChatBot/ChatbotLayout.jsx";
 import { AuthProvider } from "../src/contexts/user/AuthProvider.js";
-import { MypageProvider } from "../src/contexts/user/MypageProvider.js";
-import ChatBot from '../src/components/ChatBot/ChatBot.tsx';
-import { ChatProvider } from './contexts/ChatContext';
+import { ChatProvider } from './contexts/ChatContext.tsx';
+import ChatBot from './components/ChatBot/ChatBot.tsx';
 
 import "./assets/css/all.css";
 
@@ -19,8 +18,8 @@ function App() {
     <Router>
       <AuthProvider>
         <ChatProvider>
-          <MypageProvider>
             <ChatbotLayout>
+
               <Routes>
                 {/* 푸터가 필요 없는 벤더 경로 */}
                 <Route element={<CompanyLayout />}>
@@ -36,7 +35,6 @@ function App() {
               </Routes>
               <ChatBot />
             </ChatbotLayout>
-          </MypageProvider>
         </ChatProvider>
       </AuthProvider>
     </Router>

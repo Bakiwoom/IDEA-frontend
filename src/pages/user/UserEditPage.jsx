@@ -33,6 +33,15 @@ const UserEditPage = () => {
                 <div className={styles.inputContainer}>
                     <table>
                         <tr>
+                            <th>프로필 이미지</th>
+                            <td>
+                                <input
+                                    type="file"
+                                    
+                                     />
+                            </td>
+                        </tr>
+                        <tr>
                             <th>아이디</th>
                             <td>
                                 <input
