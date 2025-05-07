@@ -1,132 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Message } from '../types/chat';
-
-// 테스트용 카드 데이터
-const testCards = {
-  policy: [
-    {
-      id: 'policy1',
-      title: '장애인연금제도',
-      subtitle: '기초생활보장제도',
-      summary: '장애인연금은 장애로 인한 추가적 비용을 지원하는 제도입니다.',
-      type: 'policy' as const,
-      details: '장애인연금은 장애로 인한 추가적 비용을 지원하는 제도로, 장애등급 1~2급 장애인에게 월 30만원을 지급합니다. 신청은 읍면동 주민센터에서 가능합니다.',
-      source: {
-        url: 'https://www.mohw.go.kr',
-        name: '보건복지부',
-        phone: '129'
-      },
-      buttons: [
-        { type: 'link' as const, label: '자세히 보기', value: 'https://www.mohw.go.kr' },
-        { type: 'tel' as const, label: '전화 문의', value: '129' }
-      ]
-    },
-    {
-      id: 'policy2',
-      title: '장애인활동지원',
-      subtitle: '장애인복지법',
-      summary: '장애인의 일상생활 및 사회활동 참여를 지원하는 서비스입니다.',
-      type: 'policy' as const,
-      details: '장애인활동지원은 장애인의 일상생활 및 사회활동 참여를 지원하는 서비스로, 장애등급 1~3급 장애인에게 제공됩니다. 지원시간은 장애등급에 따라 차등 지급됩니다.',
-      source: {
-        url: 'https://www.mohw.go.kr',
-        name: '보건복지부',
-        email: 'support@mohw.go.kr'
-      }
-    },
-    {
-      id: 'policy3',
-      title: '장애인차별금지법',
-      subtitle: '장애인권리보장',
-      summary: '장애인에 대한 차별을 금지하고 권리를 보장하는 법률입니다.',
-      type: 'policy' as const,
-      details: '장애인차별금지법은 장애인에 대한 차별을 금지하고 권리를 보장하는 법률로, 교육, 고용, 재화와 용역의 제공 등 모든 영역에서의 차별을 금지합니다.',
-      source: {
-        url: 'https://www.mohw.go.kr',
-        name: '보건복지부'
-      }
-    }
-  ],
-  employment: [
-    {
-      id: 'emp1',
-      title: '장애인고용촉진공단',
-      subtitle: '취업지원',
-      summary: '장애인의 취업을 지원하는 공공기관입니다.',
-      type: 'employment' as const,
-      details: '장애인고용촉진공단은 장애인의 취업을 지원하는 공공기관으로, 직업상담, 취업알선, 직업훈련 등의 서비스를 제공합니다.',
-      source: {
-        url: 'https://www.kead.or.kr',
-        name: '장애인고용촉진공단',
-        phone: '1588-1519'
-      }
-    },
-    {
-      id: 'emp2',
-      title: '장애인일자리',
-      subtitle: '취업정보',
-      summary: '장애인을 위한 다양한 일자리 정보를 제공합니다.',
-      type: 'employment' as const,
-      details: '장애인일자리는 장애인을 위한 다양한 일자리 정보를 제공하는 서비스로, 공공부문 일자리, 민간부문 일자리, 창업지원 등 다양한 정보를 제공합니다.',
-      source: {
-        url: 'https://www.kead.or.kr',
-        name: '장애인고용촉진공단'
-      }
-    },
-    {
-      id: 'emp3',
-      title: '장애인직업재활',
-      subtitle: '직업훈련',
-      summary: '장애인의 직업재활을 위한 훈련 프로그램을 제공합니다.',
-      type: 'employment' as const,
-      details: '장애인직업재활은 장애인의 직업재활을 위한 훈련 프로그램을 제공하는 서비스로, 직업평가, 직업훈련, 취업알선 등의 서비스를 제공합니다.',
-      source: {
-        url: 'https://www.kead.or.kr',
-        name: '장애인고용촉진공단'
-      }
-    }
-  ],
-  welfare: [
-    {
-      id: 'welfare1',
-      title: '장애인복지시설',
-      subtitle: '복지서비스',
-      summary: '장애인의 복지증진을 위한 시설을 안내합니다.',
-      type: 'welfare' as const,
-      details: '장애인복지시설은 장애인의 복지증진을 위한 시설로, 주간보호시설, 거주시설, 단기보호시설 등이 있습니다.',
-      source: {
-        url: 'https://www.mohw.go.kr',
-        name: '보건복지부',
-        phone: '129'
-      }
-    },
-    {
-      id: 'welfare2',
-      title: '장애인복지카드',
-      subtitle: '복지혜택',
-      summary: '장애인의 복지혜택을 제공하는 카드 서비스입니다.',
-      type: 'welfare' as const,
-      details: '장애인복지카드는 장애인의 복지혜택을 제공하는 카드 서비스로, 교통비, 문화생활비, 의료비 등 다양한 혜택을 제공합니다.',
-      source: {
-        url: 'https://www.mohw.go.kr',
-        name: '보건복지부'
-      }
-    },
-    {
-      id: 'welfare3',
-      title: '장애인복지지원',
-      subtitle: '지원사업',
-      summary: '장애인의 복지증진을 위한 다양한 지원사업을 안내합니다.',
-      type: 'welfare' as const,
-      details: '장애인복지지원은 장애인의 복지증진을 위한 다양한 지원사업을 안내하는 서비스로, 생활지원, 의료지원, 교육지원 등 다양한 지원사업을 제공합니다.',
-      source: {
-        url: 'https://www.mohw.go.kr',
-        name: '보건복지부'
-      }
-    }
-  ]
-};
+import ExpertService, { Message } from '../components/ChatBot/services/ExpertService';
 
 interface ChatContextType {
   isOpen: boolean;
@@ -150,7 +24,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const openChat = () => setIsOpen(true);
   const closeChat = () => {
     setIsOpen(false);
-    // 대화 종료 시 대화 내용 저장
     if (messages.length > 0) {
       localStorage.setItem('last_conversation', JSON.stringify(messages));
     }
@@ -161,7 +34,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     
     setIsLoading(true);
     try {
-      // 이전 대화 내용 불러오기
       const savedConversation = localStorage.getItem('last_conversation');
       if (savedConversation) {
         const parsedMessages = JSON.parse(savedConversation);
@@ -169,28 +41,42 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setConversationHistory(parsedMessages);
         return;
       }
-
-      const response = await fetch('http://localhost:8082/api/chatbot/start', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-
-      const data = await response.json();
-
-      const welcomeMessage: Message = {
-        id: uuidv4(),
-        content: data.answer,
-        sender: 'bot',
-        role: 'assistant',
-        timestamp: new Date(),
-        actionCards: data.action_cards,
-        exampleQuestions: data.example_questions
-      };
-
-      setMessages([welcomeMessage]);
-      setConversationHistory([welcomeMessage]);
+      
+      // API 호출로 초기 메시지 가져오기
+      try {
+        const response = await fetch('http://localhost:8082/api/chatbot/start', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        const data = await response.json();
+        const welcomeMessage: Message = {
+          id: uuidv4(),
+          content: data.answer,
+          sender: 'bot',
+          role: 'assistant',
+          timestamp: new Date(),
+          actionCards: data.action_cards,
+          exampleQuestions: data.example_questions
+        };
+        setMessages([welcomeMessage]);
+        setConversationHistory([welcomeMessage]);
+      } catch (apiError) {
+        console.warn('API 연결 실패, 기본 환영 메시지 사용:', apiError);
+        // API 실패 시 기본 환영 메시지 사용
+        const welcomeMessage: Message = {
+          id: uuidv4(),
+          content: '원하시는 서비스를 선택해주세요.',
+          sender: 'bot',
+          role: 'assistant',
+          timestamp: new Date(),
+          // ExpertService를 사용하여 전문가 카드 가져오기
+          actionCards: ExpertService.getExpertCardsByRole('user')
+        };
+        setMessages([welcomeMessage]);
+        setConversationHistory([welcomeMessage]);
+      }
     } catch (error) {
       console.error('Error starting chat:', error);
       const errorMessage: Message = {
@@ -208,7 +94,14 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const sendMessage = async (content: string, expertType: string) => {
     if (!expertType) {
-      console.error('전문가 타입이 지정되지 않았습니다.');
+      const errorMessage: Message = {
+        id: uuidv4(),
+        content: '전문가를 먼저 선택해주세요.',
+        sender: 'bot',
+        role: 'assistant',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
       return;
     }
 
@@ -219,63 +112,158 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       role: 'user',
       timestamp: new Date(),
     };
-
-    // 사용자 메시지 추가
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
-
     try {
-      // 대화 이력 업데이트
       const updatedHistory: Message[] = [...conversationHistory, userMessage];
       setConversationHistory(updatedHistory);
-
-      // API 요청을 위한 대화 이력 포맷팅
       const formattedHistory = updatedHistory.map((msg: Message) => ({
         role: msg.role,
         content: msg.content
       }));
-
-      // 대화 이력을 포함하여 API 호출
-      const response = await fetch('http://localhost:8082/api/chatbot/conversation', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          messages: formattedHistory,
-          expert_type: expertType
-        })
-      });
-
-      const data = await response.json();
-
-      // 응답 텍스트에서 카드 정보 분리
+      
+      let response;
+      let data;
+      
+      try {
+        response = await fetch('http://localhost:8082/api/chatbot/conversation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            messages: formattedHistory,
+            expert_type: expertType
+          })
+        });
+        
+        data = await response.json();
+      } catch (fetchError) {
+        console.warn('백엔드 연결 실패, 테스트 데이터 사용:', fetchError);
+        
+        // 테스트용 응답 데이터
+        const testCardContent = content.toLowerCase().includes('지원금') 
+          ? `장애인 고용 지원금에 대한 정보를 알려드리겠습니다.
+          
+---
+[
+  {
+    "id": "card1",
+    "title": "장애인 고용 지원금",
+    "subtitle": "고용노동부 장애인 고용 촉진 정책",
+    "summary": "장애인을 고용한 사업주에게 지급되는 지원금입니다.",
+    "type": "employment",
+    "details": "장애인 고용 지원금은 장애인을 고용한 사업주에게 지급되는 지원금으로, 장애인 근로자 1인당 월 30~80만원까지 지원됩니다. 신청 방법은 한국장애인고용공단 지사를 방문하거나 온라인으로 신청 가능합니다.",
+    "source": {
+      "url": "https://www.kead.or.kr",
+      "name": "한국장애인고용공단",
+      "phone": "1588-1519"
+    },
+    "buttons": [
+      {
+        "type": "link",
+        "label": "지원금 신청하기",
+        "value": "https://www.kead.or.kr/business/employment.jsp"
+      },
+      {
+        "type": "tel",
+        "label": "전화 문의",
+        "value": "1588-1519"
+      }
+    ]
+  }
+]`
+          : content.toLowerCase().includes('복지') 
+          ? `장애인 복지 서비스에 대한 정보입니다.
+          
+---
+[
+  {
+    "id": "card2",
+    "title": "장애인 복지 카드",
+    "subtitle": "장애인 복지 서비스 이용 안내",
+    "summary": "장애인 복지 카드로 이용할 수 있는 서비스입니다.",
+    "type": "welfare",
+    "details": "장애인 복지 카드는 장애인 등록증과 함께 발급되는 카드로, 교통수단 이용 시 요금 감면, 공공시설 이용료 감면 등 다양한 혜택을 받을 수 있습니다. 주민센터에서 신청 가능합니다.",
+    "source": {
+      "url": "https://www.bokjiro.go.kr",
+      "name": "복지로",
+      "phone": "129"
+    }
+  }
+]`
+          : content.toLowerCase().includes('테스트') || content.toLowerCase().includes('test')
+          ? `다양한 필드 포맷 테스트용 카드입니다.
+          
+---
+[
+  {
+    "id": "test-card-1",
+    "title": "description 필드 테스트",
+    "description": "summary 대신 description 필드를 사용한 카드입니다.",
+    "type": "policy",
+    "content": "details 대신 content 필드를 사용한 상세 내용입니다. 이 카드는 서로 다른 필드 이름을 테스트하기 위한 카드입니다."
+  },
+  {
+    "id": "test-card-2",
+    "title": "content만 있는 카드",
+    "type": "education",
+    "content": "content 필드만 있는 카드입니다. 이 내용이 요약과 상세 정보로 모두 사용됩니다."
+  }
+]`
+          : `질문에 대한 답변입니다. 카드 정보가 없습니다.`;
+          
+        data = {
+          answer: testCardContent
+        };
+      }
+      
+      // 응답 데이터 디버깅 로그 추가
+      console.log('백엔드 응답 데이터:', data);
+      
       const { cleanContent, extractedCards } = extractCardInfoFromText(data.answer || '');
       
-      // 서버 응답 카드 데이터 또는 텍스트에서 추출한 카드 데이터 사용
-      const cardData = Array.isArray(data.cards) && data.cards.length > 0 
-        ? data.cards 
-        : extractedCards.length > 0 
-          ? extractedCards 
-          : generateCardsBasedOnExpertType(expertType, content);
-
-      // 서버 응답 데이터 구조 확인
+      // 카드 데이터 처리 로직 개선
+      let cardData = [];
+      if (Array.isArray(data.cards) && data.cards.length > 0) {
+        console.log('백엔드에서 직접 제공된 카드 데이터:', data.cards);
+        cardData = data.cards;
+      } else if (extractedCards.length > 0) {
+        console.log('텍스트에서 추출된 카드 데이터:', extractedCards);
+        cardData = extractedCards;
+      } else {
+        console.log('카드 데이터가 없거나 형식이 올바르지 않습니다.');
+      }
+      
+      // 카드 데이터에 필수 필드 확인 및 추가
+      cardData = cardData.map((card: any, index: number) => {
+        // 백엔드에서 오는 다양한 필드명 처리
+        const cardContent = (card as any).content || '';
+        const cardDescription = (card as any).description || '';
+        
+        return {
+          id: card.id || `card-${index}-${Date.now()}`,
+          title: card.title || '제목 없음',
+          summary: card.summary || cardDescription || cardContent || '',
+          type: card.type || 'policy',
+          details: card.details || cardContent || cardDescription || card.summary || '',
+          subtitle: card.subtitle,
+          source: card.source,
+          buttons: card.buttons
+        };
+      });
+      
       const botMessage: Message = {
         id: uuidv4(),
         content: cleanContent || data.answer || '죄송합니다. 응답을 받지 못했습니다. 잠시 후 다시 시도해 주세요.',
         sender: 'bot',
         role: 'assistant',
         timestamp: new Date(),
-        cards: cardData
+        cards: cardData.length > 0 ? cardData : undefined
       };
-
-      // 대화 이력 업데이트
       setConversationHistory(prev => [...prev, botMessage]);
       setMessages(prev => [...prev, botMessage]);
-
-      // 대화 내용 저장
       localStorage.setItem('last_conversation', JSON.stringify([...updatedHistory, botMessage]));
-
     } catch (error) {
       console.error('Error sending message:', error);
       const errorMessage: Message = {
@@ -296,91 +284,85 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const extractCardInfoFromText = (text: string) => {
     let cleanContent = text;
     let extractedCards: any[] = [];
-
-    // '###정보 카드' 또는 '---' 구분자가 있는지 확인
-    if (text.includes('###정보 카드') || text.includes('---')) {
-      const parts = text.includes('###정보 카드') 
-        ? text.split('###정보 카드') 
-        : text.split('---');
+    
+    // 개선된 구분자 검출 로직
+    const hasCardSeparator = text.includes('###정보 카드') || 
+                            text.includes('---') || 
+                            text.includes('카드 정보:') || 
+                            text.includes('[카드]');
+    
+    if (hasCardSeparator) {
+      let parts;
+      if (text.includes('###정보 카드')) {
+        parts = text.split('###정보 카드');
+      } else if (text.includes('---')) {
+        parts = text.split('---');
+      } else if (text.includes('카드 정보:')) {
+        parts = text.split('카드 정보:');
+      } else if (text.includes('[카드]')) {
+        parts = text.split('[카드]');
+      } else {
+        parts = [text];
+      }
       
       cleanContent = parts[0].trim();
       
-      // 구분자 이후 텍스트에서 JSON 형식의 카드 정보 추출 시도
       if (parts.length > 1) {
         const cardText = parts[1].trim();
         try {
-          // JSON 포맷 여부 간단 체크
-          if (cardText.startsWith('{') && cardText.endsWith('}')) {
+          // JSON 형식인지 확인
+          if ((cardText.startsWith('{') && cardText.endsWith('}')) || 
+              (cardText.startsWith('[') && cardText.endsWith(']'))) {
             try {
               const jsonData = JSON.parse(cardText);
-              extractedCards = Array.isArray(jsonData) ? jsonData : [jsonData];
+              const parsedCards = Array.isArray(jsonData) ? jsonData : [jsonData];
+              
+              // 카드 데이터 포맷팅
+              extractedCards = parsedCards.map((card: any, index: number) => {
+                const cardContent = card.content || '';
+                const cardDescription = card.description || '';
+                
+                return {
+                  id: card.id || `parsed-card-${index}-${Date.now()}`,
+                  title: card.title || '정보 카드',
+                  summary: card.summary || cardDescription || cardContent || '요약 정보가 없습니다.',
+                  type: card.type || 'policy',
+                  details: card.details || cardContent || cardDescription || card.summary || '상세 정보가 없습니다.',
+                  subtitle: card.subtitle,
+                  source: card.source,
+                  buttons: card.buttons
+                };
+              });
+              
+              console.log('텍스트에서 추출된 카드 데이터:', extractedCards);
             } catch (e) {
               console.warn('카드 JSON 파싱 실패, 기본 카드 템플릿 사용', e);
+              // 파싱 실패 시 기본 카드 생성
               extractedCards = [{
-                id: uuidv4(),
-                title: '관련 정보',
+                id: `fallback-card-${Date.now()}`,
+                title: '정보 카드',
+                summary: '카드 정보를 파싱할 수 없습니다.',
                 type: 'policy',
-                summary: '챗봇이 제공하는 관련 정보입니다.',
-                details: cardText,
+                details: cardText
               }];
             }
           } else {
-            // JSON이 아니면 텍스트 자체를 카드의 details로 사용
+            // JSON이 아닌 경우 텍스트를 카드 내용으로 사용
             extractedCards = [{
-              id: uuidv4(),
-              title: '관련 정보',
+              id: `text-card-${Date.now()}`,
+              title: '정보 카드',
+              summary: cardText.substring(0, 100) + (cardText.length > 100 ? '...' : ''),
               type: 'policy',
-              summary: '챗봇이 제공하는 관련 정보입니다.',
-              details: cardText,
+              details: cardText
             }];
           }
         } catch (e) {
           console.error('카드 정보 추출 중 오류 발생', e);
-          extractedCards = [{
-            id: uuidv4(),
-            title: '관련 정보',
-            type: 'policy',
-            summary: '챗봇이 제공하는 관련 정보입니다.',
-            details: cardText,
-          }];
+          extractedCards = [];
         }
       }
     }
-
     return { cleanContent, extractedCards };
-  };
-
-  // 전문가 유형에 따라 카드 생성
-  const generateCardsBasedOnExpertType = (expertType: string, query: string) => {
-    const expertTypeMap: Record<string, string> = {
-      '장애인 정책': 'policy',
-      '장애인 취업': 'employment',
-      '장애인 복지': 'welfare',
-      '장애인 창업': 'startup',
-      '장애인 의료': 'medical',
-      '장애인 교육': 'education',
-      '전문 상담': 'counseling'
-    };
-    
-    const cardType = expertTypeMap[expertType] || 'policy';
-    
-    // 기존 테스트 카드 데이터 사용
-    if (testCards[cardType as keyof typeof testCards]) {
-      return testCards[cardType as keyof typeof testCards];
-    }
-    
-    // 기본 카드 생성 (테스트 데이터가 없는 경우)
-    return [{
-      id: uuidv4(),
-      title: `${expertType} 관련 정보`,
-      type: cardType,
-      summary: `${expertType}와 관련된 정보를 제공합니다.`,
-      details: `사용자 질문: "${query}"에 대한 ${expertType} 정보입니다. 자세한 정보는 관련 기관 웹사이트를 참조하세요.`,
-      source: {
-        name: '장애인 복지 정보 포털',
-        url: 'https://www.bokjiro.go.kr/'
-      }
-    }];
   };
 
   return (
