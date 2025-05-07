@@ -9,6 +9,7 @@ import CompanyLayout from "./components/CompanyLayout.jsx";
 import {AuthProvider} from "../src/contexts/user/AuthProvider.js";
 import ChatBot from '../src/components/ChatBot/ChatBot.tsx';
 import { ChatProvider } from './contexts/ChatContext';
+import {MypageProvider} from "../src/contexts/user/MypageProvider.js";
 
 import "./assets/css/all.css";
 
@@ -16,22 +17,24 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <ChatProvider>
-          <Routes>
-            {/* 푸터가 필요 없는 벤더 경로 */}
-            <Route element={<CompanyLayout />}>
-              <Route path="/company/*" element={<CompanyRoutes />} />
-            </Route>
-            {/* 푸터가 있는 나머지 경로 */}
-            <Route element={<Layout />}>
-              <Route path="/" element={<Main />} />
-              <Route path="/admin/*" element={<AdminRoutes />} />
-            </Route>
-            {/* 사용자 라우터 (layout X) */}
-            <Route path="/user/*" element={<UserRoutes />} />
-          </Routes>
-          <ChatBot />
-        </ChatProvider>
+          <ChatProvider>
+            <MypageProvider>
+              <Routes>
+                {/* 푸터가 필요 없는 벤더 경로 */}
+                <Route element={<CompanyLayout />}>
+                  <Route path="/company/*" element={<CompanyRoutes />} />
+                </Route>
+                {/* 푸터가 있는 나머지 경로 */}
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Main />} />
+                  <Route path="/admin/*" element={<AdminRoutes />} />
+                </Route>
+                {/* 사용자 라우터 (layout X) */}
+                <Route path="/user/*" element={<UserRoutes />} />
+              </Routes>
+              <ChatBot />
+            </MypageProvider>
+          </ChatProvider>
       </AuthProvider>
     </Router>
   );
