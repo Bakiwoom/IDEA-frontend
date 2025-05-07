@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import SideNavigation from "./SideNavigation";
 import styles from "../../assets/css/main/Main.module.css";
 import { CATEGORY_PAGE } from "../../routes/contantsRoutes";
-import { useChat } from "../../contexts/ChatContext";
+import { useAuth } from "../../contexts/user/AuthProvider"; // AuthContext 불러오기
 
 const Main = () => {
   const [recommendedJobs, setRecommendedJobs] = useState([]);
@@ -17,14 +17,11 @@ const Main = () => {
   // 토큰 가져오기
   const token = localStorage.getItem('token');
 
-  const { openChat, isOpen } = useChat();
-
-  const authUser = JSON.parse(localStorage.getItem('authUser') || '{}');
-  const userRole = authUser.role || 'user'; // 'user' or 'company'
-  const userName = authUser.userName || '사용자';
+  // AuthContext에서 사용자 정보 가져오기
+  const { name, role } = useAuth();
 
   // 공고 데이터 새로고침 함수 추가
-  const fetchAllJobs = async () => {
+  const fetchAllJobs = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -70,10 +67,10 @@ const Main = () => {
       setError("채용공고를 불러오는데 실패했습니다.");
       setLoading(false);
     }
-  };
+  }, [token]);
 
   // 북마크 조회 함수
-  const fetchUserBookmarks = async () => {
+  const fetchUserBookmarks = useCallback(async () => {
     try {
       console.log('북마크 목록 조회 요청');
       const response = await axios.get(
@@ -94,14 +91,14 @@ const Main = () => {
     } catch (err) {
       console.error("북마크를 불러오는데 실패했습니다:", err);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchAllJobs();
     if (token) {
       fetchUserBookmarks();
     }
-  }, [token]);
+  }, [token, fetchAllJobs, fetchUserBookmarks]);
 
   // 북마크 토글
   const toggleBookmark = async (e, jobId) => {
@@ -254,16 +251,16 @@ const Main = () => {
   };
 
   // 맞춤 공고가 없을 때 대체 데이터 준비
-  const getDefaultRecommendedJobs = () => {
-    if (userRole === 'user') {
-      // TODO: 장애, 지역, 성별, 연령 기반 인기 공고(북마크/클릭수 많은 공고) API 호출 또는 필터링
-      return popularJobs.slice(0, 3); // 임시: 인기 공고 상위 3개
-    } else if (userRole === 'company') {
-      // TODO: 동종 업종, 지역 내 구직 희망자(지원의향서) API 호출 또는 필터링
-      return []; // 임시: 기업회원은 별도 컴포넌트/메시지
-    }
-    return [];
-  };
+  // const getDefaultRecommendedJobs = () => {
+  //   if (role === 'user') {
+  //     // TODO: 장애, 지역, 성별, 연령 기반 인기 공고(북마크/클릭수 많은 공고) API 호출 또는 필터링
+  //     return popularJobs.slice(0, 3); // 임시: 인기 공고 상위 3개
+  //   } else if (role === 'company') {
+  //     // TODO: 동종 업종, 지역 내 구직 희망자(지원의향서) API 호출 또는 필터링
+  //     return []; // 임시: 기업회원은 별도 컴포넌트/메시지
+  //   }
+  //   return [];
+  // };
 
   if (loading) {
     return (
@@ -309,11 +306,11 @@ const Main = () => {
         </div>
 
         {/* 맞춤 공고 섹션 */}
-        {token && authUser.role === 'user' && (
+        {token && role === 'user' && (
           <section id="recommended-jobs" className={styles.mainSection}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>
-                {(recommendedJobs.length > 0 ? recommendedJobs[0].userName : userName) + "님이 꼭 봐야 할 공고"}
+                {(name || '사용자') + "님이 꼭 봐야 할 공고"}
               </h2>
             </div>
 
