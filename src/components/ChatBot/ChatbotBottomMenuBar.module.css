@@ -17,14 +17,19 @@
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   font-size: 1.05rem;
-
-
+  padding: 8px 15px;
+  background-color: rgb(23, 140, 251);
+  border: none;
+  color: #fff;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(66,99,235,0.08);
   transition: background 0.18s, color 0.18s, box-shadow 0.18s;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .handleButton:hover {
@@ -47,7 +52,6 @@
   z-index: 21;
   width: 100%;
   max-width: 100%;
-
 }
 
 .expertIconWrapper {
@@ -57,13 +61,15 @@
   align-items: center;
   cursor: pointer;
   font-size: 2rem;
-  transition: transform 0.15s;
+  transition: transform 0.2s, filter 0.2s;
+  padding: 6px 0;
 }
 
 .expertIconWrapper:focus,
 .expertIconWrapper:hover {
-  transform: scale(1.12);
+  transform: translateY(-5px);
   z-index: 22;
+  filter: drop-shadow(0 8px 12px rgba(66, 99, 235, 0.25));
 }
 
 .expertIcon {
@@ -77,13 +83,14 @@
   justify-content: center;
   box-shadow: 0 2px 8px rgba(66,99,235,0.08);
   margin-bottom: 0.25rem;
-  transition: background 0.2s;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .expertIconWrapper:hover .expertIcon,
 .expertIconWrapper:focus .expertIcon {
   background: #4263EB;
   color: #fff;
+  box-shadow: 0 10px 15px rgba(66,99,235,0.25);
 }
 
 .tooltip {
@@ -110,6 +117,25 @@
 .expertIconWrapper:focus .tooltip {
   display: block;
   opacity: 1;
+}
+
+/* 현재 선택된 전문가 강조 */
+.currentExpert .expertIcon {
+  background: #4263EB;
+  color: #fff;
+  box-shadow: 0 8px 16px rgba(66,99,235,0.35);
+}
+
+.currentExpert {
+  transform: translateY(-3px);
+  filter: drop-shadow(0 6px 10px rgba(66, 99, 235, 0.2));
+}
+
+/* 해시태그와 전문가 이름 강조 */
+.expertName {
+  color: #ffffff;
+  font-weight: bold;
+  margin-right: 0.25rem;
 }
 
 @media (max-width: 600px) {
