@@ -65,6 +65,7 @@
     padding: 8px 15px 10px 25px;
     cursor: pointer;
     transition: transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
+    overflow: hidden;
 }
 .itemBox:hover{
     transform: scale(1.03) translateY(-5px);
@@ -91,12 +92,24 @@
 .spanBox{
     padding-top: 8px;
 }
-.spanBox span{
+.spanBox .iconSpan{
     background-color: #e9ecef;
     margin-right: 5px;
     font-size: 12px;
     padding: 3px 3px;
     border-radius: 3px;
+}
+.spanBox .disavility{
+    background-color: #fff5f5;
+    color: #e03131;
+    margin-right: 5px;
+    font-size: 12px;
+    padding: 5px 5px;
+    border-radius: 3px;
+}
+
+.spanBox i{
+    margin-right: 3px;
 }
 .dayBox{
     display: flex;
@@ -111,4 +124,16 @@
 }
 .heartIcon{
     font-size: 20px;
+}
+.iconHover:hover{
+    transform: scale(1.03) translateY(-1px);
+    color: #e03131;
+}
+
+/*페이징*/
+.pagination{
+    background-color: #ffffff;
+    text-align: center;
+    padding-bottom: 20px;
+    padding-top: 20px;
 }
