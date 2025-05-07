@@ -223,17 +223,25 @@ body {
     color: #2f9e44;
 }
 
+.cardDate {
+    font-size: 15px;
+    color: #868e96;
+}
+
 .likeButton {
     background: none;
     border: none;
     cursor: pointer;
-    color: #adb5bd;
-    font-size: 16px;
+    color: #868e96;
+    font-size: 22px;
+    padding-left: 5px;
+    position: relative;
+    top: 1px;
 }
 
-.likeButton:hover {
+.likeButtonActive {
     color: #e03131;
-}
+  }
 
 .active {
     display: block;

@@ -52,7 +52,11 @@
 .name{
     font-size: 20px;
 }
-.state{
+.stateYes{
+    font-size: 13px;
+    color: var(--logo-color);
+}
+.stateNo{
     font-size: 13px;
     color: rgb(255, 57, 57);
 }
@@ -64,6 +68,9 @@
     display: flex;
     justify-content: space-between;
 }
+.profileItem {
+    padding-top: 20px;
+}
 .profileItem li:first-child{
     font-weight: bold;
     font-size: 15px;
@@ -71,6 +78,11 @@
 .profileItem span{
     color: rgb(47, 51, 255);
     padding-right: 5px;
+}
+.disabilityType{
+    background-color: antiquewhite;
+    padding: 4px 8px;
+    font-size: 12px
 }
 
 
@@ -126,7 +138,25 @@
 .listBox table{
     margin-top: 25px;
     width: 98%;
+    border: none;
 }
+.listBox table th,td{
+    border: none;
+}
+.listBox table th{
+    background-color: rgb(236, 236, 236);
+    height: 40px;
+}
+.listBox table td{
+    font-size: 13px;
+    text-align: center;
+    height: 60px;
+}
+
+
 .listBox table button{
+    cursor: pointer;
+    /* background-color: antiquewhite; */
+    color: var(--logo-color);
     cursor: pointer;
 }

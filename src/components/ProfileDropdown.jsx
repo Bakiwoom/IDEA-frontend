@@ -1,10 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "../assets/css/main/ProfileDropdown.module.css";
+import { useNavigate } from "react-router-dom";
 
 import { USER_MYPAGE_MAIN,EDIT_PAGE } from "../routes/contantsRoutes";
+import {useAuth} from "../contexts/user/AuthProvider";
 
 const ProfileDropdown = ({type}) => {
+
+  const {logout} = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = ()=>{
+    logout();
+    navigate('/');
+    
+  }
+
   let title = "";
 
   switch (type) {
@@ -48,7 +60,7 @@ const ProfileDropdown = ({type}) => {
         </ul>
       </div>
 
-      <div className={styles.logoutButtonContainer}>
+      <div className={styles.logoutButtonContainer} onClick={handleLogout}>
          <Link to="/">로그아웃</Link>
       </div>
     </div>
