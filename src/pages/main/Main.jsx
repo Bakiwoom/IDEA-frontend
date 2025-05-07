@@ -326,16 +326,7 @@ const Main = () => {
       {/* 사이드 내비게이션 */}
       <SideNavigation />
 
-      {/* 챗봇 */}
-      {!isOpen && (
-        <div className={styles.chatbotContainer} onClick={openChat} style={{ cursor: 'pointer' }}>
-          <img
-            src="/images/chatbot.png"
-            alt="챗봇"
-            className={styles.chatbotIcon}
-          />
-        </div>
-      )}
+      
     </div>
   );
 };

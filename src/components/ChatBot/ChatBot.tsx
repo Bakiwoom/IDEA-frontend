@@ -6,6 +6,8 @@ import { format } from 'date-fns';
 import { ChatBotIcon } from '../Icons/ChatBotIcon';
 import PolicyCard from './PolicyCard';
 import ChatbotBottomMenuBar from './ChatbotBottomMenuBar';
+import { getExpertCardsByRole } from './expertCardData';
+import { useAuth } from '../../contexts/user/AuthProvider';
 
 // Message 컴포넌트를 분리하고 메모이제이션 적용
 const ChatMessage = memo(({ message, isUser }: { message: Message; isUser: boolean }) => {
@@ -300,6 +302,7 @@ interface ExpertQuestion {
 
 const ChatBot: React.FC = () => {
   const { isOpen, messages, isLoading, closeChat, sendMessage, startChat, setMessages } = useChat();
+  const { role } = useAuth();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -326,18 +329,6 @@ const ChatBot: React.FC = () => {
   const [currentExpertType, setCurrentExpertType] = useState<string>('');
   const [showTutorial, setShowTutorial] = useState(true);
   const [isExpertBarOpen, setIsExpertBarOpen] = useState(false);
-  const [role, setRole] = useState<string>(() => {
-    const authUser = localStorage.getItem('authUser');
-    if (authUser) {
-      try {
-        const parsed = JSON.parse(authUser);
-        return parsed.role || 'user';
-      } catch {
-        return 'user';
-      }
-    }
-    return 'user';
-  });
   const [actionCardsPatched, setActionCardsPatched] = useState(false);
 
   useEffect(() => {
@@ -388,32 +379,7 @@ const ChatBot: React.FC = () => {
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    const authUser = localStorage.getItem('authUser');
-    if (authUser) {
-      try {
-        const parsed = JSON.parse(authUser);
-        console.log('authUser role:', parsed.role);
-        if (parsed.role) setRole(parsed.role);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }, []);
-
-  // 전문가 카드 데이터 예시
-  const userExpertCards = [
-    { id: 'policy', title: '정책 전문가', expert_type: '정책', description: '장애인 정책 안내', icon: '📜' },
-    { id: 'employment', title: '취업 전문가', expert_type: '장애인 취업', description: '취업 정보 제공', icon: '💼' },
-    // ... 기타 카드 ...
-  ];
-  const companyExpertCards = [
-    { id: 'employment_policy', title: '장애인 채용 정책 전문가', expert_type: '고용 정책', description: '장애인 고용 관련 법률, 제도, 지원금 안내', icon: '📑' },
-    { id: 'job_seekers', title: '장애인 구직자 현황', expert_type: '구직자 현황', description: '장애인 구직자 통계 및 현황 정보', icon: '📊' },
-    { id: 'consulting', title: '고용 컨설팅', expert_type: '고용 컨설팅', description: '장애인 고용 환경 개선, 컨설팅 안내', icon: '💼' },
-    { id: 'application_manage', title: '지원의향서 관리', expert_type: '지원의향서', description: '내 기업에 지원한 구직자 관리', icon: '📂' },
-  ];
-  const expertCards = role === 'company' ? companyExpertCards : userExpertCards;
+  const expertCards = getExpertCardsByRole(role);
 
   console.log('현재 role:', role, 'expertCards:', expertCards);
 
@@ -656,7 +622,7 @@ const ChatBot: React.FC = () => {
           sender: 'bot',
           role: 'assistant',
           timestamp: new Date(),
-          actionCards: role === 'company' ? companyExpertCards : userExpertCards
+          actionCards: role === 'company' ? getExpertCardsByRole('company') : getExpertCardsByRole('user')
         }
       ]);
       setActionCardsPatched(false);

@@ -6,7 +6,9 @@ import CompanyRoutes from "./routes/CompanyRoutes.jsx";
 import AdminRoutes from "./routes/AdminRoutes";
 import Layout from "./components/Layout";
 import CompanyLayout from "./components/CompanyLayout.jsx";
-import {AuthProvider} from "../src/contexts/user/AuthProvider.js";
+import ChatbotLayout from "./components/ChatBot/ChatbotLayout.jsx";
+import { AuthProvider } from "../src/contexts/user/AuthProvider.js";
+import { MypageProvider } from "../src/contexts/user/MypageProvider.js";
 import ChatBot from '../src/components/ChatBot/ChatBot.tsx';
 import { ChatProvider } from './contexts/ChatContext';
 
@@ -16,7 +18,9 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-          <ChatProvider>
+        <ChatProvider>
+            <ChatbotLayout>
+
               <Routes>
                 {/* 푸터가 필요 없는 벤더 경로 */}
                 <Route element={<CompanyLayout />}>
@@ -31,7 +35,8 @@ function App() {
                 <Route path="/user/*" element={<UserRoutes />} />
               </Routes>
               <ChatBot />
-          </ChatProvider>
+            </ChatbotLayout>
+        </ChatProvider>
       </AuthProvider>
     </Router>
   );
