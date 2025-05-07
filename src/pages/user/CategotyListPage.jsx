@@ -50,7 +50,6 @@ const CategoryListPage = () =>{
             
           })
             .then((response) => {
-                console.log('setListVo',response.data.apiData);
               setListVo(response.data.apiData);
             })
             .catch((error) => {
@@ -72,7 +71,6 @@ const CategoryListPage = () =>{
             
           })
             .then((response) => {
-              console.log('setBookmarkList',response.data.apiData);
               setBookmarkList(response.data.apiData);
             })
             .catch((error) => {
@@ -83,7 +81,6 @@ const CategoryListPage = () =>{
 
     //좋아요 등록
     const handleHeart = (jobId)=>{
-        console.log('heart click')
         
         if(role === 'company'){
             alert('기업회원은 사용불가능한 기능입니다.');
