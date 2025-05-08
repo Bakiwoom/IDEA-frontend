@@ -169,7 +169,7 @@ const CategoryListPage = () =>{
                             </div>
                             <div className={styles.dayBox}>
                                 <span className={styles.itemEndday}>~ {item.deadline.slice(5)}</span>
-                                <span className={`${styles.heartIcon} ${role === 'company' ? '' : styles.iconHover}`} onClick={()=>handleHeart(item.jobId)}>
+                                <span className={`${styles.heartIcon} ${role === 'company' ? '' : styles.iconHover} ${bookmarkList.some(bookmark => bookmark.jobId === item.jobId) ? styles.redHeart : ''}`}  onClick={()=>handleHeart(item.jobId)}>
                                     {bookmarkList.some(bookmark => bookmark.jobId === item.jobId)
                                     ? '♥' : '♡'
                                     }
