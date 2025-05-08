@@ -1,9 +1,19 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "../../assets/css/vendor/CompanySidebar.module.css";
+
+import {useAuth} from "../../contexts/user/AuthProvider";
 
 const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const {logout} = useAuth();
+
+  const handleLogout = ()=>{
+    logout();
+    navigate('/');
+  }
 
   return (
     <div className={styles.sidebar}>
@@ -51,7 +61,16 @@ const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
             알림 설정
           </Link> */}
         </li>
-        <li className={styles.logoutItem}><Link to="/">로그아웃</Link></li>
+        <li className={activeMenu === "main" ? styles.active : ""}>
+          <Link
+            to="/"
+            className={styles.menuLink}
+            onClick={() => handleMenuChange("main")}
+          >
+            홈으로 가기
+          </Link>
+        </li>
+        <li className={styles.logoutItem} onClick={handleLogout}><Link to="/">로그아웃</Link></li>
       </ul>
     </div>
   );

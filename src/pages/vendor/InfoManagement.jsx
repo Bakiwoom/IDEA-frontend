@@ -11,7 +11,7 @@ const InfoManagement = () => {
   const [activeMenu, setActiveMenu] = useState("info-management");
   const navigate = useNavigate();
   const location = useLocation();
-  //const token = localStorage.getItem('token'); // JWT 토큰 가져오기
+  const token = localStorage.getItem('token'); // JWT 토큰 가져오기
 
   // URL에서 탭 파라미터 가져오기
   const getTabFromURL = () => {
@@ -65,9 +65,9 @@ const InfoManagement = () => {
         method: 'get',
         url: `${process.env.REACT_APP_API_URL}/api/companies/me/company/detail`,
         responseType: "json",
-        // headers: {
-        //   Authorization: `Bearer ${token}`
-        // }
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
       if (response.data.result === "success") {
@@ -104,9 +104,9 @@ const InfoManagement = () => {
         method: 'get',
         url: `${process.env.REACT_APP_API_URL}/api/companies/me/manager/detail`,
         responseType: "json",
-        // headers: {
-        //   Authorization: `Bearer ${token}`
-        // }
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
       if (response.data.result === "success") {
@@ -152,9 +152,9 @@ const InfoManagement = () => {
         method: 'get',
         url: `${process.env.REACT_APP_API_URL}/api/companies/me/account/detail`,
         responseType: "json",
-        // headers: {
-        //   Authorization: `Bearer ${token}`
-        // }
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
       console.log("API 응답 전체:", response);
@@ -282,7 +282,7 @@ const InfoManagement = () => {
         method: 'post',
         url: `${process.env.REACT_APP_API_URL}/api/companies/me/company/update`,
         headers: {
-          //Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
         },
         data: formData
@@ -334,7 +334,7 @@ const InfoManagement = () => {
         method: 'post',
         url: `${process.env.REACT_APP_API_URL}/api/companies/me/manager/update`,
         headers: {
-          //Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         data: {
@@ -397,7 +397,7 @@ const InfoManagement = () => {
         method: 'post',
         url: `${process.env.REACT_APP_API_URL}/api/companies/me/account/password`,
         headers: {
-          //Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         data: {

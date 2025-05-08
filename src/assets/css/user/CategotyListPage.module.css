@@ -129,6 +129,9 @@
     transform: scale(1.03) translateY(-1px);
     color: #e03131;
 }
+.redHeart{
+    color: #e03131;
+}
 
 /*페이징*/
 .pagination{
