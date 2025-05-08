@@ -116,7 +116,7 @@ const UserMyPageMain = () =>{
                                 <td className={styles.listBtn}><button>상세보기</button></td>
                             </tr>
                         ) : (
-                            <p></p>
+                            <td></td>
                         )}
                     </tbody>
                 </table>

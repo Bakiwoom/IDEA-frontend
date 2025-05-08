@@ -14,7 +14,7 @@ export const UsermypageProvider = ({ children }) => {
     const [totalCount, setTotalCount] = useState(0);
     
     
-
+    //지원내역 가져오기
     const getApplications = ()=>{
 
         axios({
