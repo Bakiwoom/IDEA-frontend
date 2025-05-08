@@ -61,6 +61,15 @@ const VendorSidebar = ({ activeMenu, handleMenuChange }) => {
             알림 설정
           </Link> */}
         </li>
+        <li className={activeMenu === "main" ? styles.active : ""}>
+          <Link
+            to="/"
+            className={styles.menuLink}
+            onClick={() => handleMenuChange("main")}
+          >
+            홈으로 가기
+          </Link>
+        </li>
         <li className={styles.logoutItem} onClick={handleLogout}><Link to="/">로그아웃</Link></li>
       </ul>
     </div>

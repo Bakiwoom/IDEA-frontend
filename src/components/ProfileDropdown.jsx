@@ -54,10 +54,10 @@ const ProfileDropdown = ({type}) => {
           <div className={styles.myMenuSection}>
             <ul className={styles.menuList}>
               <li className={styles.menuListItem}>
-                <Link to='company/job/management/detail/:jobId'>MY홈</Link>
+                <Link to='/company/job/management'>MY홈</Link>
               </li>
               <li className={styles.menuListItem}>
-                <Link to="company/info/management">내정보 관리</Link>
+                <Link to="/company/info/management">내정보 관리</Link>
               </li>
             </ul>
           </div>
