@@ -8,24 +8,31 @@ const ApplicantManagement = () => {
   const [applicants, setApplicants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // 필터와 검색을 위한 상태 추가
   const [sortOrder, setSortOrder] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredApplicants, setFilteredApplicants] = useState([]);
-  
-  // 로컬 스토리지에서 토큰 가져오기 (주석 처리)
-  // const token = localStorage.getItem('token');
+
+  // 로컬 스토리지에서 토큰 가져오기
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     // 지원자 목록 데이터 가져오기
     const fetchApplicants = async () => {
       try {
         setLoading(true);
-        
+
         // 토큰 인증 부분 주석 처리
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/companies/me/applications`);
-        
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/companies/me/applications`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
         // 백엔드 응답 구조에 맞게 데이터 추출
         if (response.data && response.data.result === "success") {
           console.log('API 응답 데이터:', response.data);
@@ -33,7 +40,7 @@ const ApplicantManagement = () => {
         } else {
           throw new Error(response.data?.message || "데이터를 불러오는데 실패했습니다.");
         }
-        
+
         setLoading(false);
       } catch (err) {
         console.error("지원자 목록을 불러오는데 실패했습니다:", err);
@@ -51,7 +58,7 @@ const ApplicantManagement = () => {
 
     // 검색 필터링
     if (searchTerm) {
-      result = result.filter(applicant => 
+      result = result.filter(applicant =>
         applicant.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         applicant.userPhone.includes(searchTerm) ||
         applicant.jobTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -109,7 +116,7 @@ const ApplicantManagement = () => {
             <div className={styles.formRow}>
               <div className={styles.formGroup}>
                 <label htmlFor="job-filter">공고별 필터</label>
-                <select 
+                <select
                   id="job-filter"
                   value={sortOrder}
                   onChange={handleSortChange}
