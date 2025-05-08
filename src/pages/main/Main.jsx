@@ -237,13 +237,15 @@ const Main = () => {
           </div>
           <div>
             <span className={`${styles.cardDate}`}>{formatDeadline(job.deadline)}</span>
-            <button
-              type="button"
-              className={`${styles.likeButton} ${bookmarks.has(job.jobId) ? styles.likeButtonActive : ''}`}
-              onClick={handleBookmarkClick}
-            >
-              {bookmarks.has(job.jobId) ? '♥' : '♡'}
-            </button>
+            {role !== 'company' && (
+              <button
+                type="button"
+                className={`${styles.likeButton} ${bookmarks.has(job.jobId) ? styles.likeButtonActive : ''}`}
+                onClick={handleBookmarkClick}
+              >
+                {bookmarks.has(job.jobId) ? '♥' : '♡'}
+              </button>
+            )}
           </div>
         </div>
       </div>
