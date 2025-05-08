@@ -5,10 +5,12 @@ import axios from "axios";
 import styles from "../../assets/css/user/UserMyPageMain.module.css";
 
 import {useAuth} from "../../contexts/user/AuthProvider";
+import {useUserMypage} from "../../contexts/user/UsermypageProvider";
 
 const UserMyPageMain = () =>{
     const apiUrl = process.env.REACT_APP_API_URL;
     const {name, userId} = useAuth();
+    const {getApplications , applicationList, totalCount} = useUserMypage();
 
     const [bookmark, setBookmark] = useState(0);
     const [isVerified, setIsVerified] = useState(0);
@@ -33,10 +35,15 @@ const UserMyPageMain = () =>{
                 alert("서버와의 연결 중 문제가 발생했습니다. 다시 시도해 주세요.");
             });
     };
-
+    //북마크 갯수
     useEffect(()=>{
         getBookmarkcount();
-    },[])
+    },[bookmark]);
+
+    //지원내역 관리
+    useEffect(()=>{
+        getApplications();
+    },[totalCount]);
 
 
     return(
@@ -72,7 +79,7 @@ const UserMyPageMain = () =>{
                     </div>
                     <div className={styles.numberTextBox}>
                         <div className={`${styles.number} ${styles.numberLine}`}>
-                            <p className={styles.count}>0</p>
+                            <p className={styles.count}>{totalCount}</p>
                             <p className={styles.numberName}>지원완료</p>
                         </div>
                         <div className={styles.number}>
@@ -86,22 +93,31 @@ const UserMyPageMain = () =>{
                 <h3>최근 지원현황</h3>
                 <table>
                     <thead>
-                        <tr>
-                            <th>공고명</th>
-                            <th>기업명</th>
-                            <th>지원일</th>
-                            <th>상태</th>
-                            <th></th>
-                        </tr>
+                        {applicationList && applicationList.length > 0 ? (
+                            <tr>
+                                <th>공고명</th>
+                                <th>기업명</th>
+                                <th>지원일</th>
+                                <th>유형</th>
+                                <th></th>
+                            </tr>
+                        ) : (
+                            <p className={styles.applicationListNone}>- 지원내역이 없습니다.</p>
+                        )}
+                        
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>백엔드 개발자 채용</td>
-                            <td>(주)함께일해요</td>
-                            <td>2025-04-15</td>
-                            <td>지원완료</td>
-                            <td className={styles.listBtn}><button>상세보기</button></td>
-                        </tr>
+                        {applicationList && applicationList.length > 0 ? (
+                            <tr>
+                                <td>{applicationList.title}</td>
+                                <td>{applicationList.companyName}</td>
+                                <td>{applicationList.createAt}</td>
+                                <td>{applicationList.jobType}</td>
+                                <td className={styles.listBtn}><button>상세보기</button></td>
+                            </tr>
+                        ) : (
+                            <p></p>
+                        )}
                     </tbody>
                 </table>
             </div>
