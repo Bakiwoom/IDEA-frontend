@@ -78,7 +78,7 @@ const JobManagement = () => {
           <thead>
             <tr>
               <th>공고명</th>
-              <th>채용담당</th>
+              <th>채용 담당</th>
               <th>직무 유형</th>
               <th>지원자 수</th>
               <th>마감일</th>

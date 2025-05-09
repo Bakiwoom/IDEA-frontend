@@ -23,7 +23,6 @@ const ApplicantManagement = () => {
       try {
         setLoading(true);
 
-        // 토큰 인증 부분 주석 처리
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/companies/me/applications`,
           {
