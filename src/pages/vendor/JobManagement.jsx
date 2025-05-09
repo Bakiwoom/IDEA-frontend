@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../../assets/css/vendor/JobManagement.module.css";
 import VendorSidebar from "./CompanySidebar";
@@ -7,17 +7,59 @@ import VendorSidebar from "./CompanySidebar";
 const JobManagement = () => {
   const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState("job-management");
+  const [jobPostings, setJobPostings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // 토큰 가져오기
+  const token = localStorage.getItem('token');
 
   // 메뉴 변경 핸들러
   const handleMenuChange = (menuId) => {
     setActiveMenu(menuId);
-    // 메뉴 변경 시 필요한 라우팅 로직 추가 가능
+    // 메뉴 변경 시, 필요한 라우팅 로직 추가 가능
   };
 
   // 상세보기 버튼 클릭 핸들러
   const handleViewDetail = (jobId) => {
     navigate(`/company/job/management/detail/${jobId}`);
   };
+
+  // 공고 데이터 가져오기
+  const fetchJobPostings = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/companies/me/jobs/posting`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.data.result === "success") {
+        setJobPostings(response.data.apiData || []);
+        console.log('공고글 데이터:', response.data.apiData);
+      } else {
+        setError(response.data.message || "데이터를 불러오는데 실패했습니다.");
+      }
+    } catch (err) {
+      console.error("공고 데이터 로드 실패:", err);
+      setError("공고 데이터를 불러오는데 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 날짜 포맷 함수
+  const formatDate = (dateString) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  };
+
+  // 컴포넌트 마운트 시 데이터 로드
+  useEffect(() => {
+    fetchJobPostings();
+  }, []);
 
   return (
     <div className={styles.mypageWrap}>
@@ -36,88 +78,59 @@ const JobManagement = () => {
           <thead>
             <tr>
               <th>공고명</th>
-              <th>모집부문</th>
-              <th>상태</th>
+              <th>채용담당</th>
+              <th>직무 유형</th>
               <th>지원자 수</th>
               <th>마감일</th>
               <th>관리</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                {/* 채용 공고 상세페이지와 연결 필요 */}
-                <Link to={`/job/management/detail/1`}> 
-                  웹 접근성 담당자 채용
-                </Link>
-              </td>
-              <td>웹 접근성 개선</td>
-              <td>
-                <span className={`${styles.statusBadge} ${styles.statusOpen}`}>
-                  모집중
-                </span>
-              </td>
-              <td>5명</td>
-              <td>2025-05-10</td>
-              <td>
-                <button
-                  className={styles.btnSecondary}
-                  onClick={() => handleViewDetail(1)}
-                >
-                  상세보기
-                </button>
-                <button className={styles.btnSecondary}>수정</button>
-                <button className={styles.btnSecondary}>마감</button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <Link to={`/job/management/detail/2`}>
-                  프론트엔드 개발자 채용
-                </Link>
-              </td>
-              <td>프론트엔드 개발</td>
-              <td>
-                <span className={`${styles.statusBadge} ${styles.statusClose}`}>
-                  모집완료
-                </span>
-              </td>
-              <td>3명</td>
-              <td>2025-04-10</td>
-              <td>
-                <button
-                  className={styles.btnSecondary}
-                  onClick={() => handleViewDetail(2)}
-                >
-                  상세보기
-                </button>
-                <button className={styles.btnSecondary}>수정</button>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <Link to={`/job/management/detail/3`}>
-                  사무보조 채용
-                </Link>
-              </td>
-              <td>사무보조</td>
-              <td>
-                <span className={`${styles.statusBadge} ${styles.statusEnd}`}>
-                  마감
-                </span>
-              </td>
-              <td>0명</td>
-              <td>2025-03-01</td>
-              <td>
-                <button
-                  className={styles.btnSecondary}
-                  onClick={() => handleViewDetail(3)}
-                >
-                  상세보기
-                </button>
-              </td>
-            </tr>
-            {/* 반복 */}
+            {loading && (
+              <tr>
+                <td colSpan="6" className={styles.messageCell}>데이터를 불러오는 중입니다...</td>
+              </tr>
+            )}
+            {error && (
+              <tr>
+                <td colSpan="6" className={`${styles.messageCell} ${styles.errorMessage}`}>{error}</td>
+              </tr>
+            )}
+            {!loading && !error && jobPostings.length === 0 && (
+              <tr>
+                <td colSpan="6" className={styles.messageCell}>등록된 공고가 없습니다.</td>
+              </tr>
+            )}
+            {!loading && !error && jobPostings.length > 0 && 
+              jobPostings.map((job, index) => (
+                <tr key={job.jobId || index}>
+                  <td>{job.title || '제목 없음'}</td>
+                  <td>{job.department || '-'}</td>
+                  <td>{job.jobType || '-'}</td>
+                  <td>{job.applyCount || '-'}</td>
+                  <td>{formatDate(job.deadline)}</td>
+                  <td>
+                    <button
+                      className={styles.btnSecondary}
+                      onClick={() => handleViewDetail(job.jobId)}
+                    >
+                      상세보기
+                    </button>
+                    <button 
+                      className={styles.btnSecondary}
+                      onClick={() => navigate(`/company/job/edit/${job.jobId}`)}
+                    >
+                      수정
+                    </button>
+                    <button 
+                      className={styles.btnSecondary}
+                    >
+                      마감
+                    </button>
+                  </td>
+                </tr>
+              ))
+            }
           </tbody>
         </table>
       </section>
