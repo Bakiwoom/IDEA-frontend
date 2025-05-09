@@ -52,9 +52,17 @@ const UserMyPageMain = () =>{
             <div className={styles.topBox}>
                 <div className={styles.profileContainer}>
                     <div className={styles.profileFlexBox}>
-                        <div className={styles.profileImgBox}>
-                            <img></img>
-                        </div>
+
+                        {profileImg !== null && profileImg !== ''? (
+                            <div className={styles.profileImgBox}>
+                                <img src={profileImg}></img>
+                            </div>
+                        ) : (
+                            <div className={styles.profileImgBox}>
+                                <img></img>
+                            </div>
+                        )}
+                        
                         <div className={styles.profileTextBox}>
                             <div className={styles.name}>{name}</div>
                            {isVerified === 1 ? (
@@ -99,7 +107,7 @@ const UserMyPageMain = () =>{
                                 <th>기업명</th>
                                 <th>지원일</th>
                                 <th>유형</th>
-                                <th></th>
+                                <th> </th>
                             </tr>
                         ) : (
                             <p className={styles.applicationListNone}>- 지원내역이 없습니다.</p>
@@ -116,7 +124,7 @@ const UserMyPageMain = () =>{
                                 <td className={styles.listBtn}><button>상세보기</button></td>
                             </tr>
                         ) : (
-                            <td></td>
+                            <td> </td>
                         )}
                     </tbody>
                 </table>

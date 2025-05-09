@@ -40,7 +40,6 @@ const UserEditPage = () => {
             
           })
             .then((response) => {
-                console.log(response.data.apiData)
                 if(response.data.result === 'success'){
                     setUserVo({
                         profileImg: response.data.apiData.userProfileImageUrl,
@@ -116,7 +115,6 @@ const UserEditPage = () => {
             
           })
             .then((response) => {
-                console.log(response.data.result);
                 if(response.data.result === 'success'){
                     alert("회원정보수정이 완료되었습니다.");
                     navigate(USER_MYPAGE_MAIN);
@@ -130,6 +128,11 @@ const UserEditPage = () => {
             }); 
     }
 
+    //취소버튼
+    const handleBack = ()=>{
+        alert('변경된 내용은 저장되지 않습니다.');
+        navigate(USER_MYPAGE_MAIN);
+    }
 
 
     //생년월일
@@ -278,7 +281,7 @@ const UserEditPage = () => {
                         </table>
                         <div className={styles.buttonBox}>
                             <button type="submit" className={styles.fixbtn}>수정하기</button>
-                            <button className={styles.cancelbtn}>취소</button>
+                            <button onClick={handleBack} type="button" className={styles.cancelbtn}>취소</button>
                         </div>
                     </form>
                 </div>
