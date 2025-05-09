@@ -9,6 +9,7 @@ import LoginPage from '../pages/user/LoginPage';
 import UserMyPageMain from '../pages/user/UserMyPageMain';
 import CategoryListPage from '../pages/user/CategotyListPage';
 import UserEditPage from '../pages/user/UserEditPage';
+import UserApplications from '../pages/user/UserApplications';
 
 const UserRoutes = () => {
   return (
@@ -25,6 +26,8 @@ const UserRoutes = () => {
         <Route path='/loginPage' element={<LoginPage />} />
         <Route path='/mypage/userMyPageMain' element={<UserMyPageMain />} />
         <Route path='/mypage/userEditPage' element={<UserEditPage />} />
+        <Route path='/mypage/userApplications' element={<UserApplications />} />
+        
         
 
       </Route>
