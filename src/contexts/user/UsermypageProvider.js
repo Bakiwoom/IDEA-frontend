@@ -35,7 +35,7 @@ export const UsermypageProvider = ({ children }) => {
 
             })
             .catch((error) => {
-              console.error("disabilityPage리스트 가져오기 실패:", error);
+              console.error("지원공고리스트 가져오기 실패:", error);
               alert("서버와의 연결 중 문제가 발생했습니다. 다시 시도해 주세요.");
             });
 
