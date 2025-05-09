@@ -39,12 +39,24 @@
     margin-top: 25px;
     padding-left: 45px;
 }
+/*profile img*/
 .profileImgBox{
     width: 110px;
     height: 120px;
     border-radius: 40%;
     border: 1px solid var(--login-hiddenfont-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
+.profileImgBox img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/*text*/
 .profileTextBox{
     padding-left: 20px;
     margin-top: 25px;
