@@ -4,6 +4,7 @@ import { type } from "@testing-library/user-event/dist/type";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { LOGIN_PAGE } from '../../routes/contantsRoutes';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -40,7 +41,7 @@ const UserSignUpPage = () => {
         .then((response) => {
             if(response.data.result === 'success'){
                 alert('회원가입이 완료되었습니다.');
-                navigate('/user/loginPage');
+                navigate(LOGIN_PAGE);
             }else{
                 alert("회원가입에 실패하였습니다. 다시 시도해주세요.");
             }
