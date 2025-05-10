@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import ExpertService, { Message } from '../components/ChatBot/services/ExpertService';
+import ExpertService from '../components/ChatBot/services/ExpertService';
+import { Message } from '../types/chat';
 
 interface ChatContextType {
   isOpen: boolean;
@@ -114,17 +115,20 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
+
     try {
       const updatedHistory: Message[] = [...conversationHistory, userMessage];
       setConversationHistory(updatedHistory);
+
+      // MongoDBService 관련 코드 완전 삭제, 오직 fetch로 백엔드 호출
       const formattedHistory = updatedHistory.map((msg: Message) => ({
         role: msg.role,
         content: msg.content
       }));
-      
+
       let response;
       let data;
-      
+
       try {
         response = await fetch('http://localhost:8082/api/chatbot/conversation', {
           method: 'POST',
@@ -136,7 +140,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             expert_type: expertType
           })
         });
-        
         data = await response.json();
       } catch (fetchError) {
         console.warn('백엔드 연결 실패, 테스트 데이터 사용:', fetchError);
@@ -261,6 +264,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         timestamp: new Date(),
         cards: cardData.length > 0 ? cardData : undefined
       };
+
       setConversationHistory(prev => [...prev, botMessage]);
       setMessages(prev => [...prev, botMessage]);
       localStorage.setItem('last_conversation', JSON.stringify([...updatedHistory, botMessage]));
