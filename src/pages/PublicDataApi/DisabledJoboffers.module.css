@@ -4,138 +4,224 @@
 }
 
 .title {
-    @apply text-2xl font-bold mb-4;
+    @apply text-2xl font-bold mb-4 text-gray-800;
 }
 
 .buttonContainer {
-    @apply mb-4 space-x-2;
+    @apply mb-6 space-x-2 flex justify-end;
 }
 
 .button {
-    @apply font-bold py-2 px-4 rounded disabled:opacity-50;
+    @apply font-bold py-2 px-6 rounded-lg disabled:opacity-50 transition-colors duration-150;
 }
 
 .refreshButton {
-    @apply bg-blue-500 hover:bg-blue-700 text-white;
+    @apply bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-sm;
 }
 
 .loadButton {
-    @apply bg-green-500 hover:bg-green-700 text-white;
+    @apply bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-sm;
 }
 
 .error {
-    @apply bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4;
+    @apply bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4;
 }
 
 .loading {
-    @apply text-blue-500 mb-4;
+    @apply text-blue-600 mb-4 text-center font-medium;
 }
 
 .tableContainer {
-    @apply overflow-x-auto;
-    /* 테이블 전체 고정폭 */
+    @apply overflow-x-auto rounded-xl shadow-sm bg-white border border-gray-100;
 }
 
 .table {
-    @apply min-w-full bg-white border border-gray-300;
-    table-layout: fixed;
-}
-
-.tableHeader {
-    @apply bg-gray-100;
-}
-
-.tableCell {
-    @apply px-4 py-2 border;
-}
-
-.tableRow {
-    @apply hover:bg-gray-50;
-}
-
-/* 상세보기(아코디언) */
-.detail {
-    @apply bg-gray-50 border-t border-gray-200 px-6 py-4;
-    animation: fadeIn 0.2s;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* 픽토그램(아이콘) */
-.pictogramRow {
-    @apply flex gap-4 mt-2 mb-2;
-}
-.pictogram {
-    @apply flex flex-col items-center text-gray-400 transition-colors duration-150;
-    font-size: 1.7rem;
-    cursor: pointer;
-}
-.pictogram.active {
-    @apply text-blue-500 font-bold;
-}
-.pictogramLabel {
-    @apply text-xs mt-1 text-center;
-}
-
-/* 툴팁 */
-.tooltip {
-    @apply absolute z-10 px-2 py-1 bg-black text-white text-xs rounded shadow-lg;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.15s;
-}
-.pictogram:hover .tooltip {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-/* 페이징 */
-.pagination {
-    @apply flex justify-center items-center gap-2 mt-6 mb-2;
-}
-.pageBtn {
-    @apply px-3 py-1 rounded border text-gray-700 bg-white hover:bg-blue-100 transition;
-}
-.pageBtn.active {
-    @apply bg-blue-500 text-white font-bold;
-}
-.pageBtn:disabled {
-    @apply opacity-50 cursor-not-allowed;
-}
-
-/* 리스트 행 스타일 개선 */
-.listRow {
-    @apply cursor-pointer border-b border-gray-200 hover:bg-blue-50 transition;
-}
-.listCell {
-    @apply px-4 py-3 text-sm text-gray-800 align-middle;
+    @apply min-w-full;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
 /* 리스트 헤더 */
 .listHeader {
-    @apply bg-gray-100 text-gray-700 font-semibold text-center;
+    @apply bg-gray-50 text-gray-700 font-semibold sticky top-0;
 }
 
-.listCell, .tableCell {
-    @apply px-4 py-3 text-sm text-gray-800 align-middle;
+.listHeader th {
+    @apply px-6 py-4 text-sm border-b border-gray-200 first:rounded-tl-xl last:rounded-tr-xl;
+    background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+}
+
+/* 리스트 행 스타일 */
+.listRow {
+    @apply cursor-pointer border-b border-gray-100 hover:bg-blue-50/60 transition-colors duration-150;
+}
+
+.listRow:last-child {
+    @apply border-b-0;
+}
+
+.listCell {
+    @apply px-6 py-4 text-sm text-gray-700;
     word-break: break-all;
     white-space: normal;
     vertical-align: middle;
-    /* 고정폭 지정 (예시) */
-    max-width: 220px;
-    min-width: 120px;
-    overflow-wrap: break-word;
-}
-
-.subText {
-    @apply text-xs text-gray-500 mt-1 block;
-    line-height: 1.2;
+    line-height: 1.5;
 }
 
 .centerCell {
     @apply text-center;
+}
+
+/* 상세보기 스타일 */
+.detail {
+    @apply bg-gray-50/50 px-6 py-4;
+    animation: fadeIn 0.2s;
+}
+
+.detail > div {
+    @apply bg-white rounded-xl shadow-sm p-6 border border-gray-100;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 픽토그램 섹션 */
+.pictogramRow {
+    @apply flex flex-wrap gap-6 mt-4 justify-center md:justify-start;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 0.75rem;
+}
+
+.pictogram {
+    @apply flex flex-col items-center text-gray-400 transition-colors duration-150;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: relative;
+}
+
+.pictogram.active {
+    @apply text-blue-600;
+}
+
+.pictogramLabel {
+    @apply text-xs mt-2 text-center font-semibold;
+}
+
+/* 툴팁 스타일 개선 */
+.tooltip {
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 50;
+}
+
+/* 툴팁 화살표 */
+.tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 4px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+}
+
+.pictogram:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    top: -45px;
+}
+
+/* 페이징 */
+.pagination {
+    @apply flex justify-center items-center gap-2 mt-8 mb-2;
+}
+
+.pageBtn {
+    @apply px-4 py-2 rounded-lg border text-gray-700 bg-white hover:bg-blue-50 transition-colors duration-150 text-sm font-medium;
+}
+
+.pageBtn.active {
+    @apply bg-blue-500 text-white font-bold border-blue-500;
+}
+
+.pageBtn:disabled {
+    @apply opacity-50 cursor-not-allowed;
+}
+
+/* 서브텍스트 */
+.subText {
+    @apply text-xs text-gray-500 mt-1 block;
+    line-height: 1.4;
+}
+
+/* 상세정보 스타일 */
+.detailSection {
+    @apply mb-6;
+}
+
+.detailSection h3 {
+    @apply text-blue-900 font-semibold mb-4 text-lg;
+}
+
+.detailGrid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+.detailItem {
+    @apply flex items-center text-sm py-2 border-b border-gray-100 last:border-b-0;
+}
+
+.detailLabel {
+    @apply font-medium text-gray-600 mr-2;
+    min-width: 90px;
+}
+
+.detailValue {
+    @apply text-gray-800 flex-1;
+}
+
+/* 날짜 표시 컨테이너 */
+.dateContainer {
+    @apply flex items-center justify-center gap-2;
+}
+
+.endDate {
+    @apply text-gray-700;
+}
+
+/* 남은 기간 라벨 */
+.todayLabel {
+    @apply px-2 py-0.5 text-xs font-bold rounded-full;
+    background-color: #ef4444;  /* red-500 */
+    color: white;
+    font-size: 0.7rem;
+}
+
+.urgentLabel {
+    @apply px-2 py-0.5 text-xs font-semibold rounded-full;
+    background-color: #ffedd5;  /* orange-100 */
+    color: #c2410c;  /* orange-700 */
+    font-size: 0.7rem;
+}
+
+.normalLabel {
+    @apply px-2 py-0.5 text-xs font-semibold rounded-full;
+    background-color: #dcfce7;  /* green-100 */
+    color: #15803d;  /* green-700 */
+    font-size: 0.7rem;
 } 

@@ -9,61 +9,61 @@ const API_URL = process.env.REACT_APP_API_URL;
 const PAGE_SIZE = 6;
 
 interface WelfareServiceList {
-    servId: string;
-    inqNum: string;
-    intrsThemaArray: string;
-    jurMnofNm: string;
-    jurOrgNm: string;
-    lifeArray: string;
-    onapPsbltYn: string;
-    rprsCtadr: string;
-    servDgst: string;
-    servDtlLink: string;
-    servNm: string;
-    sprtCycNm: string;
-    srvPvsnNm: string;
-    svcfrstRegTs: string;
-    trgterIndvdlArray: string;
+    servId: string;      // 서비스 ID
+    inqNum: string;      // 조회수
+    intrsThemaArray: string;    // 관심주제
+    jurMnofNm: string;   // 소관부처명
+    jurOrgNm: string;    // 소관조직명
+    lifeArray: string;   // 생애주기
+    onapPsbltYn: string; // 온라인신청가능여부
+    rprsCtadr: string;   // 대표연락처
+    servDgst: string;    // 서비스 요약
+    servDtlLink: string; // 서비스 상세 링크
+    servNm: string;      // 서비스명
+    sprtCycNm: string;   // 지원주기명
+    srvPvsnNm: string;   // 서비스제공부서명
+    svcfrstRegTs: string;// 서비스 최초 등록일시
+    trgterIndvdlArray: string;  // 대상자 개인
 }
 
 interface WelfareServiceDetail {
-    servId: string;
-    servNm: string;
-    jurMnofNm: string;
-    tgtrDtlCn: string;
-    slctCritCn: string;
-    alwServCn: string;
-    crtrYr: string;
-    rprsCtadr: string;
-    wlfareInfoOutlCn: string;
-    sprtCycNm: string;
-    srvPvsnNm: string;
-    lifeArray: string;
-    trgterIndvdlArray: string;
-    intrsThemaArray: string;
-    applmetList: Array<{
-        servSeCode: string;
-        servSeDetailLink: string;
-        servSeDetailNm: string;
+    servId: string;      // 서비스 ID
+    servNm: string;      // 서비스명
+    jurMnofNm: string;   // 소관부처명
+    tgtrDtlCn: string;   // 대상자 상세내용
+    slctCritCn: string;  // 선정기준 내용
+    alwServCn: string;   // 급여서비스 내용
+    crtrYr: string;      // 기준년도
+    rprsCtadr: string;   // 대표연락처
+    wlfareInfoOutlCn: string;   // 복지정보 개요 내용
+    sprtCycNm: string;   // 지원주기명
+    srvPvsnNm: string;   // 서비스제공부서명
+    lifeArray: string;   // 생애주기
+    trgterIndvdlArray: string;  // 대상자 개인
+    intrsThemaArray: string;    // 관심주제
+    applmetList: Array<{        // 신청방법 목록
+        servSeCode: string;     // 서비스 구분 코드
+        servSeDetailLink: string;    // 서비스 구분 상세 링크
+        servSeDetailNm: string;      // 서비스 구분 상세 이름
     }>;
-    inqplCtadrList: Array<{
-        servSeCode: string;
-        servSeDetailLink: string;
-        servSeDetailNm: string;
+    inqplCtadrList: Array<{    // 문의처 연락처 목록
+        servSeCode: string;     // 서비스 구분 코드
+        servSeDetailLink: string;    // 서비스 구분 상세 링크
+        servSeDetailNm: string;      // 서비스 구분 상세 이름
     }>;
-    inqplHmpgReldList: Array<{
-        servSeCode: string;
-        servSeDetailLink: string;
-        servSeDetailNm: string;
+    inqplHmpgReldList: Array<{  // 문의처 홈페이지 관련 목록
+        servSeCode: string;     // 서비스 구분 코드
+        servSeDetailLink: string;    // 서비스 구분 상세 링크
+        servSeDetailNm: string;      // 서비스 구분 상세 이름
     }>;
-    basfrmList: Array<{
-        servSeCode: string;
-        servSeDetailLink: string;
-        servSeDetailNm: string;
+    basfrmList: Array<{        // 서식 목록
+        servSeCode: string;     // 서비스 구분 코드
+        servSeDetailLink: string;    // 서비스 구분 상세 링크
+        servSeDetailNm: string;      // 서비스 구분 상세 이름
     }>;
-    baslawList: Array<{
-        servSeCode: string;
-        servSeDetailNm: string;
+    baslawList: Array<{        // 근거법령 목록
+        servSeCode: string;     // 서비스 구분 코드
+        servSeDetailNm: string;      // 서비스 구분 상세 이름
     }>;
 }
 
@@ -80,6 +80,36 @@ const WelfareServices: React.FC = () => {
 
     const detailRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
+
+    // URL 유효성 검사 함수 추가
+    const isValidUrl = (urlString: string): boolean => {
+        try {
+            const url = new URL(urlString);
+            return url.protocol === 'http:' || url.protocol === 'https:';
+        } catch {
+            return false;
+        }
+    };
+
+    // 링크 렌더링 함수 추가
+    const renderLink = (text: string, link?: string) => {
+        if (!link || !isValidUrl(link)) {
+            return <span className={styles.plainText}>{text}</span>;
+        }
+        return (
+            <div className={styles.linkContainer}>
+                <span>{text}</span>
+                <a 
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.linkStyle}
+                >
+                    바로가기
+                </a>
+            </div>
+        );
+    };
 
     const fetchList = async () => {
         try {
@@ -359,36 +389,114 @@ const WelfareServices: React.FC = () => {
                         <div className={styles.tabPanel}>
                             {tab === 'target' && (
                                 <>
-                                    <b>지원대상</b>
-                                    <div className={styles.markdown}>
-                                        <ReactMarkdown>
-                                            {selectedDetail.tgtrDtlCn || '-'}
-                                        </ReactMarkdown>
+                                    <div className={styles.extraSection}>
+                                        <h3>지원대상</h3>
+                                        <div className={styles.markdown}>
+                                            <ReactMarkdown>
+                                                {selectedDetail.tgtrDtlCn || '-'}
+                                            </ReactMarkdown>
+                                        </div>
                                     </div>
-                                    <b style={{ marginTop: '1rem', display: 'block' }}>선정기준</b>
-                                    <div className={styles.markdown}>
-                                        <ReactMarkdown>
-                                            {selectedDetail.slctCritCn || '-'}
-                                        </ReactMarkdown>
+                                    
+                                    <div className={styles.extraSection}>
+                                        <h3>선정기준</h3>
+                                        <div className={styles.markdown}>
+                                            <ReactMarkdown>
+                                                {selectedDetail.slctCritCn || '-'}
+                                            </ReactMarkdown>
+                                        </div>
                                     </div>
                                 </>
                             )}
                             {tab === 'content' && (
                                 <>
-                                    <b>서비스 내용</b>
-                                    <div style={{ marginTop: '0.5rem', whiteSpace: 'pre-line' }}>{selectedDetail.alwServCn || '-'}</div>
+                                    <div className={styles.extraSection}>
+                                        <h3>서비스 내용</h3>
+                                        <div className={styles.markdown}>
+                                            <ReactMarkdown>
+                                                {selectedDetail.alwServCn || '-'}
+                                            </ReactMarkdown>
+                                        </div>
+                                    </div>
                                 </>
                             )}
                             {tab === 'apply' && (
                                 <>
-                                    <b>신청방법</b>
-                                    <div style={{ marginTop: '0.5rem', whiteSpace: 'pre-line' }}>{selectedDetail.applmetList?.map(x => x.servSeDetailNm).join('\n') || '-'}</div>
+                                    <div className={styles.extraSection}>
+                                        <h3>신청방법</h3>
+                                        <ul className={styles.listStyle}>
+                                            {selectedDetail.applmetList?.map((item, index) => (
+                                                <li key={index}>
+                                                    {renderLink(item.servSeDetailNm, item.servSeDetailLink)}
+                                                </li>
+                                            )) || '-'}
+                                        </ul>
+                                    </div>
                                 </>
                             )}
                             {tab === 'extra' && (
                                 <>
-                                    <b>추가정보</b>
-                                    <div style={{ marginTop: '0.5rem', whiteSpace: 'pre-line' }}>{selectedDetail.intrsThemaArray || '-'}</div>
+                                    <div className={styles.extraSection}>
+                                        <h3>복지정보 개요</h3>
+                                        <div className={styles.markdown}>
+                                            <ReactMarkdown>
+                                                {selectedDetail.wlfareInfoOutlCn || '-'}
+                                            </ReactMarkdown>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.extraSection}>
+                                        <h3>관심주제</h3>
+                                        <div className={styles.markdown}>
+                                            <ReactMarkdown>
+                                                {selectedDetail.intrsThemaArray || '-'}
+                                            </ReactMarkdown>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.extraSection}>
+                                        <h3>문의처 연락처</h3>
+                                        <ul className={styles.listStyle}>
+                                            {selectedDetail.inqplCtadrList?.map((item, index) => (
+                                                <li key={index}>
+                                                    {renderLink(item.servSeDetailNm, item.servSeDetailLink)}
+                                                </li>
+                                            )) || '-'}
+                                        </ul>
+                                    </div>
+
+                                    <div className={styles.extraSection}>
+                                        <h3>관련 홈페이지</h3>
+                                        <ul className={styles.listStyle}>
+                                            {selectedDetail.inqplHmpgReldList?.map((item, index) => (
+                                                <li key={index}>
+                                                    {renderLink(item.servSeDetailNm, item.servSeDetailLink)}
+                                                </li>
+                                            )) || '-'}
+                                        </ul>
+                                    </div>
+
+                                    <div className={styles.extraSection}>
+                                        <h3>신청 서식</h3>
+                                        <ul className={styles.listStyle}>
+                                            {selectedDetail.basfrmList?.map((item, index) => (
+                                                <li key={index}>
+                                                    {renderLink(item.servSeDetailNm, item.servSeDetailLink)}
+                                                </li>
+                                            )) || '-'}
+                                        </ul>
+                                    </div>
+
+                                    <div className={styles.extraSection}>
+                                        <h3>근거 법령</h3>
+                                        <ul className={styles.listStyle}>
+                                            {selectedDetail.baslawList?.map((item, index) => (
+                                                <li key={index}>
+                                                    {item.servSeDetailNm}
+                                                </li>
+                                            )) || '-'}
+                                        </ul>
+                                    </div>
                                 </>
                             )}
                         </div>

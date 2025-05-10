@@ -1,54 +1,83 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './DisabledJoboffers.module.css';
+import { format, differenceInDays, parse, isValid } from 'date-fns';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 interface DisabledJoboffer {
-    busplaName: string;
-    cntctNo: string;
-    compAddr: string;
-    empType: string;
-    enterType: string;
-    jobNm: string;
-    offerregDt: string;
-    regDt: string;
-    regagnName: string;
-    reqCareer: string;
-    reqEduc: string;
-    rno: string;
-    rnum: string;
-    salary: string;
-    salaryType: string;
-    termDate: string;
-    envBothHands: string;
-    envEyesight: string;
-    envHandwork: string;
-    envLiftPower: string;
-    envLstnTalk: string;
-    envStndWalk: string;
+    // 기본 정보
+    busplaName: string;    // 사업장명
+    jobNm: string;        // 모집직종
+    empType: string;      // 고용형태
+    compAddr: string;     // 사업장주소
+    termDate: string;     // 모집기간
+    
+    // 상세 정보
+    cntctNo: string;      // 연락처
+    enterType: string;    // 입사형태
+    offerregDt: string;   // 구인신청일자
+    regDt: string;        // 등록일
+    regagnName: string;   // 담당기관
+    reqCareer: string;    // 요구경력
+    reqEduc: string;      // 요구학력
+    salary: string;       // 임금
+    salaryType: string;   // 임금형태
+
+    // 작업환경 정보
+    envBothHands: string; // 작업환경_양손사용
+    envEyesight: string;  // 작업환경_시력
+    envHandwork: string;  // 작업환경_손작업
+    envLiftPower: string; // 작업환경_드는힘
+    envLstnTalk: string;  // 작업환경_듣고 말하기
+    envStndWalk: string;  // 작업환경_서거나 걷기
 }
+
 
 // 픽토그램 정보 정의
 const pictogramDefs = [
-    { key: 'envBothHands', label: '양손 사용', icon: (
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M7 12l-2 4m0 0l-2-4m2 4v4m10-8l2 4m0 0l2-4m-2 4v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="7" r="3" stroke="currentColor" strokeWidth="2"/></svg>
-    ) },
-    { key: 'envEyesight', label: '시력', icon: (
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="8" ry="5" stroke="currentColor" strokeWidth="2"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
-    ) },
-    { key: 'envHandwork', label: '손작업', icon: (
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect x="7" y="11" width="10" height="6" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M9 11V7a3 3 0 1 1 6 0v4" stroke="currentColor" strokeWidth="2"/></svg>
-    ) },
-    { key: 'envLiftPower', label: '들어올림', icon: (
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect x="8" y="8" width="8" height="8" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M12 8V4m0 0l-2 2m2-2l2 2" stroke="currentColor" strokeWidth="2"/></svg>
-    ) },
-    { key: 'envLstnTalk', label: '청취/대화', icon: (
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke="currentColor" strokeWidth="2"/><path d="M12 13v3m0 0l-2-2m2 2l2-2" stroke="currentColor" strokeWidth="2"/></svg>
-    ) },
-    { key: 'envStndWalk', label: '서기/걷기', icon: (
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="6" r="2" stroke="currentColor" strokeWidth="2"/><path d="M12 8v4l-2 4m2-4l2 4" stroke="currentColor" strokeWidth="2"/></svg>
-    ) },
+    { 
+        key: 'envBothHands', 
+        label: '양손 사용', 
+        icon: (
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M7 12l-2 4m0 0l-2-4m2 4v4m10-8l2 4m0 0l2-4m-2 4v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="7" r="3" stroke="currentColor" strokeWidth="2"/></svg>
+        )
+    },
+    { 
+        key: 'envEyesight', 
+        label: '시력', 
+        icon: (
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="8" ry="5" stroke="currentColor" strokeWidth="2"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+        )
+    },
+    { 
+        key: 'envHandwork', 
+        label: '손작업', 
+        icon: (
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect x="7" y="11" width="10" height="6" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M9 11V7a3 3 0 1 1 6 0v4" stroke="currentColor" strokeWidth="2"/></svg>
+        )
+    },
+    { 
+        key: 'envLiftPower', 
+        label: '들어올림', 
+        icon: (
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect x="8" y="8" width="8" height="8" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M12 8V4m0 0l-2 2m2-2l2 2" stroke="currentColor" strokeWidth="2"/></svg>
+        )
+    },
+    { 
+        key: 'envLstnTalk', 
+        label: '청취/대화', 
+        icon: (
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke="currentColor" strokeWidth="2"/><path d="M12 13v3m0 0l-2-2m2 2l2-2" stroke="currentColor" strokeWidth="2"/></svg>
+        )
+    },
+    { 
+        key: 'envStndWalk', 
+        label: '서기/걷기', 
+        icon: (
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="6" r="2" stroke="currentColor" strokeWidth="2"/><path d="M12 8v4l-2 4m2-4l2 4" stroke="currentColor" strokeWidth="2"/></svg>
+        )
+    },
 ];
 
 const PAGE_SIZE = 10;
@@ -67,6 +96,55 @@ function splitTextWithParenthesis(text: string) {
     }
     return text;
 }
+
+// 날짜 변환 및 남은 일수 계산 함수
+const calculateDaysLeft = (termDateStr: string) => {
+    // "2025-05-02~2025-05-30" 형식의 날짜에서 종료일 추출
+    const endDate = termDateStr.split('~')[1];
+    if (!endDate) return null;
+    
+    const date = parse(endDate.trim(), 'yyyy-MM-dd', new Date());
+    if (!isValid(date)) return null;
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const daysLeft = differenceInDays(date, today);
+    return daysLeft;
+};
+
+// 남은 기간 라벨 컴포넌트
+const DaysLeftLabel: React.FC<{ daysLeft: number }> = ({ daysLeft }) => {
+    let labelStyle = '';
+    let text = '';
+
+    if (daysLeft < 0) {
+        return null; // 마감된 경우 라벨 표시 안함
+    } else if (daysLeft === 0) {
+        labelStyle = styles.todayLabel;
+        text = '오늘마감';
+    } else if (daysLeft < 10) {
+        labelStyle = styles.urgentLabel;
+        text = `D-${daysLeft}`;
+    } else {
+        labelStyle = styles.normalLabel;
+        text = `D-${daysLeft}`;
+    }
+
+    return <span className={labelStyle}>{text}</span>;
+};
+
+// 날짜 표시 컴포넌트
+const FormattedDate: React.FC<{ termDate: string }> = ({ termDate }) => {
+    const daysLeft = calculateDaysLeft(termDate);
+    const endDate = termDate.split('~')[1]?.trim() || termDate; // 종료일만 표시
+
+    return (
+        <div className={styles.dateContainer}>
+            <span className={styles.endDate}>{endDate}</span>
+            {daysLeft !== null && daysLeft >= 0 && <DaysLeftLabel daysLeft={daysLeft} />}
+        </div>
+    );
+};
 
 const DisabledJoboffers: React.FC = () => {
     const [data, setData] = useState<DisabledJoboffer[]>([]);
@@ -158,7 +236,7 @@ const DisabledJoboffers: React.FC = () => {
                             <th className={styles.listCell}>모집직종</th>
                             <th className={styles.listCell}>고용형태</th>
                             <th className={styles.listCell}>사업장 위치</th>
-                            <th className={styles.listCell}>모집기간</th>
+                            <th className={styles.listCell}>마감일</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -171,32 +249,76 @@ const DisabledJoboffers: React.FC = () => {
                                         <td className={styles.listCell}>{splitTextWithParenthesis(item.jobNm)}</td>
                                         <td className={`${styles.listCell} ${styles.centerCell}`}>{splitTextWithParenthesis(item.empType)}</td>
                                         <td className={styles.listCell}>{splitTextWithParenthesis(item.compAddr)}</td>
-                                        <td className={`${styles.listCell} ${styles.centerCell}`}>{splitTextWithParenthesis(item.termDate)}</td>
+                                        <td className={`${styles.listCell} ${styles.centerCell}`}>
+                                            <FormattedDate termDate={item.termDate} />
+                                        </td>
                                     </tr>
                                     {expandedIdx === globalIdx && (
                                         <tr>
                                             <td colSpan={5} className={styles.detail}>
-                                                <div style={{display:'flex', flexWrap:'wrap', gap:'2rem'}}>
-                                                    <div style={{minWidth:'220px', flex:'1'}}>
-                                                        <div><b>연락처:</b> {item.cntctNo || '-'}</div>
-                                                        <div><b>입사형태:</b> {item.enterType || '-'}</div>
-                                                        <div><b>구인신청일:</b> {item.offerregDt || '-'}</div>
-                                                        <div><b>등록일:</b> {item.regDt || '-'}</div>
-                                                        <div><b>담당기관:</b> {item.regagnName || '-'}</div>
-                                                        <div><b>요구경력:</b> {item.reqCareer || '-'}</div>
-                                                        <div><b>요구학력:</b> {item.reqEduc || '-'}</div>
-                                                        <div><b>임금:</b> {item.salary || '-'}</div>
-                                                        <div><b>임금형태:</b> {item.salaryType || '-'}</div>
+                                                <div>
+                                                    <div className={styles.detailGrid}>
+                                                        <div className={styles.detailSection}>
+                                                            <h3>기본 정보</h3>
+                                                            <div className={styles.detailItem}>
+                                                                <span className={styles.detailLabel}>연락처:</span>
+                                                                <span className={styles.detailValue}>{item.cntctNo || '-'}</span>
+                                                            </div>
+                                                            <div className={styles.detailItem}>
+                                                                <span className={styles.detailLabel}>입사형태:</span>
+                                                                <span className={styles.detailValue}>{item.enterType || '-'}</span>
+                                                            </div>
+                                                            <div className={styles.detailItem}>
+                                                                <span className={styles.detailLabel}>구인신청일:</span>
+                                                                <span className={styles.detailValue}>{item.offerregDt || '-'}</span>
+                                                            </div>
+                                                            <div className={styles.detailItem}>
+                                                                <span className={styles.detailLabel}>등록일:</span>
+                                                                <span className={styles.detailValue}>{item.regDt || '-'}</span>
+                                                            </div>
+                                                            <div className={styles.detailItem}>
+                                                                <span className={styles.detailLabel}>담당기관:</span>
+                                                                <span className={styles.detailValue}>{item.regagnName || '-'}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className={styles.detailSection}>
+                                                            <h3>근무 조건</h3>
+                                                            <div className={styles.detailItem}>
+                                                                <span className={styles.detailLabel}>요구경력:</span>
+                                                                <span className={styles.detailValue}>{item.reqCareer || '-'}</span>
+                                                            </div>
+                                                            <div className={styles.detailItem}>
+                                                                <span className={styles.detailLabel}>요구학력:</span>
+                                                                <span className={styles.detailValue}>{item.reqEduc || '-'}</span>
+                                                            </div>
+                                                            <div className={styles.detailItem}>
+                                                                <span className={styles.detailLabel}>임금:</span>
+                                                                <span className={styles.detailValue}>{item.salary || '-'}</span>
+                                                            </div>
+                                                            <div className={styles.detailItem}>
+                                                                <span className={styles.detailLabel}>임금형태:</span>
+                                                                <span className={styles.detailValue}>{item.salaryType || '-'}</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div style={{minWidth:'220px', flex:'1'}}>
+
+                                                    <div className={styles.detailSection}>
+                                                        <h3>작업환경 정보</h3>
                                                         <div className={styles.pictogramRow}>
-                                                            {pictogramDefs.map(p => (
-                                                                <div key={p.key} className={`${styles.pictogram} ${item[p.key as keyof DisabledJoboffer] ? styles.active : ''}`} style={{position:'relative'}}>
-                                                                    {p.icon}
-                                                                    <span className={styles.pictogramLabel}>{p.label}</span>
-                                                                    <span className={styles.tooltip}>{item[p.key as keyof DisabledJoboffer] || '해당 없음'}</span>
-                                                                </div>
-                                                            ))}
+                                                            {pictogramDefs.map(p => {
+                                                                const envValue = item[p.key as keyof DisabledJoboffer];
+                                                                return (
+                                                                    <div key={p.key} className={`${styles.pictogram} ${envValue ? styles.active : ''}`}>
+                                                                        {p.icon}
+                                                                        <span className={styles.pictogramLabel}>{p.label}</span>
+                                                                        {envValue && (
+                                                                            <span className={styles.tooltip}>
+                                                                                {envValue}
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                );
+                                                            })}
                                                         </div>
                                                     </div>
                                                 </div>
