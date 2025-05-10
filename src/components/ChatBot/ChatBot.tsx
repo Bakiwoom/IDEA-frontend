@@ -619,7 +619,7 @@ const ChatBot: React.FC = () => {
                     onClick={() => handleExpertSelect(card.expert_type)}
                     role="button"
                     tabIndex={0}
-                    onKeyPress={(e) => {
+                    onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         handleExpertSelect(card.expert_type);
                       }
