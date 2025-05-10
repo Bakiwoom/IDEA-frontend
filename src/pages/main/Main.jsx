@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import SideNavigation from "./SideNavigation";
 import styles from "../../assets/css/main/Main.module.css";
@@ -19,6 +19,8 @@ const Main = () => {
 
   // AuthContext에서 사용자 정보 가져오기
   const { name, role } = useAuth();
+
+  const navigate = useNavigate();
 
   // 공고 데이터 새로고침 함수 추가
   const fetchAllJobs = useCallback(async () => {
@@ -188,7 +190,6 @@ const Main = () => {
       alert("북마크 처리에 실패했습니다.");
     }
   };
-
   // 마감일 포맷팅
   const formatDeadline = (deadline) => {
     if (!deadline) return '';
@@ -211,9 +212,11 @@ const Main = () => {
     const handleBookmarkClick = (e) => {
       toggleBookmark(e, job.jobId);
     };
-
+    const handleCardClick = () => {
+      navigate(`/company/job/management/detail/${job.jobId}`);
+    };
     return (
-      <div className={`${styles.card} ${isTopBordered ? styles.topBorderedCard : ''}`}>
+      <div className={`${styles.card} ${isTopBordered ? styles.topBorderedCard : ''}`} onClick={handleCardClick} style={{cursor:'pointer'}}>
         <img
           src={job.companyLogo || "/images/default-company-logo.png"}
           alt={`${job.companyName} 로고`}
