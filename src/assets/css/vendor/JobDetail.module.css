@@ -1,105 +1,159 @@
-/* 마이페이지 컨테이너 */
-.mypageWrap {
+/* src/assets/css/vendor/JobDetail.module.css */
+/* Apple 스타일, CSS 변수 없이 직접 값 지정 */
+
+.companyWrapper {
   display: flex;
-  min-height: 100vh;
+  background-color: #f0f3ff;        /* 부드러운 블루 계열 */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+               Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* 메인 콘텐츠 영역 */
+.userGuestWrapper {
+  display: flex;
+  background-color: #f7f7f7;        /* 연한 그레이 */
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+               Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
 .mainContent {
   flex: 1;
-  padding: 20px;
-  background: #fff;
-  border-radius: 0 16px 16px 0;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
 }
 
-/* 테이블 스타일 */
-.table {
+.mainContent:hover {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.loading,
+.error {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 24px;
+  text-align: center;
+  color: #3a3a3c;
+  padding: 32px 0;
+  font-size: 1.1rem;
 }
 
-.table th, 
-.table td {
-  border-bottom: 1px solid #e5e7eb;
-  padding: 12px 8px;
-  text-align: left;
+.jobInfoBox {
+  margin-bottom: 24px;
 }
 
-/* 장애 등급 태그 */
-.degreeTag {
-  display: inline-block;
-  border-radius: 6px;
-  padding: 7px 10px;
-  font-size: 0.95rem;
+.title {
+  font-size: 28px;
   font-weight: 600;
+  color: #1c1c1e;
+  margin-bottom: 16px;
 }
 
-.degreeHeavy {
-  background: #6366f1;
-  color: #fff;
-}
-
-.degreeLight {
-  background: #a7f3d0;
-  color: #065f46;
-}
-
-/* 혜택 정보 박스 */
-.benefitBox {
-  background: #f1f5f9;
-  border-radius: 10px;
-  padding: 14px 18px;
-  margin-bottom: 8px;
-}
-
-.benefitBox ul {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.benefitBox li {
-  margin-bottom: 4px;
-}
-
-/* 버튼 스타일 */
-.btnSecondary {
-  background: #e0e7ff;
-  color: #222;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 18px;
-  font-size: 0.97rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btnSecondary:hover {
-  background: #c7d2fe;
-}
-
-/* 공고 섹션 */
-.jobSection {
-  margin-bottom: 48px;
-}
-
-.jobTitle {
+.companyInfo {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  font-size: 20px;
-  font-weight: bold;
-  color: #333;
+  margin-bottom: 16px;
 }
 
-.btnPrimary {
-  background: #2563eb;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 24px;
-  font-size: 1rem;
+.companyLogo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.infoBox p {
+  margin-bottom: 16px;
+  color: #1c1c1e;
+  line-height: 1.6;
+}
+
+.jobActions,
+.userActions {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+}
+
+/* 공통 버튼 스타일 */
+.btnPrimary,
+.applyButton,
+.bookmarkButton {
   cursor: pointer;
-  transition: background 0.2s;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 20px;
+  transition: box-shadow 0.2s, background-color 0.2s;
+}
+
+/* 기업용 버튼 */
+.btnPrimary {
+  background-color: #007aff;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 122, 255, 0.4);
+}
+
+.btnPrimary:hover {
+  background-color: #0066e0;
+  box-shadow: 0 3px 8px rgba(0, 122, 255, 0.5);
+}
+
+/* 일반 사용자 지원 버튼 */
+.applyButton {
+  background-color: #007aff;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 122, 255, 0.4);
+  margin-right: 16px;
+}
+
+.applyButton:hover {
+  background-color: #0066e0;
+  box-shadow: 0 3px 8px rgba(0, 122, 255, 0.5);
+}
+
+/* 일반 사용자 북마크 버튼 */
+.bookmarkButton {
+  background-color: transparent;
+  color: #007aff;
+  border: 2px solid #007aff;
+  box-shadow: none;
+}
+
+.bookmarkButton:hover {
+  background-color: rgba(0, 122, 255, 0.1);
+}
+
+/* 로그인 유도 */
+.loginPrompt {
+  text-align: center;
+  margin-top: 24px;
+  color: #3a3a3c;
+}
+
+.loginLink {
+  color: #007aff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-left: 8px;
+}
+
+.loginLink:hover {
+  text-decoration: underline;
+}
+
+/* src/assets/css/vendor/JobDetail.module.css */
+.closedBadge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  background-color: #e53e3e; /* 붉은 계열 */
+  color: #fff;
+  font-size: 0.875rem;
+  border-radius: 4px;
 }
