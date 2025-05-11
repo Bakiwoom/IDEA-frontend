@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import ExpertService, { Message } from '../components/ChatBot/services/ExpertService';
+import ExpertService from '../components/ChatBot/services/ExpertService';
+import { Message } from '../types/chat';
 
 interface ChatContextType {
   isOpen: boolean;
@@ -14,6 +15,8 @@ interface ChatContextType {
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +47,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       
       // API 호출로 초기 메시지 가져오기
       try {
-        const response = await fetch('http://localhost:8082/api/chatbot/start', {
+        const response = await fetch(`${API_URL}/api/chatbot/start`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -114,19 +117,22 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
+
     try {
       const updatedHistory: Message[] = [...conversationHistory, userMessage];
       setConversationHistory(updatedHistory);
+
+      // MongoDBService 관련 코드 완전 삭제, 오직 fetch로 백엔드 호출
       const formattedHistory = updatedHistory.map((msg: Message) => ({
         role: msg.role,
         content: msg.content
       }));
-      
+
       let response;
       let data;
-      
+
       try {
-        response = await fetch('http://localhost:8082/api/chatbot/conversation', {
+        response = await fetch(`${API_URL}/api/chatbot/conversation`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -136,86 +142,20 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             expert_type: expertType
           })
         });
-        
         data = await response.json();
       } catch (fetchError) {
-        console.warn('백엔드 연결 실패, 테스트 데이터 사용:', fetchError);
-        
-        // 테스트용 응답 데이터
-        const testCardContent = content.toLowerCase().includes('지원금') 
-          ? `장애인 고용 지원금에 대한 정보를 알려드리겠습니다.
-          
----
-[
-  {
-    "id": "card1",
-    "title": "장애인 고용 지원금",
-    "subtitle": "고용노동부 장애인 고용 촉진 정책",
-    "summary": "장애인을 고용한 사업주에게 지급되는 지원금입니다.",
-    "type": "employment",
-    "details": "장애인 고용 지원금은 장애인을 고용한 사업주에게 지급되는 지원금으로, 장애인 근로자 1인당 월 30~80만원까지 지원됩니다. 신청 방법은 한국장애인고용공단 지사를 방문하거나 온라인으로 신청 가능합니다.",
-    "source": {
-      "url": "https://www.kead.or.kr",
-      "name": "한국장애인고용공단",
-      "phone": "1588-1519"
-    },
-    "buttons": [
-      {
-        "type": "link",
-        "label": "지원금 신청하기",
-        "value": "https://www.kead.or.kr/business/employment.jsp"
-      },
-      {
-        "type": "tel",
-        "label": "전화 문의",
-        "value": "1588-1519"
-      }
-    ]
-  }
-]`
-          : content.toLowerCase().includes('복지') 
-          ? `장애인 복지 서비스에 대한 정보입니다.
-          
----
-[
-  {
-    "id": "card2",
-    "title": "장애인 복지 카드",
-    "subtitle": "장애인 복지 서비스 이용 안내",
-    "summary": "장애인 복지 카드로 이용할 수 있는 서비스입니다.",
-    "type": "welfare",
-    "details": "장애인 복지 카드는 장애인 등록증과 함께 발급되는 카드로, 교통수단 이용 시 요금 감면, 공공시설 이용료 감면 등 다양한 혜택을 받을 수 있습니다. 주민센터에서 신청 가능합니다.",
-    "source": {
-      "url": "https://www.bokjiro.go.kr",
-      "name": "복지로",
-      "phone": "129"
-    }
-  }
-]`
-          : content.toLowerCase().includes('테스트') || content.toLowerCase().includes('test')
-          ? `다양한 필드 포맷 테스트용 카드입니다.
-          
----
-[
-  {
-    "id": "test-card-1",
-    "title": "description 필드 테스트",
-    "description": "summary 대신 description 필드를 사용한 카드입니다.",
-    "type": "policy",
-    "content": "details 대신 content 필드를 사용한 상세 내용입니다. 이 카드는 서로 다른 필드 이름을 테스트하기 위한 카드입니다."
-  },
-  {
-    "id": "test-card-2",
-    "title": "content만 있는 카드",
-    "type": "education",
-    "content": "content 필드만 있는 카드입니다. 이 내용이 요약과 상세 정보로 모두 사용됩니다."
-  }
-]`
-          : `질문에 대한 답변입니다. 카드 정보가 없습니다.`;
-          
-        data = {
-          answer: testCardContent
+        console.error('백엔드 연결 실패:', fetchError);
+        const errorMessage: Message = {
+          id: uuidv4(),
+          content: '죄송합니다. 서버와의 연결에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+          sender: 'bot',
+          role: 'assistant',
+          timestamp: new Date(),
         };
+        setMessages(prev => [...prev, errorMessage]);
+        setConversationHistory(prev => [...prev, errorMessage]);
+        setIsLoading(false);
+        return;
       }
       
       // 응답 데이터 디버깅 로그 추가
@@ -261,6 +201,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         timestamp: new Date(),
         cards: cardData.length > 0 ? cardData : undefined
       };
+
       setConversationHistory(prev => [...prev, botMessage]);
       setMessages(prev => [...prev, botMessage]);
       localStorage.setItem('last_conversation', JSON.stringify([...updatedHistory, botMessage]));

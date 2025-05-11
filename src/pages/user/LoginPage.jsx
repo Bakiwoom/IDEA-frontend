@@ -17,14 +17,8 @@ const LoginPage = () => {
 
     const navigate = useNavigate();
 
-    const [selectTab, setSelectTab] = useState("user");
     const [id, setId] = useState('');
     const [pw, setPw] = useState('');
-
-    // tab (userType)
-    const handleClick = (tab)=>{
-        setSelectTab(tab);
-    };
 
     //로그인
     const handleLogin = (e) => {
@@ -77,8 +71,7 @@ const LoginPage = () => {
                     <div className={styles.loginBox}>
                         <div className={styles.tabsBox}>
                             <ul>
-                                <li className={selectTab === 'user' ? styles.activeTab : ''} onClick={()=>handleClick('user')}>개인회원</li>
-                                <li className={selectTab === 'company' ? styles.activeTab : ''} onClick={()=>handleClick('company')}>기업회원</li>
+                                <li >로그인</li>
                             </ul>
                         </div>
                         <div className={styles.inputBox}>

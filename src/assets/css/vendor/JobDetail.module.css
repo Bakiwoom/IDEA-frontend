@@ -1,105 +1,218 @@
-/* 마이페이지 컨테이너 */
-.mypageWrap {
+/* src/assets/css/vendor/JobDetail.module.css */
+
+/* 공통 래퍼 */
+.companyWrapper {
   display: flex;
-  min-height: 100vh;
+  font-family: 'SUIT', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background-color: #F9FAFB;
 }
-
-/* 메인 콘텐츠 영역 */
-.mainContent {
-  flex: 1;
-  padding: 20px;
-  background: #fff;
-  border-radius: 0 16px 16px 0;
+.userGuestWrapper {
+  display: flex;
+  justify-content: center;
+  padding: 20px 24px;
+  font-family: 'SUIT', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background-color: #F9FAFB;
 }
-
-/* 테이블 스타일 */
-.table {
+.companyContent {
+  width: 85%;
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  padding: 48px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+  border: 1px solid #E5E7EB;
+}
+.userGuestContent {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 24px;
+  max-width: 1024px;
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  padding: 56px 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid #E5E7EB;
 }
 
-.table th, 
-.table td {
-  border-bottom: 1px solid #e5e7eb;
-  padding: 12px 8px;
-  text-align: left;
+/* 로딩 및 에러 */
+.loading,
+.error {
+  width: 100%;
+  text-align: center;
+  color: #6B7280;
+  padding: 48px 0;
+  font-size: 1.3rem;
 }
 
-/* 장애 등급 태그 */
-.degreeTag {
-  display: inline-block;
-  border-radius: 6px;
-  padding: 7px 10px;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.degreeHeavy {
-  background: #6366f1;
-  color: #fff;
-}
-
-.degreeLight {
-  background: #a7f3d0;
-  color: #065f46;
-}
-
-/* 혜택 정보 박스 */
-.benefitBox {
-  background: #f1f5f9;
-  border-radius: 10px;
-  padding: 14px 18px;
-  margin-bottom: 8px;
-}
-
-.benefitBox ul {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.benefitBox li {
-  margin-bottom: 4px;
-}
-
-/* 버튼 스타일 */
-.btnSecondary {
-  background: #e0e7ff;
-  color: #222;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 18px;
-  font-size: 0.97rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btnSecondary:hover {
-  background: #c7d2fe;
-}
-
-/* 공고 섹션 */
-.jobSection {
-  margin-bottom: 48px;
-}
-
-.jobTitle {
+/* 제목 */
+.title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 32px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  font-size: 20px;
-  font-weight: bold;
-  color: #333;
+  gap: 14px;
 }
 
-.btnPrimary {
-  background: #2563eb;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 24px;
-  font-size: 1rem;
+.closedBadge {
+  background-color: #DC2626;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 9999px;
+}
+
+/* 기업 정보 */
+.companyInfo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 36px;
+}
+
+.companyLogo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #E5E7EB;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* 공고 상세 */
+.jobInfoBox {
+  background-color: #F9FAFB;
+  border-radius: 16px;
+  padding: 40px;
+  margin-bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  border: 1px solid #E5E7EB;
+}
+
+.sectionTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1F2937;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.infoBox p {
+  margin-bottom: 10px;
+  color: #374151;
+  font-size: 17px;
+  line-height: 1.75;
+  padding: 10px 14px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* 버튼 영역 */
+.userActions,
+.jobActions {
+  position: sticky;
+  bottom: 0;
+  background: #ffffff;
+  border-top: 1px solid #E5E7EB;
+  padding: 24px 0 0;
+  margin-top: 56px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  z-index: 10;
+}
+
+.applyButton,
+.bookmarkButton,
+.cancelButton {
+  padding: 14px 28px;
+  border-radius: 9999px;
+  font-size: 17px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease-in-out;
+  border: none;
+}
+
+.applyButton {
+  background-color: #2563EB;
+  color: white;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.3);
+}
+
+.applyButton:hover {
+  background-color: #1D4ED8;
+  transform: translateY(-2px);
+}
+
+.bookmarkButton {
+  background-color: white;
+  color: #2563EB;
+  border: 2px solid #2563EB;
+}
+
+.bookmarkButton:hover {
+  background-color: #EFF6FF;
+}
+
+.cancelButton {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FCA5A5;
+}
+
+.cancelButton:hover {
+  background-color: #FECACA;
+}
+
+.appliedNotice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-weight: 600;
+  color: #10B981;
+}
+
+.loginPrompt {
+  text-align: center;
+  margin-top: 36px;
+  color: #4B5563;
+  font-size: 16px;
+}
+
+.loginLink {
+  color: #2563EB;
+  font-weight: 600;
+  text-decoration: none;
+  margin: 0 14px;
+}
+
+.loginLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .companyContent,
+  .userGuestContent {
+    padding: 24px;
+  }
+
+  .userActions,
+  .jobActions {
+    flex-direction: column;
+    align-items: stretch;
+    position: static;
+    border-top: none;
+    padding-top: 16px;
+  }
+
+  .applyButton,
+  .bookmarkButton,
+  .cancelButton {
+    width: 100%;
+  }
 }

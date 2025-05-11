@@ -1,12 +1,16 @@
 import React, { useState, useRef, useEffect, FormEvent, memo, useCallback } from 'react';
 import { useChat } from '../../contexts/ChatContext';
+import { useNavigate } from 'react-router-dom';
 import styles from './ChatBot.module.css';
 import { format } from 'date-fns';
 import { ChatBotIcon } from '../Icons/ChatBotIcon';
 import PolicyCard from './PolicyCard';
 import ChatbotBottomMenuBar from './ChatbotBottomMenuBar';
 import { useAuth } from '../../contexts/user/AuthProvider';
-import ExpertService, { ExpertQuestion, Message } from './services/ExpertService';
+import ExpertService, { ExpertQuestion } from './services/ExpertService';
+import { Message, PolicyCard as PolicyCardType } from '../../types/chat';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Message 컴포넌트를 분리하고 메모이제이션 적용
 const ChatMessage = memo(({ message, isUser }: { message: Message; isUser: boolean }) => {
@@ -200,7 +204,9 @@ const ChatMessage = memo(({ message, isUser }: { message: Message; isUser: boole
           {!isUser && <ChatBotIcon />}
           <div className={styles.message}>
             <div className={styles.messageContent}>
-              {cleanContent}
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {cleanContent}
+              </ReactMarkdown>
             </div>
           </div>
           <div className={styles.timestamp}>
@@ -223,7 +229,7 @@ const ChatMessage = memo(({ message, isUser }: { message: Message; isUser: boole
             onTouchMove={isDragging ? handleDragMove : undefined}
             onTouchEnd={handleDragEnd}
           >
-            {message.cards.map((card, idx) => (
+            {message.cards.map((card: PolicyCardType, idx: number) => (
               <div key={card.id || `card-${idx}-${Date.now()}`} className={styles.cardItem}>
                 <PolicyCard
                   card={{
@@ -252,7 +258,7 @@ const ChatMessage = memo(({ message, isUser }: { message: Message; isUser: boole
           </div>
           {message.cards.length > 1 && (
             <div className={styles.cardIndicators}>
-              {message.cards.map((_, index) => (
+              {message.cards.map((_: PolicyCardType, index: number) => (
                 <div
                   key={index}
                   className={`${styles.cardIndicator} ${index === currentCardIndex ? styles.active : ''}`}
@@ -348,6 +354,7 @@ const ChatBot: React.FC = () => {
   const [showTutorial, setShowTutorial] = useState(true);
   const [isExpertBarOpen, setIsExpertBarOpen] = useState(false);
   const [actionCardsPatched, setActionCardsPatched] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isOpen) {
@@ -489,7 +496,7 @@ const ChatBot: React.FC = () => {
       ]);
       setActionCardsPatched(true);
     }
-  }, [isOpen, expertCards, actionCardsPatched, messages]);
+  }, [isOpen, expertCards, actionCardsPatched, messages, setMessages]);
 
   // 챗봇을 닫을 때 플래그 초기화
   useEffect(() => {
@@ -513,7 +520,36 @@ const ChatBot: React.FC = () => {
       ]);
       setActionCardsPatched(false);
     }
-  }, [role, isOpen]);
+  }, [role, isOpen, setMessages]);
+
+  // 메시지 응답 처리
+  const handleMessageResponse = (message: Message) => {
+    if (message.action && message.action.type === "navigate") {
+      const targetUrl = message.action.target;
+      const keyword = message.action.keyword || "장애인";
+      navigate(`${targetUrl}&keyword=${encodeURIComponent(keyword)}`);
+    }
+  };
+
+  // 메시지 전송 핸들러
+  const handleSendMessage = async (message: string, expertType: string) => {
+    try {
+      await sendMessage(message, expertType);
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage && lastMessage.action) {
+        handleMessageResponse(lastMessage);
+      }
+    } catch (error) {
+      console.error('메시지 전송 실패:', error);
+      setMessages(prev => [...prev, {
+        id: crypto.randomUUID(),
+        content: "죄송합니다. 요청을 처리하는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        sender: 'bot',
+        role: 'assistant',
+        timestamp: new Date()
+      }]);
+    }
+  };
 
   if (!isOpen && !isAnimating) return null;
 
@@ -583,7 +619,7 @@ const ChatBot: React.FC = () => {
                     onClick={() => handleExpertSelect(card.expert_type)}
                     role="button"
                     tabIndex={0}
-                    onKeyPress={(e) => {
+                    onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         handleExpertSelect(card.expert_type);
                       }
@@ -600,7 +636,7 @@ const ChatBot: React.FC = () => {
               <div className={styles.exampleQuestions}>
                 <h3 className={styles.exampleQuestionsTitle}>자주 묻는 질문</h3>
                 <div className={styles.questionsList}>
-                  {message.exampleQuestions.map((question) => (
+                  {message.exampleQuestions.map((question: ExpertQuestion) => (
                     <button
                       key={question.id}
                       className={styles.questionButton}
@@ -638,7 +674,7 @@ const ChatBot: React.FC = () => {
         />
         <ChatInput
           isLoading={isLoading}
-          onSendMessage={sendMessage}
+          onSendMessage={handleSendMessage}
           currentExpertType={currentExpertType}
         />
       </div>

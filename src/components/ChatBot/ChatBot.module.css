@@ -300,10 +300,58 @@
 
 /* 메시지 영역에만 글자 크기 조절 적용 */
 .messageContent {
-  font-size: calc(0.875rem * var(--font-scale));
-  line-height: 1.6;
-  white-space: pre-wrap;
-  word-break: break-word;
+  font-family: 'Noto Sans', 'Apple SD Gothic Neo', 'Segoe UI', 'sans-serif';
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.messageContent h1,
+.messageContent h2,
+.messageContent h3 {
+  font-weight: 700;
+  margin: 1.2em 0 0.5em 0;
+}
+
+.messageContent ul,
+.messageContent ol {
+  margin: 0.5em 0 0.5em 1.5em;
+}
+
+.messageContent blockquote {
+  border-left: 4px solid #ececec;
+  background: #fafbfc;
+  color: #555;
+  margin: 1em 0;
+  padding: 0.5em 1em;
+  font-style: italic;
+}
+
+.messageContent table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  background: #fafbfc;
+}
+
+.messageContent th,
+.messageContent td {
+  border: 1px solid #e3e3e3;
+  padding: 0.5em 0.8em;
+  text-align: left;
+}
+
+.messageContent code {
+  background: #f6f6f6;
+  border-radius: 4px;
+  padding: 0.1em 0.3em;
+  font-size: 0.95em;
+  color: #c7254e;
+}
+
+.messageContent hr {
+  border: none;
+  border-top: 1.5px solid #ececec;
+  margin: 1.5em 0;
 }
 
 .timestamp {

@@ -1,11 +1,13 @@
-import { Route } from "react-router-dom";
+import { Route, useNavigate } from "react-router-dom";
 import SignUpForm from "../../components/SignUpForm";
 import axios from "axios";
+import { LOGIN_PAGE } from '../../routes/contantsRoutes';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const VendorSignUpPage = () =>{
 
+    const navigate = useNavigate();
     const companyFields = [
         {name:'id', label:'아이디', type:'text', placeholder:'아이디를 입력해주세요.'}
        ,{name:'pw', label:'비밀번호', type:'password', placeholder:'비밀번호를 입력해주세요.'}
@@ -33,6 +35,10 @@ const VendorSignUpPage = () =>{
         })
         .then((response) => {
             console.log("회원가입 성공:", response.data);
+            if(response.data.result === 'success'){
+                alert('회원가입이 완료되었습니다.');
+                navigate(LOGIN_PAGE);
+            }
         })
         .catch((error) => {
             console.error("회원가입 실패:", error);

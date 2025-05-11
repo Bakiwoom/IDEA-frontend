@@ -1,22 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
 import { ExpertCard, userExpertCards, companyExpertCards } from '../expertCardData';
+import { Message } from '../../../types/chat';
 
 export interface ExpertQuestion {
   id: string;
-  question: string;
   expert_type: string;
+  question: string;
   category?: string;
-}
-
-export interface Message {
-  id: string;
-  content: string;
-  sender: 'user' | 'bot';
-  role: 'user' | 'assistant';
-  timestamp: Date;
-  cards?: any[];
-  actionCards?: ExpertCard[];
-  exampleQuestions?: ExpertQuestion[];
 }
 
 class ExpertService {

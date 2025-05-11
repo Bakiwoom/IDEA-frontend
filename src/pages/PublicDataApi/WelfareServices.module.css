@@ -1,0 +1,368 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 네비게이션 스타일 */
+.nav {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+    width: 100%;
+}
+
+.navContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+}
+
+.menuButton {
+    background: none;
+    border: none;
+    font-size: 20px;
+    padding: 15px 15px 15px 0;
+    cursor: pointer;
+}
+
+.menuButton:hover {
+    color: #4263eb;
+}
+
+.navMenu {
+    display: flex;
+    list-style: none;
+    font-weight: bold;
+}
+
+.navMenu li {
+    margin-right: 20px;
+}
+
+.navMenu a.link {
+    display: block;
+    padding: 15px 10px;
+    text-decoration: none;
+    color: #495057;
+    font-size: 17px;
+}
+
+.navMenu a.link:hover {
+    color: #4263eb;
+}
+
+.navMenu a.active {
+    color: #4263eb;
+}
+
+.title {
+    @apply text-2xl font-bold mb-4;
+    padding-top: 20px;
+}
+
+.buttonContainer {
+    @apply mb-6 space-x-2 flex justify-end;
+}
+
+.button {
+    @apply font-bold py-2 px-6 rounded-lg disabled:opacity-50 transition-colors duration-150;
+}
+
+.refreshButton {
+    @apply bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-sm;
+}
+
+.loadButton {
+    @apply bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-sm;
+}
+
+.error {
+    @apply bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4;
+}
+
+.loading {
+    @apply text-blue-500 mb-4;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.serviceList {
+    @apply space-y-4;
+}
+
+.serviceCard {
+    @apply border rounded-lg p-4 hover:bg-gray-50;
+}
+
+.serviceTitle {
+    @apply text-lg font-semibold;
+}
+
+.serviceSubtitle {
+    @apply text-gray-600;
+}
+
+.serviceDescription {
+    @apply text-sm mt-2;
+}
+
+.serviceActions {
+    @apply mt-2 space-x-2;
+}
+
+.detailButton {
+    @apply text-blue-500 hover:text-blue-700;
+}
+
+.detailLink {
+    @apply text-green-500 hover:text-green-700;
+}
+
+.detailCard {
+    @apply border rounded-lg p-4 bg-gray-50;
+}
+
+.detailTitle {
+    @apply text-xl font-bold mb-4;
+}
+
+.detailContent {
+    @apply space-y-2;
+}
+
+.detailLabel {
+    @apply font-semibold;
+}
+
+.searchBar {
+    @apply mb-4 flex items-center gap-2;
+}
+.searchInput {
+    @apply border rounded px-3 py-2 w-64 text-sm;
+}
+
+.pagination {
+    @apply flex justify-center items-center gap-2 mt-6 mb-2;
+}
+.pageBtn {
+    @apply px-3 py-1 rounded border text-gray-700 bg-white hover:bg-blue-100 transition;
+}
+.pageBtn.active {
+    @apply bg-blue-500 text-white font-bold;
+}
+.pageBtn:disabled {
+    @apply opacity-50 cursor-not-allowed;
+}
+
+.cardGrid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+@media (min-width: 768px) {
+    .cardGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.card {
+    @apply border rounded-xl p-5 bg-white shadow-sm relative flex flex-col min-h-[320px];
+    transition: box-shadow 0.2s;
+}
+.card:hover {
+    @apply shadow-lg;
+}
+.cardTags {
+    @apply flex flex-wrap gap-2 mb-2;
+}
+.tag {
+    @apply px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-200;
+}
+.cardFav {
+    @apply absolute top-4 right-4 text-gray-400 hover:text-blue-500 cursor-pointer text-xl;
+    transition: color 0.2s;
+}
+.cardTitle {
+    @apply text-lg font-bold mb-1 mt-2;
+}
+.cardDesc {
+    @apply text-sm text-gray-700 mb-3 line-clamp-3;
+}
+.cardInfo {
+    @apply text-xs text-gray-500 mb-1;
+}
+.cardBtnRow {
+    @apply mt-auto flex gap-2;
+}
+.cardBtn {
+    @apply w-full py-2 rounded-lg font-semibold text-white bg-gray-400 hover:bg-blue-500 transition;
+    font-size: 1rem;
+    text-align: center;
+}
+.cardBtn.primary {
+    @apply bg-blue-600 hover:bg-blue-700;
+}
+
+/* 상세 */
+.detailWrap {
+    @apply bg-white rounded-xl shadow-sm p-8 mt-4 relative;
+}
+.detailTags {
+    @apply flex flex-wrap gap-2 mb-2;
+}
+.detailFav {
+    @apply absolute top-8 right-8 text-gray-400 hover:text-blue-500 cursor-pointer text-2xl;
+    transition: color 0.2s;
+}
+.detailTitle {
+    @apply text-2xl font-bold mb-2;
+}
+.detailDesc {
+    @apply text-base text-gray-700 mb-4;
+}
+.detailTable {
+    @apply w-full border rounded mb-6;
+    border-collapse: collapse;
+}
+.detailTable th, .detailTable td {
+    @apply border px-4 py-2 text-center;
+}
+.detailTable th {
+    @apply bg-gray-50 font-semibold;
+}
+.detailTableRow {
+    @apply text-sm;
+}
+.detailBtnRow {
+    @apply flex justify-center mt-6;
+}
+.detailBtn {
+    @apply px-8 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition;
+    font-size: 1.1rem;
+}
+
+/* 탭 */
+.tabs {
+    @apply flex border-b mb-2 mt-8;
+}
+.tab {
+    @apply px-6 py-2 cursor-pointer text-gray-600 font-semibold border-b-2 border-transparent transition;
+}
+.tab.active {
+    @apply text-blue-600 border-blue-600 bg-blue-50;
+}
+.tabPanel {
+    @apply p-4 bg-white rounded-b-xl border border-t-0;
+    min-height: 120px;
+}
+
+/* 기타 */
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.markdown ul {
+  list-style-type: disc;
+  margin-left: 1.5em;
+}
+.markdown ol {
+  list-style-type: decimal;
+  margin-left: 1.5em;
+}
+.markdown b, .markdown strong {
+  font-weight: bold;
+}
+.markdown {
+  white-space: pre-line;
+  font-size: 1rem;
+  color: #222;
+}
+
+.filterBtn {
+  @apply px-3 py-1 rounded border text-gray-700 bg-white hover:bg-blue-100 transition;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+.filterActive {
+  @apply px-3 py-1 rounded border font-bold text-white bg-blue-500 border-blue-500;
+  margin-left: 0.5rem;
+}
+
+.extraSection {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 0.5rem;
+}
+
+.extraSection h3 {
+    color: #1e40af;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.listStyle {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.listStyle li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.listStyle li:last-child {
+    border-bottom: none;
+}
+
+.linkStyle {
+    color: #2563eb;
+    text-decoration: none;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    background: #eff6ff;
+    font-size: 0.9rem;
+    margin-left: 1rem;
+}
+
+.linkStyle:hover {
+    background: #dbeafe;
+    text-decoration: underline;
+}
+
+.plainText {
+    color: #374151;
+    font-size: 0.95rem;
+}
+
+.linkContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.linkContainer span {
+    color: #374151;
+    font-size: 0.95rem;
+} 

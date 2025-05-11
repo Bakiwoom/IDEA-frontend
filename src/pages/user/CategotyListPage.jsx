@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import styles from "../../assets/css/user/CategotyListPage.module.css";
 import Nav from "../../components/Navbar";
@@ -10,6 +11,7 @@ import {useAuth} from "../../contexts/user/AuthProvider";
 const CategoryListPage = () =>{
 
     const {authUser, memberId, role, userId} = useAuth();
+    const navigate = useNavigate();
 
     const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -158,7 +160,7 @@ const CategoryListPage = () =>{
                 <h2 className={styles.pageTitle}>장애인 채용공고</h2>
                 <div className={styles.itemBoxContainer}>
                     {listVo.map((item, index)=>(
-                        <div className={styles.itemBox} key={item.jobId}>
+                        <div className={styles.itemBox} key={item.jobId} onClick={() => navigate(`/company/job/management/detail/${item.jobId}`)} style={{cursor:'pointer'}}>
                             <img src={item.companyLogo} className={styles.logoImg} alt="업체로고"></img>
                             <h3 className={styles.itemTitle}>{item.title}</h3>
                             <p className={styles.itemCompany}>{item.companyName}</p>
@@ -169,7 +171,7 @@ const CategoryListPage = () =>{
                             </div>
                             <div className={styles.dayBox}>
                                 <span className={styles.itemEndday}>~ {item.deadline.slice(5)}</span>
-                                <span className={`${styles.heartIcon} ${role === 'company' ? '' : styles.iconHover} ${bookmarkList.some(bookmark => bookmark.jobId === item.jobId) ? styles.redHeart : ''}`}  onClick={()=>handleHeart(item.jobId)}>
+                                <span className={`${styles.heartIcon} ${role === 'company' ? '' : styles.iconHover} ${bookmarkList.some(bookmark => bookmark.jobId === item.jobId) ? styles.redHeart : ''}`}  onClick={(e)=>{e.stopPropagation();handleHeart(item.jobId);}}>
                                     {bookmarkList.some(bookmark => bookmark.jobId === item.jobId)
                                     ? '♥' : '♡'
                                     }

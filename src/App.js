@@ -4,6 +4,7 @@ import Main from "./pages/main/Main.jsx";
 import UserRoutes from "./routes/UserRoutes";
 import CompanyRoutes from "./routes/CompanyRoutes.jsx";
 import AdminRoutes from "./routes/AdminRoutes";
+import PublicDataApiRoutes from "./routes/PublicDataApiRoutes";
 import Layout from "./components/Layout";
 import CompanyLayout from "./components/CompanyLayout.jsx";
 import ChatbotLayout from "./components/ChatBot/ChatbotLayout.jsx";
@@ -30,6 +31,7 @@ function App() {
                   <Route element={<Layout />}>
                     <Route path="/" element={<Main />} />
                     <Route path="/admin/*" element={<AdminRoutes />} />
+                    <Route path="/public-data/*" element={<PublicDataApiRoutes />} />
                   </Route>
                   {/* 사용자 라우터 (layout X) */}
                   <Route path="/user/*" element={<UserRoutes />} />

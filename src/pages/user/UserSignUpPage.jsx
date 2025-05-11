@@ -4,6 +4,7 @@ import { type } from "@testing-library/user-event/dist/type";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { LOGIN_PAGE } from '../../routes/contantsRoutes';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -17,7 +18,7 @@ const UserSignUpPage = () => {
        ,{name:'pw', label:'비밀번호', type:'password', placeholder:'비밀번호를 입력해주세요.'}
        ,{name:'ph', label:'전화번호', type:'tel', placeholder:'핸드폰번호를 입력해주세요.'}
        ,{name:'email', label:'이메일', type:'email', placeholder:'이메일을 입력해주세요.'}
-       ,{name:'disabilityType', label:'장애유형', type:'select', options: ["경증남성", "경증여성", "중증남성", "중증여성"]}
+       ,{name:'disabilityType', label:'장애유형', type:'select', options: ["선택안함","경증남성", "경증여성", "중증남성", "중증여성"]}
        ,{name:'obstacle', label:'장애인 증명서', type:'file'}
    ];
    
@@ -40,7 +41,7 @@ const UserSignUpPage = () => {
         .then((response) => {
             if(response.data.result === 'success'){
                 alert('회원가입이 완료되었습니다.');
-                navigate('/user/loginPage');
+                navigate(LOGIN_PAGE);
             }else{
                 alert("회원가입에 실패하였습니다. 다시 시도해주세요.");
             }

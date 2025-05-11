@@ -7,6 +7,11 @@ export interface Message {
   cards?: PolicyCard[];
   actionCards?: ExpertCard[];
   exampleQuestions?: ExpertQuestion[];
+  action?: {
+    type: string;
+    target: string;
+    keyword?: string;
+  };
 }
 
 export interface PolicyCardButton {
