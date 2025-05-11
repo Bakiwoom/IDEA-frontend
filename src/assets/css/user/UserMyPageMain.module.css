@@ -177,3 +177,8 @@
     color: var(--login-hiddenfont-color);
 }
 
+/* UserMyPageMain.module.css */
+.closedRow {
+    background-color: #f5f5f5;
+    color: #999;
+}
