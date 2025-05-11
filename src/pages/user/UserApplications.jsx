@@ -40,11 +40,20 @@ const UserApplications = () => {
                                 <td className={styles.aiContents}>
                                     <div>
                                         <p className={styles.BenefitTitle}>내 혜택:</p>
-                                        <li>혜택1</li>
-                                        <li>혜택2</li>
+                                        {item.myBenefits
+                                            ? item.myBenefits.split('\n').map((benefit, i) => (
+                                                <li key={`my-${i}`}>{benefit.trim()}</li>
+                                            ))
+                                            : <li>없음</li>
+                                        }
+
                                         <p className={styles.BenefitTitle}>기업 혜택:</p>
-                                        <li>혜택1</li>
-                                        <li>혜택2</li>
+                                        {item.companyBenefits
+                                            ? item.companyBenefits.split('\n').map((benefit, i) => (
+                                                <li key={`company-${i}`}>{benefit.trim()}</li>
+                                            ))
+                                            : <li>없음</li>
+                                        }
                                     </div>
                                 </td>
                                 <td className={styles.text}>{item.jobType || '-'}</td>

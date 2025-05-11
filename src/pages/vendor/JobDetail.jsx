@@ -16,13 +16,15 @@ const JobDetail = () => {
   const { jobId } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const { role } = useAuth();
+  const { role, userId } = useAuth();
 
   const [activeMenu, setActiveMenu] = useState("job-management");
   const [jobData, setJobData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [hasApplied, setHasApplied] = useState(false);
+
+
 
   useEffect(() => {
     (async () => {
@@ -50,15 +52,36 @@ const JobDetail = () => {
     return opt ? opt.name : "미등록";
   })();
 
+
   const handleApply = async () => {
-    if (!token) return navigate("/login");
+    if (!token || !userId) {
+      alert("로그인 정보가 없거나 만료되었습니다.");
+      return navigate("/login");
+    }
+
     try {
+      // 1단계: Spring Boot에 지원 요청
       await axios.post(`${process.env.REACT_APP_API_URL}/api/job/${jobId}/apply`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       setHasApplied(true);
       alert("지원이 완료되었습니다!");
+
+      const jobInfo = jobData;
+
+      console.log("전송 데이터 확인", { userId, jobId, jobInfo });
+
+      // 2단계: Spring Boot → FastAPI 분석 요청
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/ai/benefits`, {
+        user_info: { id: userId },   // ✅ 이 구조로 바꿔야 함!
+        job_info: jobData,
+      });
+
+      console.log("✅ 분석 요청 완료");
+
     } catch (err) {
+      console.error("❌ 분석 요청 실패:", err);
       alert(err.response?.data?.message || "지원 중 오류가 발생했습니다.");
     }
   };
