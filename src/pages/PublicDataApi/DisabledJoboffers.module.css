@@ -1,10 +1,12 @@
 .container {
-    @apply mx-auto px-4 py-8;
-    max-width: 1280px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .title {
     @apply text-2xl font-bold mb-4 text-gray-800;
+    padding-top: 20px;
 }
 
 .buttonContainer {
@@ -41,6 +43,59 @@
     border-spacing: 0;
 }
 
+/* 네비게이션 스타일 */
+.nav {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+    width: 100%;
+}
+
+.navContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+}
+
+.menuButton {
+    background: none;
+    border: none;
+    font-size: 20px;
+    padding: 15px 15px 15px 0;
+    cursor: pointer;
+}
+
+.menuButton:hover {
+    color: #4263eb;
+}
+
+.navMenu {
+    display: flex;
+    list-style: none;
+    font-weight: bold;
+}
+
+.navMenu li {
+    margin-right: 20px;
+}
+
+.navMenu a.link {
+    display: block;
+    padding: 15px 10px;
+    text-decoration: none;
+    color: #495057;
+    font-size: 17px;
+}
+
+.navMenu a.link:hover {
+    color: #4263eb;
+}
+
+.navMenu a.active {
+    color: #4263eb;
+}
+
 /* 리스트 헤더 */
 .listHeader {
     @apply bg-gray-50 text-gray-700 font-semibold sticky top-0;
@@ -54,10 +109,25 @@
 /* 리스트 행 스타일 */
 .listRow {
     @apply cursor-pointer border-b border-gray-100 hover:bg-blue-50/60 transition-colors duration-150;
+    position: relative;
 }
 
 .listRow:last-child {
     @apply border-b-0;
+}
+
+/* 선택된 행 스타일 */
+.listRow.selected {
+    background-color: #EFF6FF;
+    border-left: 4px solid #4263eb;
+}
+
+.listRow.selected:hover {
+    background-color: #DBEAFE;
+}
+
+.listRow.selected td:first-child {
+    padding-left: calc(1.5rem - 4px);
 }
 
 .listCell {
@@ -76,6 +146,8 @@
 .detail {
     @apply bg-gray-50/50 px-6 py-4;
     animation: fadeIn 0.2s;
+    border-left: 4px solid #4263eb;
+    background-color: #F8FAFC;
 }
 
 .detail > div {

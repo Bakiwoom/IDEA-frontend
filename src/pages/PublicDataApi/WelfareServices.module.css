@@ -1,26 +1,81 @@
 .container {
-    @apply mx-auto px-4 py-8;
-    max-width: 1280px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 네비게이션 스타일 */
+.nav {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+    width: 100%;
+}
+
+.navContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+}
+
+.menuButton {
+    background: none;
+    border: none;
+    font-size: 20px;
+    padding: 15px 15px 15px 0;
+    cursor: pointer;
+}
+
+.menuButton:hover {
+    color: #4263eb;
+}
+
+.navMenu {
+    display: flex;
+    list-style: none;
+    font-weight: bold;
+}
+
+.navMenu li {
+    margin-right: 20px;
+}
+
+.navMenu a.link {
+    display: block;
+    padding: 15px 10px;
+    text-decoration: none;
+    color: #495057;
+    font-size: 17px;
+}
+
+.navMenu a.link:hover {
+    color: #4263eb;
+}
+
+.navMenu a.active {
+    color: #4263eb;
 }
 
 .title {
     @apply text-2xl font-bold mb-4;
+    padding-top: 20px;
 }
 
 .buttonContainer {
-    @apply mb-4 space-x-2;
+    @apply mb-6 space-x-2 flex justify-end;
 }
 
 .button {
-    @apply font-bold py-2 px-4 rounded disabled:opacity-50;
+    @apply font-bold py-2 px-6 rounded-lg disabled:opacity-50 transition-colors duration-150;
 }
 
 .refreshButton {
-    @apply bg-blue-500 hover:bg-blue-700 text-white;
+    @apply bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-sm;
 }
 
 .loadButton {
-    @apply bg-green-500 hover:bg-green-700 text-white;
+    @apply bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-sm;
 }
 
 .error {

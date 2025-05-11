@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './DisabledJoboffers.module.css';
 import { format, differenceInDays, parse, isValid } from 'date-fns';
+import { Link } from 'react-router-dom';
+import { WELFARE_SERVICES_PAGE } from './WelfareServices';
+
+export const DISABLED_JOB_OFFERS_PAGE = '/public-data/disabled-job-offers';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -198,148 +202,182 @@ const DisabledJoboffers: React.FC = () => {
     };
 
     return (
-        <div className={styles.container}>
-            <h2 className={styles.title}>장애인 구인 실시간 현황</h2>
-            
-            <div className={styles.buttonContainer}>
-                <button
-                    onClick={refreshData}
-                    disabled={loading}
-                    className={`${styles.button} ${styles.refreshButton}`}
-                >
-                    데이터 갱신
-                </button>
-                <button
-                    onClick={fetchData}
-                    disabled={loading}
-                    className={`${styles.button} ${styles.loadButton}`}
-                >
-                    데이터 불러오기
-                </button>
-            </div>
-
-            {error && (
-                <div className={styles.error}>
-                    {error}
+        <>
+            <nav className={styles.nav}>
+                <div className={`${styles.container} ${styles.navContainer}`}>
+                    <button className={styles.menuButton}>☰</button>
+                    <ul className={styles.navMenu}>
+                        <li>
+                            <Link to="/" className={styles.link}>
+                                홈으로
+                            </Link>
+                        </li>
+                        <li>
+                            <Link 
+                                to={DISABLED_JOB_OFFERS_PAGE} 
+                                className={`${styles.link} ${window.location.pathname === DISABLED_JOB_OFFERS_PAGE ? styles.active : ''}`}
+                            >
+                                구인 실시간 현황
+                            </Link>
+                        </li>
+                        <li>
+                            <Link 
+                                to={WELFARE_SERVICES_PAGE} 
+                                className={styles.link}
+                            >
+                                복지서비스 목록
+                            </Link>
+                        </li>
+                    </ul>
                 </div>
-            )}
+            </nav>
+            <div className={styles.container}>
+                <h2 className={styles.title}>장애인 구인 실시간 현황</h2>
+                
+                <div className={styles.buttonContainer}>
+                    <button
+                        onClick={refreshData}
+                        disabled={loading}
+                        className={`${styles.button} ${styles.refreshButton}`}
+                    >
+                        데이터 갱신
+                    </button>
+                    <button
+                        onClick={fetchData}
+                        disabled={loading}
+                        className={`${styles.button} ${styles.loadButton}`}
+                    >
+                        데이터 불러오기
+                    </button>
+                </div>
 
-            {loading && (
-                <div className={styles.loading}>데이터를 불러오는 중...</div>
-            )}
+                {error && (
+                    <div className={styles.error}>
+                        {error}
+                    </div>
+                )}
 
-            <div className={styles.tableContainer}>
-                <table className={styles.table}>
-                    <thead>
-                        <tr className={styles.listHeader}>
-                            <th className={styles.listCell}>사업장명</th>
-                            <th className={styles.listCell}>모집직종</th>
-                            <th className={styles.listCell}>고용형태</th>
-                            <th className={styles.listCell}>사업장 위치</th>
-                            <th className={styles.listCell}>마감일</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {pagedData.map((item, idx) => {
-                            const globalIdx = (page - 1) * PAGE_SIZE + idx;
-                            return (
-                                <React.Fragment key={globalIdx}>
-                                    <tr className={styles.listRow} onClick={() => handleExpand(globalIdx)}>
-                                        <td className={styles.listCell}>{splitTextWithParenthesis(item.busplaName)}</td>
-                                        <td className={styles.listCell}>{splitTextWithParenthesis(item.jobNm)}</td>
-                                        <td className={`${styles.listCell} ${styles.centerCell}`}>{splitTextWithParenthesis(item.empType)}</td>
-                                        <td className={styles.listCell}>{splitTextWithParenthesis(item.compAddr)}</td>
-                                        <td className={`${styles.listCell} ${styles.centerCell}`}>
-                                            <FormattedDate termDate={item.termDate} />
-                                        </td>
-                                    </tr>
-                                    {expandedIdx === globalIdx && (
-                                        <tr>
-                                            <td colSpan={5} className={styles.detail}>
-                                                <div>
-                                                    <div className={styles.detailGrid}>
-                                                        <div className={styles.detailSection}>
-                                                            <h3>기본 정보</h3>
-                                                            <div className={styles.detailItem}>
-                                                                <span className={styles.detailLabel}>연락처:</span>
-                                                                <span className={styles.detailValue}>{item.cntctNo || '-'}</span>
-                                                            </div>
-                                                            <div className={styles.detailItem}>
-                                                                <span className={styles.detailLabel}>입사형태:</span>
-                                                                <span className={styles.detailValue}>{item.enterType || '-'}</span>
-                                                            </div>
-                                                            <div className={styles.detailItem}>
-                                                                <span className={styles.detailLabel}>구인신청일:</span>
-                                                                <span className={styles.detailValue}>{item.offerregDt || '-'}</span>
-                                                            </div>
-                                                            <div className={styles.detailItem}>
-                                                                <span className={styles.detailLabel}>등록일:</span>
-                                                                <span className={styles.detailValue}>{item.regDt || '-'}</span>
-                                                            </div>
-                                                            <div className={styles.detailItem}>
-                                                                <span className={styles.detailLabel}>담당기관:</span>
-                                                                <span className={styles.detailValue}>{item.regagnName || '-'}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className={styles.detailSection}>
-                                                            <h3>근무 조건</h3>
-                                                            <div className={styles.detailItem}>
-                                                                <span className={styles.detailLabel}>요구경력:</span>
-                                                                <span className={styles.detailValue}>{item.reqCareer || '-'}</span>
-                                                            </div>
-                                                            <div className={styles.detailItem}>
-                                                                <span className={styles.detailLabel}>요구학력:</span>
-                                                                <span className={styles.detailValue}>{item.reqEduc || '-'}</span>
-                                                            </div>
-                                                            <div className={styles.detailItem}>
-                                                                <span className={styles.detailLabel}>임금:</span>
-                                                                <span className={styles.detailValue}>{item.salary || '-'}</span>
-                                                            </div>
-                                                            <div className={styles.detailItem}>
-                                                                <span className={styles.detailLabel}>임금형태:</span>
-                                                                <span className={styles.detailValue}>{item.salaryType || '-'}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                {loading && (
+                    <div className={styles.loading}>데이터를 불러오는 중...</div>
+                )}
 
-                                                    <div className={styles.detailSection}>
-                                                        <h3>작업환경 정보</h3>
-                                                        <div className={styles.pictogramRow}>
-                                                            {pictogramDefs.map(p => {
-                                                                const envValue = item[p.key as keyof DisabledJoboffer];
-                                                                return (
-                                                                    <div key={p.key} className={`${styles.pictogram} ${envValue ? styles.active : ''}`}>
-                                                                        {p.icon}
-                                                                        <span className={styles.pictogramLabel}>{p.label}</span>
-                                                                        {envValue && (
-                                                                            <span className={styles.tooltip}>
-                                                                                {envValue}
-                                                                            </span>
-                                                                        )}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                    </div>
-                                                </div>
+                <div className={styles.tableContainer}>
+                    <table className={styles.table}>
+                        <thead>
+                            <tr className={styles.listHeader}>
+                                <th className={styles.listCell}>사업장명</th>
+                                <th className={styles.listCell}>모집직종</th>
+                                <th className={styles.listCell}>고용형태</th>
+                                <th className={styles.listCell}>사업장 위치</th>
+                                <th className={styles.listCell}>마감일</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {pagedData.map((item, idx) => {
+                                const globalIdx = (page - 1) * PAGE_SIZE + idx;
+                                const isSelected = expandedIdx === globalIdx;
+                                return (
+                                    <React.Fragment key={globalIdx}>
+                                        <tr 
+                                            className={`${styles.listRow} ${isSelected ? styles.selected : ''}`} 
+                                            onClick={() => handleExpand(globalIdx)}
+                                        >
+                                            <td className={styles.listCell}>{splitTextWithParenthesis(item.busplaName)}</td>
+                                            <td className={styles.listCell}>{splitTextWithParenthesis(item.jobNm)}</td>
+                                            <td className={`${styles.listCell} ${styles.centerCell}`}>{splitTextWithParenthesis(item.empType)}</td>
+                                            <td className={styles.listCell}>{splitTextWithParenthesis(item.compAddr)}</td>
+                                            <td className={`${styles.listCell} ${styles.centerCell}`}>
+                                                <FormattedDate termDate={item.termDate} />
                                             </td>
                                         </tr>
-                                    )}
-                                </React.Fragment>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                                        {isSelected && (
+                                            <tr>
+                                                <td colSpan={5} className={styles.detail}>
+                                                    <div>
+                                                        <div className={styles.detailGrid}>
+                                                            <div className={styles.detailSection}>
+                                                                <h3>기본 정보</h3>
+                                                                <div className={styles.detailItem}>
+                                                                    <span className={styles.detailLabel}>연락처:</span>
+                                                                    <span className={styles.detailValue}>{item.cntctNo || '-'}</span>
+                                                                </div>
+                                                                <div className={styles.detailItem}>
+                                                                    <span className={styles.detailLabel}>입사형태:</span>
+                                                                    <span className={styles.detailValue}>{item.enterType || '-'}</span>
+                                                                </div>
+                                                                <div className={styles.detailItem}>
+                                                                    <span className={styles.detailLabel}>구인신청일:</span>
+                                                                    <span className={styles.detailValue}>{item.offerregDt || '-'}</span>
+                                                                </div>
+                                                                <div className={styles.detailItem}>
+                                                                    <span className={styles.detailLabel}>등록일:</span>
+                                                                    <span className={styles.detailValue}>{item.regDt || '-'}</span>
+                                                                </div>
+                                                                <div className={styles.detailItem}>
+                                                                    <span className={styles.detailLabel}>담당기관:</span>
+                                                                    <span className={styles.detailValue}>{item.regagnName || '-'}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div className={styles.detailSection}>
+                                                                <h3>근무 조건</h3>
+                                                                <div className={styles.detailItem}>
+                                                                    <span className={styles.detailLabel}>요구경력:</span>
+                                                                    <span className={styles.detailValue}>{item.reqCareer || '-'}</span>
+                                                                </div>
+                                                                <div className={styles.detailItem}>
+                                                                    <span className={styles.detailLabel}>요구학력:</span>
+                                                                    <span className={styles.detailValue}>{item.reqEduc || '-'}</span>
+                                                                </div>
+                                                                <div className={styles.detailItem}>
+                                                                    <span className={styles.detailLabel}>임금:</span>
+                                                                    <span className={styles.detailValue}>{item.salary || '-'}</span>
+                                                                </div>
+                                                                <div className={styles.detailItem}>
+                                                                    <span className={styles.detailLabel}>임금형태:</span>
+                                                                    <span className={styles.detailValue}>{item.salaryType || '-'}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className={styles.detailSection}>
+                                                            <h3>작업환경 정보</h3>
+                                                            <div className={styles.pictogramRow}>
+                                                                {pictogramDefs.map(p => {
+                                                                    const envValue = item[p.key as keyof DisabledJoboffer];
+                                                                    return (
+                                                                        <div key={p.key} className={`${styles.pictogram} ${envValue ? styles.active : ''}`}>
+                                                                            {p.icon}
+                                                                            <span className={styles.pictogramLabel}>{p.label}</span>
+                                                                            {envValue && (
+                                                                                <span className={styles.tooltip}>
+                                                                                    {envValue}
+                                                                                </span>
+                                                                            )}
+                                                                        </div>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </React.Fragment>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+                {/* 페이징 */}
+                <div className={styles.pagination}>
+                    <button className={styles.pageBtn} onClick={()=>setPage(page-1)} disabled={page===1}>이전</button>
+                    {Array.from({length: totalPages}, (_,i)=>(
+                        <button key={i} className={`${styles.pageBtn} ${page===i+1?styles.active:''}`} onClick={()=>setPage(i+1)}>{i+1}</button>
+                    ))}
+                    <button className={styles.pageBtn} onClick={()=>setPage(page+1)} disabled={page===totalPages}>다음</button>
+                </div>
             </div>
-            {/* 페이징 */}
-            <div className={styles.pagination}>
-                <button className={styles.pageBtn} onClick={()=>setPage(page-1)} disabled={page===1}>이전</button>
-                {Array.from({length: totalPages}, (_,i)=>(
-                    <button key={i} className={`${styles.pageBtn} ${page===i+1?styles.active:''}`} onClick={()=>setPage(i+1)}>{i+1}</button>
-                ))}
-                <button className={styles.pageBtn} onClick={()=>setPage(page+1)} disabled={page===totalPages}>다음</button>
-            </div>
-        </div>
+        </>
     );
 };
 

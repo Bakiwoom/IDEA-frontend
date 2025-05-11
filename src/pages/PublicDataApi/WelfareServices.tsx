@@ -2,8 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import styles from './WelfareServices.module.css';
 import { FaRegStar, FaStar } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import { DISABLED_JOB_OFFERS_PAGE } from './DisabledJoboffers';
+
+export const WELFARE_SERVICES_PAGE = '/public-data/welfare-services';
 
 const API_URL = process.env.REACT_APP_API_URL;
 const PAGE_SIZE = 6;
@@ -231,288 +234,318 @@ const WelfareServices: React.FC = () => {
     };
 
     return (
-        <div className={styles.container}>
-            <h2 className={styles.title}>중앙부처 복지서비스 목록</h2>
-            
-            <div className={styles.buttonContainer}>
-                <button
-                    onClick={refreshData}
-                    disabled={loading}
-                    className={`${styles.button} ${styles.refreshButton}`}
-                >
-                    데이터 갱신
-                </button>
-                <button
-                    onClick={fetchList}
-                    disabled={loading}
-                    className={`${styles.button} ${styles.loadButton}`}
-                >
-                    목록 불러오기
-                </button>
-            </div>
-
-            {/* 검색바 */}
-            <div className={styles.searchBar}>
-                <input
-                    className={styles.searchInput}
-                    type="text"
-                    placeholder="서비스명 또는 소관부처명 검색"
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                />
-                <button
-                    className={search === '장애인' ? styles.filterActive : styles.filterBtn}
-                    style={{marginLeft: '0.5rem'}}
-                    onClick={() => setSearch(search === '장애인' ? '' : '장애인')}
-                >
-                    장애인
-                </button>
-            </div>
-
-            {error && (
-                <div className={styles.error}>
-                    {error}
-                </div>
-            )}
-
-            {loading && (
-                <div className={styles.loading}>데이터를 불러오는 중...</div>
-            )}
-
-            {/* 카드형 목록 */}
-            <div className={styles.cardGrid}>
-                {pagedList.map((item) => (
-                    <div
-                        key={item.servId}
-                        className={styles.card}
-                        onClick={() => handleShowDetail(item.servId)}
-                    >
-                        <div className={styles.cardTags}>
-                            {extractTags(item).map(tag => (
-                                <span key={tag} className={styles.tag}>{tag}</span>
-                            ))}
-                        </div>
-                        <div className={styles.cardFav} onClick={e => { e.stopPropagation(); toggleFavorite(item.servId); }}>
-                            {favorites.includes(item.servId) ? <FaStar color="#2563eb" /> : <FaRegStar />}
-                        </div>
-                        <div className={styles.cardTitle}>{item.servNm}</div>
-                        <div className={styles.cardDesc}>{item.servDgst}</div>
-                        <div className={styles.cardInfo}><b>담당부처</b> {item.jurMnofNm}</div>
-                        <div className={styles.cardInfo}><b>지원주기</b> {item.sprtCycNm || '-'}</div>
-                        <div className={styles.cardInfo}><b>문의처</b> {item.rprsCtadr || '-'}</div>
-                        <div className={styles.cardBtnRow}>
-                            <button
-                                className={`${styles.cardBtn} ${styles.primary}`}
-                                onClick={e => { e.stopPropagation(); handleShowDetail(item.servId); }}
+        <>
+            <nav className={styles.nav}>
+                <div className={`${styles.container} ${styles.navContainer}`}>
+                    <button className={styles.menuButton}>☰</button>
+                    <ul className={styles.navMenu}>
+                        <li>
+                            <Link to="/" className={styles.link}>
+                                홈으로
+                            </Link>
+                        </li>
+                        <li>
+                            <Link 
+                                to={DISABLED_JOB_OFFERS_PAGE} 
+                                className={styles.link}
                             >
-                                자세히 보기
-                            </button>
-                            {item.servDtlLink && (
-                                <a
-                                    href={item.servDtlLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={styles.cardBtn}
-                                    onClick={e => e.stopPropagation()}
-                                    style={{ background: '#4f46e5' }}
-                                >
-                                    신청/상세링크
-                                </a>
-                            )}
-                        </div>
-                    </div>
-                ))}
-                {pagedList.length === 0 && (
-                    <div style={{padding:'2rem', textAlign:'center', color:'#888'}}>검색 결과가 없습니다.</div>
-                )}
-            </div>
+                                구인 실시간 현황
+                            </Link>
+                        </li>
+                        <li>
+                            <Link 
+                                to={WELFARE_SERVICES_PAGE} 
+                                className={`${styles.link} ${window.location.pathname === WELFARE_SERVICES_PAGE ? styles.active : ''}`}
+                            >
+                                복지서비스 목록
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div className={styles.container}>
+                <h2 className={styles.title}>중앙부처 복지서비스 목록</h2>
+                
+                <div className={styles.buttonContainer}>
+                    <button
+                        onClick={refreshData}
+                        disabled={loading}
+                        className={`${styles.button} ${styles.refreshButton}`}
+                    >
+                        데이터 갱신
+                    </button>
+                    <button
+                        onClick={fetchList}
+                        disabled={loading}
+                        className={`${styles.button} ${styles.loadButton}`}
+                    >
+                        목록 불러오기
+                    </button>
+                </div>
 
-            {/* 상세 오버레이 */}
-            {selectedDetail && (
-                <>
-                    <div
-                        style={{position:'fixed', left:0, top:0, width:'100vw', height:'100vh', background:'rgba(0,0,0,0.08)', zIndex:20}}
-                        onClick={handleCloseDetail}
+                {/* 검색바 */}
+                <div className={styles.searchBar}>
+                    <input
+                        className={styles.searchInput}
+                        type="text"
+                        placeholder="서비스명 또는 소관부처명 검색"
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
                     />
-                    <div ref={detailRef} className={styles.detailWrap} style={{position:'relative', zIndex:30}}>
-                        <div className={styles.detailTags}>
-                            {extractTags(selectedDetail).map(tag => (
-                                <span key={tag} className={styles.tag}>{tag}</span>
-                            ))}
-                        </div>
-                        <div className={styles.detailFav} onClick={() => toggleFavorite(selectedDetail.servId)}>
-                            {favorites.includes(selectedDetail.servId) ? <FaStar color="#2563eb" /> : <FaRegStar />}
-                        </div>
-                        <div className={styles.detailTitle}>{selectedDetail.servNm}</div>
-                        <div className={styles.detailDesc}>
-                            <div className={styles.markdown}>
-                                <ReactMarkdown>
-                                    {selectedDetail.tgtrDtlCn || '-'}
-                                </ReactMarkdown>
+                    <button
+                        className={search === '장애인' ? styles.filterActive : styles.filterBtn}
+                        style={{marginLeft: '0.5rem'}}
+                        onClick={() => setSearch(search === '장애인' ? '' : '장애인')}
+                    >
+                        장애인
+                    </button>
+                </div>
+
+                {error && (
+                    <div className={styles.error}>
+                        {error}
+                    </div>
+                )}
+
+                {loading && (
+                    <div className={styles.loading}>데이터를 불러오는 중...</div>
+                )}
+
+                {/* 카드형 목록 */}
+                <div className={styles.cardGrid}>
+                    {pagedList.map((item) => (
+                        <div
+                            key={item.servId}
+                            className={styles.card}
+                            onClick={() => handleShowDetail(item.servId)}
+                        >
+                            <div className={styles.cardTags}>
+                                {extractTags(item).map(tag => (
+                                    <span key={tag} className={styles.tag}>{tag}</span>
+                                ))}
+                            </div>
+                            <div className={styles.cardFav} onClick={e => { e.stopPropagation(); toggleFavorite(item.servId); }}>
+                                {favorites.includes(item.servId) ? <FaStar color="#2563eb" /> : <FaRegStar />}
+                            </div>
+                            <div className={styles.cardTitle}>{item.servNm}</div>
+                            <div className={styles.cardDesc}>{item.servDgst}</div>
+                            <div className={styles.cardInfo}><b>담당부처</b> {item.jurMnofNm}</div>
+                            <div className={styles.cardInfo}><b>지원주기</b> {item.sprtCycNm || '-'}</div>
+                            <div className={styles.cardInfo}><b>문의처</b> {item.rprsCtadr || '-'}</div>
+                            <div className={styles.cardBtnRow}>
+                                <button
+                                    className={`${styles.cardBtn} ${styles.primary}`}
+                                    onClick={e => { e.stopPropagation(); handleShowDetail(item.servId); }}
+                                >
+                                    자세히 보기
+                                </button>
+                                {item.servDtlLink && (
+                                    <a
+                                        href={item.servDtlLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={styles.cardBtn}
+                                        onClick={e => e.stopPropagation()}
+                                        style={{ background: '#4f46e5' }}
+                                    >
+                                        신청/상세링크
+                                    </a>
+                                )}
                             </div>
                         </div>
-                        <div className={styles.detailDept}>
-                            <b>담당부서</b> {selectedDetail.jurMnofNm || '-'}
-                        </div>
-                        <table className={styles.detailTable}>
-                            <thead>
-                                <tr>
-                                    <th>기준연도</th>
-                                    <th>문의처</th>
-                                    <th>지원주기</th>
-                                    <th>제공유형</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr className={styles.detailTableRow}>
-                                    <td>{selectedDetail.crtrYr || '-'}</td>
-                                    <td>{selectedDetail.rprsCtadr || '-'}</td>
-                                    <td>{selectedDetail.sprtCycNm || '-'}</td>
-                                    <td>{selectedDetail.srvPvsnNm || '-'}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div className={styles.detailBtnRow}>
-                            <button className={styles.detailBtn} onClick={handleCloseDetail}>목록</button>
-                        </div>
-                        <div className={styles.tabs}>
-                            {tabDefs.map(t => (
-                                <div
-                                    key={t.key}
-                                    className={`${styles.tab} ${tab === t.key ? styles.active : ''}`}
-                                    onClick={() => setTab(t.key)}
-                                >
-                                    {t.label}
+                    ))}
+                    {pagedList.length === 0 && (
+                        <div style={{padding:'2rem', textAlign:'center', color:'#888'}}>검색 결과가 없습니다.</div>
+                    )}
+                </div>
+
+                {/* 상세 오버레이 */}
+                {selectedDetail && (
+                    <>
+                        <div
+                            style={{position:'fixed', left:0, top:0, width:'100vw', height:'100vh', background:'rgba(0,0,0,0.08)', zIndex:20}}
+                            onClick={handleCloseDetail}
+                        />
+                        <div ref={detailRef} className={styles.detailWrap} style={{position:'relative', zIndex:30}}>
+                            <div className={styles.detailTags}>
+                                {extractTags(selectedDetail).map(tag => (
+                                    <span key={tag} className={styles.tag}>{tag}</span>
+                                ))}
+                            </div>
+                            <div className={styles.detailFav} onClick={() => toggleFavorite(selectedDetail.servId)}>
+                                {favorites.includes(selectedDetail.servId) ? <FaStar color="#2563eb" /> : <FaRegStar />}
+                            </div>
+                            <div className={styles.detailTitle}>{selectedDetail.servNm}</div>
+                            <div className={styles.detailDesc}>
+                                <div className={styles.markdown}>
+                                    <ReactMarkdown>
+                                        {selectedDetail.tgtrDtlCn || '-'}
+                                    </ReactMarkdown>
                                 </div>
-                            ))}
+                            </div>
+                            <div className={styles.detailDept}>
+                                <b>담당부서</b> {selectedDetail.jurMnofNm || '-'}
+                            </div>
+                            <table className={styles.detailTable}>
+                                <thead>
+                                    <tr>
+                                        <th>기준연도</th>
+                                        <th>문의처</th>
+                                        <th>지원주기</th>
+                                        <th>제공유형</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr className={styles.detailTableRow}>
+                                        <td>{selectedDetail.crtrYr || '-'}</td>
+                                        <td>{selectedDetail.rprsCtadr || '-'}</td>
+                                        <td>{selectedDetail.sprtCycNm || '-'}</td>
+                                        <td>{selectedDetail.srvPvsnNm || '-'}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div className={styles.detailBtnRow}>
+                                <button className={styles.detailBtn} onClick={handleCloseDetail}>목록</button>
+                            </div>
+                            <div className={styles.tabs}>
+                                {tabDefs.map(t => (
+                                    <div
+                                        key={t.key}
+                                        className={`${styles.tab} ${tab === t.key ? styles.active : ''}`}
+                                        onClick={() => setTab(t.key)}
+                                    >
+                                        {t.label}
+                                    </div>
+                                ))}
+                            </div>
+                            <div className={styles.tabPanel}>
+                                {tab === 'target' && (
+                                    <>
+                                        <div className={styles.extraSection}>
+                                            <h3>지원대상</h3>
+                                            <div className={styles.markdown}>
+                                                <ReactMarkdown>
+                                                    {selectedDetail.tgtrDtlCn || '-'}
+                                                </ReactMarkdown>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className={styles.extraSection}>
+                                            <h3>선정기준</h3>
+                                            <div className={styles.markdown}>
+                                                <ReactMarkdown>
+                                                    {selectedDetail.slctCritCn || '-'}
+                                                </ReactMarkdown>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                                {tab === 'content' && (
+                                    <>
+                                        <div className={styles.extraSection}>
+                                            <h3>서비스 내용</h3>
+                                            <div className={styles.markdown}>
+                                                <ReactMarkdown>
+                                                    {selectedDetail.alwServCn || '-'}
+                                                </ReactMarkdown>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                                {tab === 'apply' && (
+                                    <>
+                                        <div className={styles.extraSection}>
+                                            <h3>신청방법</h3>
+                                            <ul className={styles.listStyle}>
+                                                {selectedDetail.applmetList?.map((item, index) => (
+                                                    <li key={index}>
+                                                        {renderLink(item.servSeDetailNm, item.servSeDetailLink)}
+                                                    </li>
+                                                )) || '-'}
+                                            </ul>
+                                        </div>
+                                    </>
+                                )}
+                                {tab === 'extra' && (
+                                    <>
+                                        <div className={styles.extraSection}>
+                                            <h3>복지정보 개요</h3>
+                                            <div className={styles.markdown}>
+                                                <ReactMarkdown>
+                                                    {selectedDetail.wlfareInfoOutlCn || '-'}
+                                                </ReactMarkdown>
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.extraSection}>
+                                            <h3>관심주제</h3>
+                                            <div className={styles.markdown}>
+                                                <ReactMarkdown>
+                                                    {selectedDetail.intrsThemaArray || '-'}
+                                                </ReactMarkdown>
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.extraSection}>
+                                            <h3>문의처 연락처</h3>
+                                            <ul className={styles.listStyle}>
+                                                {selectedDetail.inqplCtadrList?.map((item, index) => (
+                                                    <li key={index}>
+                                                        {renderLink(item.servSeDetailNm, item.servSeDetailLink)}
+                                                    </li>
+                                                )) || '-'}
+                                            </ul>
+                                        </div>
+
+                                        <div className={styles.extraSection}>
+                                            <h3>관련 홈페이지</h3>
+                                            <ul className={styles.listStyle}>
+                                                {selectedDetail.inqplHmpgReldList?.map((item, index) => (
+                                                    <li key={index}>
+                                                        {renderLink(item.servSeDetailNm, item.servSeDetailLink)}
+                                                    </li>
+                                                )) || '-'}
+                                            </ul>
+                                        </div>
+
+                                        <div className={styles.extraSection}>
+                                            <h3>신청 서식</h3>
+                                            <ul className={styles.listStyle}>
+                                                {selectedDetail.basfrmList?.map((item, index) => (
+                                                    <li key={index}>
+                                                        {renderLink(item.servSeDetailNm, item.servSeDetailLink)}
+                                                    </li>
+                                                )) || '-'}
+                                            </ul>
+                                        </div>
+
+                                        <div className={styles.extraSection}>
+                                            <h3>근거 법령</h3>
+                                            <ul className={styles.listStyle}>
+                                                {selectedDetail.baslawList?.map((item, index) => (
+                                                    <li key={index}>
+                                                        {item.servSeDetailNm}
+                                                    </li>
+                                                )) || '-'}
+                                            </ul>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
                         </div>
-                        <div className={styles.tabPanel}>
-                            {tab === 'target' && (
-                                <>
-                                    <div className={styles.extraSection}>
-                                        <h3>지원대상</h3>
-                                        <div className={styles.markdown}>
-                                            <ReactMarkdown>
-                                                {selectedDetail.tgtrDtlCn || '-'}
-                                            </ReactMarkdown>
-                                        </div>
-                                    </div>
-                                    
-                                    <div className={styles.extraSection}>
-                                        <h3>선정기준</h3>
-                                        <div className={styles.markdown}>
-                                            <ReactMarkdown>
-                                                {selectedDetail.slctCritCn || '-'}
-                                            </ReactMarkdown>
-                                        </div>
-                                    </div>
-                                </>
-                            )}
-                            {tab === 'content' && (
-                                <>
-                                    <div className={styles.extraSection}>
-                                        <h3>서비스 내용</h3>
-                                        <div className={styles.markdown}>
-                                            <ReactMarkdown>
-                                                {selectedDetail.alwServCn || '-'}
-                                            </ReactMarkdown>
-                                        </div>
-                                    </div>
-                                </>
-                            )}
-                            {tab === 'apply' && (
-                                <>
-                                    <div className={styles.extraSection}>
-                                        <h3>신청방법</h3>
-                                        <ul className={styles.listStyle}>
-                                            {selectedDetail.applmetList?.map((item, index) => (
-                                                <li key={index}>
-                                                    {renderLink(item.servSeDetailNm, item.servSeDetailLink)}
-                                                </li>
-                                            )) || '-'}
-                                        </ul>
-                                    </div>
-                                </>
-                            )}
-                            {tab === 'extra' && (
-                                <>
-                                    <div className={styles.extraSection}>
-                                        <h3>복지정보 개요</h3>
-                                        <div className={styles.markdown}>
-                                            <ReactMarkdown>
-                                                {selectedDetail.wlfareInfoOutlCn || '-'}
-                                            </ReactMarkdown>
-                                        </div>
-                                    </div>
+                    </>
+                )}
 
-                                    <div className={styles.extraSection}>
-                                        <h3>관심주제</h3>
-                                        <div className={styles.markdown}>
-                                            <ReactMarkdown>
-                                                {selectedDetail.intrsThemaArray || '-'}
-                                            </ReactMarkdown>
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.extraSection}>
-                                        <h3>문의처 연락처</h3>
-                                        <ul className={styles.listStyle}>
-                                            {selectedDetail.inqplCtadrList?.map((item, index) => (
-                                                <li key={index}>
-                                                    {renderLink(item.servSeDetailNm, item.servSeDetailLink)}
-                                                </li>
-                                            )) || '-'}
-                                        </ul>
-                                    </div>
-
-                                    <div className={styles.extraSection}>
-                                        <h3>관련 홈페이지</h3>
-                                        <ul className={styles.listStyle}>
-                                            {selectedDetail.inqplHmpgReldList?.map((item, index) => (
-                                                <li key={index}>
-                                                    {renderLink(item.servSeDetailNm, item.servSeDetailLink)}
-                                                </li>
-                                            )) || '-'}
-                                        </ul>
-                                    </div>
-
-                                    <div className={styles.extraSection}>
-                                        <h3>신청 서식</h3>
-                                        <ul className={styles.listStyle}>
-                                            {selectedDetail.basfrmList?.map((item, index) => (
-                                                <li key={index}>
-                                                    {renderLink(item.servSeDetailNm, item.servSeDetailLink)}
-                                                </li>
-                                            )) || '-'}
-                                        </ul>
-                                    </div>
-
-                                    <div className={styles.extraSection}>
-                                        <h3>근거 법령</h3>
-                                        <ul className={styles.listStyle}>
-                                            {selectedDetail.baslawList?.map((item, index) => (
-                                                <li key={index}>
-                                                    {item.servSeDetailNm}
-                                                </li>
-                                            )) || '-'}
-                                        </ul>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    </div>
-                </>
-            )}
-
-            {/* 페이징 */}
-            <div className={styles.pagination}>
-                <button className={styles.pageBtn} onClick={()=>{ handleCloseDetail(); if(pageGroup>1){ setPage((pageGroup-2)*pagesPerGroup+1); setPageGroup(pageGroup-1); }}} disabled={pageGroup===1}>이전</button>
-                {pageNumbers.map(num => (
-                    <button key={num} className={`${styles.pageBtn} ${page===num?styles.active:''}`} onClick={()=>{ handleCloseDetail(); handlePageClick(num); }}>{num}</button>
-                ))}
-                <button className={styles.pageBtn} onClick={()=>{ handleCloseDetail(); if(pageGroup<totalGroups){ setPage(pageGroup*pagesPerGroup+1); setPageGroup(pageGroup+1); }}} disabled={pageGroup===totalGroups}>다음</button>
+                {/* 페이징 */}
+                <div className={styles.pagination}>
+                    <button className={styles.pageBtn} onClick={()=>{ handleCloseDetail(); if(pageGroup>1){ setPage((pageGroup-2)*pagesPerGroup+1); setPageGroup(pageGroup-1); }}} disabled={pageGroup===1}>이전</button>
+                    {pageNumbers.map(num => (
+                        <button key={num} className={`${styles.pageBtn} ${page===num?styles.active:''}`} onClick={()=>{ handleCloseDetail(); handlePageClick(num); }}>{num}</button>
+                    ))}
+                    <button className={styles.pageBtn} onClick={()=>{ handleCloseDetail(); if(pageGroup<totalGroups){ setPage(pageGroup*pagesPerGroup+1); setPageGroup(pageGroup+1); }}} disabled={pageGroup===totalGroups}>다음</button>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
