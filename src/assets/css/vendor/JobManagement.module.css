@@ -1,95 +1,141 @@
-/* 마이페이지 컨테이너 */
+/* src/assets/css/vendor/JobManagement.module.css */
+
 .mypageWrap {
   display: flex;
   min-height: 100vh;
+  background-color: #F8F9FA;
+  font-family: 'SUIT', sans-serif;
+  font-size: 14px;
+  color: #2D3748;
 }
 
-/* 메인 콘텐츠 영역 */
 .mainContent {
   flex: 1;
-  padding: 20px;
-  background: #fff;
-  border-radius: 0 16px 16px 0;
+  padding: 32px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow-y: auto;
 }
 
-/* 메인 헤더 */
 .mainHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .mainHeader h1 {
   font-size: 20px;
   font-weight: bold;
-  color: #333;
+  color: #1A202C;
 }
 
-/* 버튼 스타일 */
-.btnPrimary {
-  background: #2563eb;
-  color: #fff;
+.viewApplicantsButton,
+.newJobButton {
+  background-color: #4263eb;
+  color: white;
   border: none;
-  border-radius: 8px;
   padding: 10px 20px;
-  font-size: 1rem;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background-color 0.2s ease;
 }
 
-.btnPrimary:hover {
-  background: #1d4ed8;
+.viewApplicantsButton:hover,
+.newJobButton:hover {
+  background-color: #3b5bdb;
 }
 
-.btnSecondary {
-  background: #e0e7ff;
-  color: #222;
-  border: none;
-  border-radius: 8px;
-  padding: 7px 11px;
-  font-size: 0.97rem;
-  cursor: pointer;
-  margin-right: 4px;
-  transition: background 0.2s;
-}
-
-.btnSecondary:hover {
-  background: #c7d2fe;
-}
-
-/* 테이블 스타일 */
 .table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 24px;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  margin-top: 16px;
+  font-size: 14px;
 }
 
-.table th,
-.table td {
-  border-bottom: 1px solid #e5e7eb;
-  padding: 12px 8px;
+.table th {
   text-align: left;
+  padding: 12px;
+  color: #4A5568;
+  border-bottom: 1px solid #E2E8F0;
 }
 
-.table tr:hover {
-  background: #f1f5f9;
+.table td {
+  background-color: #ffffff;
+  padding: 16px;
+  color: #2D3748;
+  border: 1px solid #E2E8F0;
+  border-top: none;
 }
 
-.table a {
-  color: #2563eb;
-  text-decoration: none;
+.table tr {
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
-.table a:hover {
-  text-decoration: underline;
+.table tr:hover td {
+  background-color: #F1F5F9;
 }
 
-/* 메시지 스타일 */
 .messageCell {
   text-align: center;
-  padding: 20px 0;
+  padding: 24px 0;
+  font-size: 14px;
+  color: #718096;
 }
 
 .errorMessage {
-  color: red;
+  color: #DC2626;
+  font-weight: 600;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.actionButton {
+  background-color: #EDF2F7;
+  color: #2D3748;
+  padding: 8px 12px;
+  font-size: 13px;
+  border: 1px solid #CBD5E0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.actionButton:hover {
+  background-color: #E2E8F0;
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    padding: 20px;
+  }
+
+  .mainHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .viewApplicantsButton,
+  .newJobButton {
+    width: 100%;
+  }
+
+  .actionButtons {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .actionButton {
+    flex: 1 1 48%;
+    margin-bottom: 8px;
+  }
 }
