@@ -29,6 +29,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "xcopy /s /y build\\* C:\\javaStudy\\workspace_boot\\IDEA-backend\\src\\main\\resources\\static\\",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
