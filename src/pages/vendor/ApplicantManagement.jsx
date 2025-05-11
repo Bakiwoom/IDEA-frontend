@@ -36,7 +36,14 @@ const ApplicantManagement = () => {
       );
 
       if (response.data?.result === "success") {
-        const newData = response.data.apiData || [];
+        const newData = (response.data.apiData || []).map((a) => ({
+          ...a,
+          benefitAnalysis: {
+            company: a.companyBenefits || "",
+            user: a.myBenefits || "",
+          },
+        }));
+
         if (newData.length === 0) setHasMore(false);
         else {
           const merged = [...applicants, ...newData];
@@ -144,8 +151,23 @@ const ApplicantManagement = () => {
                                 <div className={styles.analysisHeader}>📊 AI 혜택 분석</div>
                                 {a.benefitAnalysis ? (
                                     <div className={styles.analysisContent}>
-                                      <div><strong>기업:</strong> {a.benefitAnalysis.company}</div>
-                                      <div><strong>지원자:</strong> {a.benefitAnalysis.user}</div>
+                                      <div><strong>기업:</strong></div>
+                                      <ul>
+                                        {a.benefitAnalysis.company
+                                            ? a.benefitAnalysis.company.split('\n').map((line, idx) => (
+                                                <li key={`company-${idx}`}>{line.trim()}</li>
+                                            ))
+                                            : <li>데이터 없음</li>}
+                                      </ul>
+
+                                      <div><strong>지원자:</strong></div>
+                                      <ul>
+                                        {a.benefitAnalysis.user
+                                            ? a.benefitAnalysis.user.split('\n').map((line, idx) => (
+                                                <li key={`user-${idx}`}>{line.trim()}</li>
+                                            ))
+                                            : <li>데이터 없음</li>}
+                                      </ul>
                                     </div>
                                 ) : (
                                     <div className={styles.analysisLoading}>분석 중 또는 준비되지 않음</div>
