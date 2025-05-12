@@ -59,16 +59,16 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: e
         return styles.badgePolicy;
       case 'employment':
         return styles.badgeEmployment;
-      // case 'welfare':
-      //   return styles.badgeWelfare;
-      // case 'startup':
-      //   return styles.badgeStartup;
-      // case 'medical':
-      //   return styles.badgeMedical;
-      // case 'education':
-      //   return styles.badgeEducation;
-      // case 'counseling':
-      //   return styles.badgeCounseling;
+      case 'welfare':
+        return styles.badgeWelfare;
+      case 'startup':
+        return styles.badgeStartup;
+      case 'medical':
+        return styles.badgeMedical;
+      case 'education':
+        return styles.badgeEducation;
+      case 'counseling':
+        return styles.badgeCounseling;
       default:
         return styles.badgeDefault;
     }
@@ -80,16 +80,16 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: e
         return '📜';
       case 'employment':
         return '💼';
-      // case 'welfare':
-      //   return '🏥';
-      // case 'startup':
-      //   return '🚀';
-      // case 'medical':
-      //   return '⚕️';
-      // case 'education':
-      //   return '📚';
-      // case 'counseling':
-      //   return '💬';
+      case 'welfare':
+        return '🏥';
+      case 'startup':
+        return '🚀';
+      case 'medical':
+        return '⚕️';
+      case 'education':
+        return '📚';
+      case 'counseling':
+        return '💬';
       default:
         return '📋';
     }
