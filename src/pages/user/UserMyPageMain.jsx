@@ -43,9 +43,16 @@ const UserMyPageMain = () => {
             <div className={styles.topBox}>
                 <div className={styles.profileContainer}>
                     <div className={styles.profileFlexBox}>
-                        <div className={styles.profileImgBox}>
-                            <img src={profileImg || "/default-profile.png"} alt="프로필" />
-                        </div>
+
+                        {profileImg !== null && profileImg !== ''? (
+                            <div className={styles.profileImgBox}>
+                                <img src={profileImg}></img>
+                            </div>
+                        ) : (
+                            <div className={styles.profileImgBox}>
+                                <img></img>
+                            </div>
+                        )}
                         <div className={styles.profileTextBox}>
                             <div className={styles.name}>{name}</div>
                             {isVerified === 1 ? (
