@@ -25,7 +25,7 @@ export interface PolicyCard {
   title: string;
   subtitle?: string;
   summary: string;
-  type: 'policy' | 'employment' | 'welfare' | 'startup' | 'medical' | 'education' | 'counseling';
+  type: 'policy' | 'employment';
   details: string;
   imageUrl?: string;
   source?: {
@@ -42,7 +42,10 @@ export interface ExpertCard {
   title: string;
   expert_type: string;
   description: string;
-  icon?: string;
+  icon: string;
+  type: string;
+  summary: string;
+  details?: string;
 }
 
 export interface ExpertQuestion {

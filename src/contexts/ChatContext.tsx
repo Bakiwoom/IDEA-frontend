@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import ExpertService from '../components/ChatBot/services/ExpertService';
 import { Message } from '../types/chat';
 import { useAuth } from '../contexts/user/AuthProvider';
 
@@ -17,7 +16,7 @@ interface ChatContextType {
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { role } = useAuth();
@@ -88,12 +87,14 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-          }
+          },
+          credentials: 'include'
         });
         
         if (!response.ok) {
-          console.error('API 에러:', response.status, response.statusText);
-          throw new Error('챗봇 서비스 연결에 실패했습니다.');
+          const errorData = await response.json().catch(() => ({}));
+          console.error('API 에러 상세:', errorData);
+          throw new Error(errorData.detail || '챗봇 서비스 연결에 실패했습니다.');
         }
         
         const data = await response.json();
@@ -120,26 +121,25 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         // 사용자에게 보여줄 에러 메시지
         const errorMessage: Message = {
           id: uuidv4(),
-          content: '죄송합니다. 일시적인 오류가 발생했습니다. 잠시 후 다시 시도해 주세요. 🔄\n\n' +
-                   '문제가 지속되면 관리자에게 문의해 주세요.',
+          content: '죄송합니다. 일시적인 오류가 발생했습니다.',
           sender: 'bot',
           role: 'assistant',
           timestamp: new Date(),
-          actionCards: [
-            {
-              id: 'help',
-              title: '도움말',
-              expert_type: 'help',
-              description: '챗봇 이용에 문제가 있을 때 도움을 드립니다.',
-              icon: '❓'
-            }
-          ]
+          actionCards: [{
+            id: 'help',
+            title: '도움말',
+            expert_type: 'help',
+            description: '챗봇 이용에 문제가 있을 때 도움을 드립니다.',
+            icon: '❓',
+            type: 'help',
+            summary: '도움말'
+          }]
         };
         setMessages([errorMessage]);
         setConversationHistory([errorMessage]);
       }
     } catch (error) {
-      console.error('Error starting chat:', error);
+      console.error('상세 에러:', error);
       const errorMessage: Message = {
         id: uuidv4(),
         content: '죄송합니다. 채팅을 시작하는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
@@ -275,7 +275,12 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           details: card.details || cardContent || cardDescription || card.summary || '',
           subtitle: card.subtitle,
           source: card.source,
-          buttons: card.buttons
+          buttons: card.buttons,
+          action: card.source?.isInternalPage ? {
+            type: 'navigate',
+            target: '/public-data/welfare-services',
+            keyword: card.title || ''
+          } : undefined
         };
       });
       
@@ -357,7 +362,12 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                   details: card.details || cardContent || cardDescription || card.summary || '상세 정보가 없습니다.',
                   subtitle: card.subtitle,
                   source: card.source,
-                  buttons: card.buttons
+                  buttons: card.buttons,
+                  action: card.source?.isInternalPage ? {
+                    type: 'navigate',
+                    target: '/public-data/welfare-services',
+                    keyword: card.title || ''
+                  } : undefined
                 };
               });
               

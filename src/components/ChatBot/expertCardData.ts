@@ -4,11 +4,14 @@ export interface ExpertCard {
   expert_type: string;
   description: string;
   icon: string;
+  type: string;
+  summary: string;
+  details?: string;
 }
 
 export const userExpertCards: ExpertCard[] = [
-  {id: 'policy', title: '정책 전문가', expert_type: '장애인 정책', description: '정부, 지자체의 장애인 관련 법률 및 제도 안내', icon: '📜'},
-  {id: 'employment', title: '취업 전문가', expert_type: '장애인 취업', description: '공공기관 및 민간기업 취업 정보 제공', icon: '💼'}
+  {id: 'policy', title: '정책 전문가', expert_type: '장애인 정책', description: '정부, 지자체의 장애인 관련 법률 및 제도 안내', icon: '📜', type: 'expert', summary: '장애인 정책 정보 제공'},
+  {id: 'employment', title: '취업 전문가', expert_type: '장애인 취업', description: '공공기관 및 민간기업 취업 정보 제공', icon: '💼', type: 'expert', summary: '장애인 취업 정보 제공'}
   // {id: 'welfare', title: '복지 전문가', expert_type: '장애인 복지', description: '장애인 복지 서비스 및 혜택 안내', icon: '🏥'},
   // {id: 'startup', title: '창업 전문가', expert_type: '장애인 창업', description: '장애인 창업 지원 제도 및 프로그램 안내', icon: '🚀'},
   // {id: 'medical', title: '의료 전문가', expert_type: '장애인 의료', description: '장애 유형별 진료 및 의료 지원 정보', icon: '⚕️'},
@@ -17,8 +20,8 @@ export const userExpertCards: ExpertCard[] = [
 ];
 
 export const companyExpertCards: ExpertCard[] = [
-  { id: 'employment_policy', title: '장애인 채용 정책 전문가', expert_type: '고용 정책', description: '장애인 고용 관련 법률, 제도, 지원금 안내', icon: '📑' },
+  { id: 'employment_policy', title: '장애인 채용 정책 전문가', expert_type: '고용 정책', description: '장애인 고용 관련 법률, 제도, 지원금 안내', icon: '📑', type: 'expert', summary: '장애인 고용 관련 법률, 제도, 지원금 안내' },
   // { id: 'job_seekers', title: '장애인 구직자 현황', expert_type: '구직자 현황', description: '장애인 구직자 통계 및 현황 정보', icon: '📊' },
-  { id: 'consulting', title: '고용 컨설팅', expert_type: '고용 컨설팅', description: '장애인 고용 환경 개선, 컨설팅 안내', icon: '💼' },
+  { id: 'consulting', title: '고용 컨설팅', expert_type: '고용 컨설팅', description: '장애인 고용 환경 개선, 컨설팅 안내', icon: '💼', type: 'expert', summary: '장애인 고용 환경 개선, 컨설팅 안내' },
   // { id: 'application_manage', title: '지원의향서 관리', expert_type: '지원의향서', description: '내 기업에 지원한 구직자 관리', icon: '📂' },
 ]; 
