@@ -90,6 +90,9 @@ const ChatMessage = memo(({ message, isUser }: { message: Message; isUser: boole
 
   // 정규식을 사용하여 '---'나 '###정보 카드' 같은 구분자가 있는 경우 메시지 내용에서 분리
   const getCleanMessage = (content: string) => {
+    // content가 undefined나 null인 경우 빈 문자열 반환
+    if (!content) return '';
+    
     // 구분자로 분리되어 있는 경우 첫 번째 부분만 반환
     if (content.includes('---')) {
       return content.split('---')[0].trim();

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import ExpertService from '../components/ChatBot/services/ExpertService';
 import { Message } from '../types/chat';
+import { useAuth } from '../contexts/user/AuthProvider';
 
 interface ChatContextType {
   isOpen: boolean;
@@ -19,6 +20,7 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined);
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const { role } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,43 +44,99 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const parsedMessages = JSON.parse(savedConversation);
         setMessages(parsedMessages);
         setConversationHistory(parsedMessages);
+        setIsLoading(false);
         return;
       }
       
-      // API 호출로 초기 메시지 가져오기
+      // 비회원인 경우 기본 환영 메시지 표시
+      if (!role) {
+        const welcomeMessage: Message = {
+          id: uuidv4(),
+          content: '안녕하세요! IDEA-AI 챗봇입니다. 👋\n\n' +
+                  '저는 장애인 복지 정보와 취업 정보를 안내해드리는 AI 도우미입니다.\n\n' +
+                  '더 자세한 정보와 맞춤 서비스를 이용하시려면 로그인이 필요합니다. 😊\n\n' +
+                  '• 장애인 회원: 맞춤형 복지/취업 정보 안내\n' +
+                  '• 기업 회원: 장애인 채용 정보 및 지원제도 안내',
+          sender: 'bot',
+          role: 'assistant',
+          timestamp: new Date()
+        };
+        setMessages([welcomeMessage]);
+        setConversationHistory([welcomeMessage]);
+        setIsLoading(false);
+        return;
+      }
+      
+      // role이 설정될 때까지 대기
+      if (role === '') {
+        const loadingMessage: Message = {
+          id: uuidv4(),
+          content: '사용자 정보를 불러오는 중입니다...',
+          sender: 'bot',
+          role: 'assistant',
+          timestamp: new Date()
+        };
+        setMessages([loadingMessage]);
+        setIsLoading(false);
+        return;
+      }
+      
+      // API 호출
       try {
-        const response = await fetch(`${API_URL}/api/chatbot/start`, {
+        const userType = role === 'COMPANY' ? 'company' : 'disabled';
+        const response = await fetch(`${API_URL}/api/chatbot/start?user_type=${userType}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           }
         });
+        
+        if (!response.ok) {
+          console.error('API 에러:', response.status, response.statusText);
+          throw new Error('챗봇 서비스 연결에 실패했습니다.');
+        }
+        
         const data = await response.json();
+        
+        // 응답 데이터 유효성 검사
+        if (!data || typeof data.answer !== 'string') {
+          throw new Error('서버 응답 형식이 올바르지 않습니다.');
+        }
+        
         const welcomeMessage: Message = {
           id: uuidv4(),
-          content: data.answer,
+          content: data.answer || '안녕하세요! IDEA-AI 챗봇입니다. 무엇을 도와드릴까요?',
           sender: 'bot',
           role: 'assistant',
           timestamp: new Date(),
-          actionCards: data.action_cards,
-          exampleQuestions: data.example_questions
+          actionCards: Array.isArray(data.action_cards) ? data.action_cards : [],
+          exampleQuestions: Array.isArray(data.example_questions) ? data.example_questions : []
         };
         setMessages([welcomeMessage]);
         setConversationHistory([welcomeMessage]);
       } catch (apiError) {
-        console.warn('API 연결 실패, 기본 환영 메시지 사용:', apiError);
-        // API 실패 시 기본 환영 메시지 사용
-        const welcomeMessage: Message = {
+        console.error('API 연결 실패:', apiError);
+        
+        // 사용자에게 보여줄 에러 메시지
+        const errorMessage: Message = {
           id: uuidv4(),
-          content: '원하시는 서비스를 선택해주세요.',
+          content: '죄송합니다. 일시적인 오류가 발생했습니다. 잠시 후 다시 시도해 주세요. 🔄\n\n' +
+                   '문제가 지속되면 관리자에게 문의해 주세요.',
           sender: 'bot',
           role: 'assistant',
           timestamp: new Date(),
-          // ExpertService를 사용하여 전문가 카드 가져오기
-          actionCards: ExpertService.getExpertCardsByRole('user')
+          actionCards: [
+            {
+              id: 'help',
+              title: '도움말',
+              expert_type: 'help',
+              description: '챗봇 이용에 문제가 있을 때 도움을 드립니다.',
+              icon: '❓'
+            }
+          ]
         };
-        setMessages([welcomeMessage]);
-        setConversationHistory([welcomeMessage]);
+        setMessages([errorMessage]);
+        setConversationHistory([errorMessage]);
       }
     } catch (error) {
       console.error('Error starting chat:', error);
@@ -96,6 +154,33 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const sendMessage = async (content: string, expertType: string) => {
+    // 비회원인 경우 로그인 안내 메시지 표시
+    if (!role) {
+      const userMessage: Message = {
+        id: uuidv4(),
+        content,
+        sender: 'user',
+        role: 'user',
+        timestamp: new Date(),
+      };
+      
+      const loginGuideMessage: Message = {
+        id: uuidv4(),
+        content: '죄송합니다. 맞춤형 상담 서비스를 이용하시려면 로그인이 필요합니다. 🔒\n\n' +
+                '로그인하시면 다음과 같은 서비스를 이용하실 수 있습니다:\n\n' +
+                '• 맞춤형 복지 정보 안내\n' +
+                '• 취업 정보 및 구직 지원\n' +
+                '• 전문가 상담 서비스\n' +
+                '• 개인 맞춤 추천 서비스',
+        sender: 'bot',
+        role: 'assistant',
+        timestamp: new Date(),
+      };
+      
+      setMessages(prev => [...prev, userMessage, loginGuideMessage]);
+      return;
+    }
+
     if (!expertType) {
       const errorMessage: Message = {
         id: uuidv4(),
@@ -139,7 +224,8 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           },
           body: JSON.stringify({
             messages: formattedHistory,
-            expert_type: expertType
+            expert_type: expertType,
+            user_type: role === 'COMPANY' ? 'company' : 'disabled'
           })
         });
         data = await response.json();
