@@ -151,11 +151,11 @@ const CategoryListPage = () =>{
     return(
         <>
             <Nav />
-            <div className={styles.categotyContainer}>
+            {/* <div className={styles.categotyContainer}>
                 <ul>
                     <li className={selectedCategory === '장애인' ? styles.selected : ''} onClick={()=>handleClickCategory("장애인")}>장애인 채용</li>
                 </ul>
-            </div>
+            </div> */}
             <div className={styles.container}>
                 <h2 className={styles.pageTitle}>장애인 채용공고</h2>
                 <div className={styles.itemBoxContainer}>
