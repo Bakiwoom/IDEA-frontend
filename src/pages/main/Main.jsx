@@ -218,9 +218,9 @@ const Main = () => {
       navigate(`/company/job/management/detail/${job.jobId}`);
     };
     return (
-      <div className={`${styles.card} ${isTopBordered ? styles.topBorderedCard : ''}`} onClick={handleCardClick} style={{cursor:'pointer'}}>
+      <div className={`${styles.card} ${isTopBordered ? styles.topBorderedCard : ''}`} onClick={handleCardClick} style={{ cursor: 'pointer' }}>
         <img
-          src={job.companyLogo || "/images/default-company-logo.png"}
+          src={job.companyLogo || "/images/nologo.png"}
           alt={`${job.companyName} 로고`}
           className={styles.cardCompanyLogo}
         />

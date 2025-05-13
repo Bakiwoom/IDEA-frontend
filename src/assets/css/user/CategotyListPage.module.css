@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 .container{
-    background-color: #fff;
+    /* background-color: #fff; */
     width: 100%;
     margin: 0 auto;
     padding-bottom: 100px;
@@ -55,6 +55,7 @@
 }
 
 .itemBox{
+    background-color: #fff;
     border: 1px solid #e9ecef;
     border-radius: 8px;
     width: 340px;
@@ -135,7 +136,7 @@
 
 /*페이징*/
 .pagination{
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
     text-align: center;
     padding-bottom: 20px;
     padding-top: 20px;

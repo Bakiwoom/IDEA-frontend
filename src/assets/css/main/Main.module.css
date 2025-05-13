@@ -143,6 +143,9 @@ body {
     padding: 20px;
     transition: transform 0.2s;
     border: 1px solid #e9ecef;
+    height: 300px; /* 카드 높이 증가 */
+    display: flex;
+    flex-direction: column;
 }
 
 .card:hover {
@@ -157,26 +160,44 @@ body {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    width: 100%;
 }
 
 .cardTitle {
     font-size: 16px;
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     color: #212529;
+    height: 44px; /* 고정 높이 */
+    overflow: hidden;
+    display: -webkit-box; /* 구형 웹킷 브라우저 지원 */
+    /* display: box; 이 줄을 제거 */
+    -webkit-line-clamp: 2;
+    line-clamp: 2; /* 표준 속성 추가 */
+    -webkit-box-orient: vertical;
+    /* box-orient: vertical; 이 줄을 제거 */
+    text-overflow: ellipsis;
 }
 
 .cardCompany {
     font-size: 14px;
     color: #495057;
     margin-bottom: 10px;
+    height: 22px; /* 고정 높이 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .cardTags {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 10px;
+    margin-bottom: 5px; /* 10px에서 5px로 줄임 */
+    min-height: 30px; /* 고정 높이 대신 최소 높이 설정 */
+    max-height: 62px; /* 최대 높이는 유지 (3개 태그까지 표시 가능) */
+    overflow: hidden;
 }
+
 
 .cardTag {
     font-size: 12px;
@@ -185,9 +206,10 @@ body {
     padding: 4px 8px;
     border-radius: 4px;
     margin-right: 6px;
-    margin-bottom: 6px;
+    margin-bottom: 6px; /* 태그 간 세로 간격 */
     display: inline-flex;
     align-items: center;
+    height: 26px; /* 태그 높이 고정 */
 }
 
 .cardTag i {
@@ -199,9 +221,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 15px;
+    margin-top: auto;
     font-size: 12px;
     color: #868e96;
+    padding-top: 5px; /* 10px에서 5px로 줄임 */
+    height: 36px;
 }
 
 .cardBadge {
