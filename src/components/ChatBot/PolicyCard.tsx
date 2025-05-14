@@ -155,44 +155,10 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: e
                     🔗 {sourceName} 바로가기
                   </a>
                 )}
-                {/* {card.source.email && (
-                  <a href={`mailto:${card.source.email}`} className={styles.sourceLink}
-                    onMouseDown={e => e.stopPropagation()}
-                    onMouseUp={e => e.stopPropagation()}
-                  >
-                    📧 이메일 문의: {card.source.email}
-                  </a>
-                )}
-                {card.source.phone && (
-                  <a href={`tel:${card.source.phone}`} className={styles.sourceLink}
-                    onMouseDown={e => e.stopPropagation()}
-                    onMouseUp={e => e.stopPropagation()}
-                  >
-                    📞 전화 문의: {card.source.phone}
-                  </a>
-                )} */}
+                
               </div>
             )}
-            {/* {card.buttons && card.buttons.length > 0 && (
-              <div className={styles.buttons}>
-                {card.buttons.map((btn, idx) => (
-                  <a
-                    key={idx}
-                    href={btn.type === 'tel' ? `tel:${btn.value}` : 
-                          btn.type === 'email' ? `mailto:${btn.value}` : 
-                          btn.value}
-                    target={btn.type === 'link' ? '_blank' : undefined}
-                    rel={btn.type === 'link' ? 'noopener noreferrer' : undefined}
-                    className={styles.button}
-                    onMouseDown={e => e.stopPropagation()}
-                    onMouseUp={e => e.stopPropagation()}
-                    onClick={btn.type === 'share' ? () => navigator.share?.({ title: card.title, url: card.source?.url }) : undefined}
-                  >
-                    {btn.label}
-                  </a>
-                ))}
-              </div>
-            )} */}
+            
           </div>
         )}
       </div>

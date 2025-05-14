@@ -6,6 +6,7 @@ import styles from "../../assets/css/main/Main.module.css";
 import { CATEGORY_PAGE } from "../../routes/contantsRoutes";
 import { DISABLED_JOB_OFFERS_PAGE } from "../PublicDataApi/DisabledJoboffers";
 import { WELFARE_SERVICES_PAGE } from "../PublicDataApi/WelfareServices";
+import { DISABLED_JOBSEEKERS_PAGE } from "../PublicDataApi/DisabledJobseekers";
 import { useAuth } from "../../contexts/user/AuthProvider"; // AuthContext 불러오기
 
 const Main = () => {
@@ -301,6 +302,11 @@ const Main = () => {
             <li>
               <Link to={DISABLED_JOB_OFFERS_PAGE} className={styles.active}>
                 구인 실시간 현황
+              </Link>
+            </li>
+            <li>
+              <Link to={DISABLED_JOBSEEKERS_PAGE} className={styles.active}>
+                장애인 구직자 현황
               </Link>
             </li>
             <li>
