@@ -41,6 +41,43 @@
     margin: 0 auto;
 }
 
+/*검색*/
+.searchContainer{
+    width: 900px;
+    /* background-color: #f8c0c0; */
+    margin: 0 auto;
+    height: 150px;
+    padding-top: 40px;
+    padding-left: 50px;
+}
+.searchbox{
+    display: flex;
+    justify-content: center;
+}
+
+.searchInput{
+    width: 400px;
+    height: 40px;
+    padding: 0 5px;
+}
+.searchBTN{
+    margin-left: 10px;
+}
+
+.experience{
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    font-size: 40px;
+}
+
+.checkboxLabel{
+    font-size: 18px;
+}
+.checkbox{
+    width: 50px;
+}
+
 
 /*공고글*/
 .itemBoxContainer{
@@ -140,4 +177,11 @@
     text-align: center;
     padding-bottom: 20px;
     padding-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+.activePage {
+  color: var(--logo-color);
+  font-weight: bold;
 }
