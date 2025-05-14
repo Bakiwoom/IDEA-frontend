@@ -11,6 +11,13 @@ export const DISABLED_JOBSEEKERS_PAGE = '/public-data/disabled-jobseekers';
 const API_URL = process.env.REACT_APP_API_URL;
 const PAGE_SIZE = 12;
 
+// 기본 장애유형 목록
+const DEFAULT_DISABILITY_TYPES = [
+  '지체장애', '뇌병변장애', '시각장애', '청각장애', '언어장애', 
+  '지적장애', '자폐성장애', '정신장애', '신장장애', '심장장애', 
+  '호흡기장애', '간장애', '안면장애', '장루·요루장애', '뇌전증장애'
+];
+
 interface DisabledJobseeker {
   id: string;
   구직등록일: string;
@@ -24,16 +31,26 @@ interface DisabledJobseeker {
   희망직종: string;
 }
 
+interface PaginatedResponse {
+  content: DisabledJobseeker[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+}
+
 const DisabledJobseekers: React.FC = () => {
-  const [list, setList] = useState<DisabledJobseeker[]>([]);
+  const [jobseekers, setJobseekers] = useState<DisabledJobseeker[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const [pageGroup, setPageGroup] = useState(1); // 10개 단위 그룹
   const [favorites, setFavorites] = useState<string[]>([]);
   const [search, setSearch] = useState('');
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const [isFilterExpanded, setIsFilterExpanded] = useState(false); // 필터 접기/펼치기 상태
+  const [disabilityTypes, setDisabilityTypes] = useState<string[]>([]);
   const { showAlert } = useAlert();
   const { confirm } = useConfirm();
 
@@ -42,13 +59,61 @@ const DisabledJobseekers: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`${API_URL}/api/public/disabled/jobseekers`);
-      setList(response.data);
+      
+      // 검색어와 필터 파라미터 구성
+      const params: any = {
+        page,
+        size: PAGE_SIZE
+      };
+      
+      if (search) {
+        params.search = search;
+      }
+      
+      if (activeFilters.length > 0) {
+        params.disabilityTypes = activeFilters.join(',');
+      }
+      
+      const response = await axios.get<PaginatedResponse>(`${API_URL}/api/public/disabled/jobseekers`, { params });
+      
+      // 응답 데이터 처리
+      if (response.data && response.data.content) {
+        setJobseekers(response.data.content);
+        setTotalPages(response.data.totalPages);
+        setTotalItems(response.data.totalItems);
+        
+        // 장애유형 목록 업데이트 (최초 1회만)
+        if (disabilityTypes.length === 0) {
+          fetchDisabilityTypes();
+        }
+      } else {
+        setJobseekers([]);
+        setTotalPages(1);
+        setTotalItems(0);
+        setError('데이터 형식이 올바르지 않습니다.');
+      }
     } catch (err) {
       setError('목록을 불러오는데 실패했습니다.');
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+  
+  // 장애유형 목록 가져오기
+  const fetchDisabilityTypes = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/public/disabled/jobseekers/disability-types`);
+      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        setDisabilityTypes(response.data);
+      } else {
+        // API 응답이 비어있는 경우 기본 목록 사용
+        setDisabilityTypes(DEFAULT_DISABILITY_TYPES);
+      }
+    } catch (err) {
+      console.error("장애유형 목록을 가져오는데 실패했습니다:", err);
+      // 오류 발생 시 기본 목록 사용
+      setDisabilityTypes(DEFAULT_DISABILITY_TYPES);
     }
   };
 
@@ -60,6 +125,9 @@ const DisabledJobseekers: React.FC = () => {
         setError(null);
         await axios.post(`${API_URL}/api/public/disabled/jobseekers/refresh`);
         showAlert('데이터가 갱신되었습니다!', 'success', 3000);
+        // 첫 페이지로 이동
+        setPage(1);
+        setPageGroup(1);
         fetchList();
       } catch (err) {
         setError('데이터 갱신에 실패했습니다.');
@@ -71,27 +139,10 @@ const DisabledJobseekers: React.FC = () => {
     });
   };
 
+  // 페이지 변경 시 데이터 로드
   useEffect(() => {
     fetchList();
-  }, []);
-
-  // 필터링
-  const filteredList = list.filter(item => {
-    const matchesSearch =
-      item.희망직종.includes(search) ||
-      item.희망지역.includes(search) ||
-      item.장애유형.includes(search) ||
-      item.중증여부.includes(search);
-    
-    // 활성화된 필터가 없거나, 항목의 장애유형이 활성화된 필터 중 하나와 일치하면 표시
-    const matchesType = activeFilters.length === 0 || activeFilters.includes(item.장애유형);
-    
-    return matchesSearch && matchesType;
-  });
-
-  // 페이징 처리
-  const totalPages = Math.ceil(filteredList.length / PAGE_SIZE);
-  const pagedList = filteredList.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  }, [page, search, activeFilters]);
 
   // 페이지 그룹 계산
   const pagesPerGroup = 10;
@@ -134,8 +185,13 @@ const DisabledJobseekers: React.FC = () => {
     setFavorites(favs => favs.includes(id) ? favs.filter(f => f !== id) : [...favs, id]);
   };
 
-  // 장애유형 필터 목록
-  const disabilityTypes = Array.from(new Set(list.map(item => item.장애유형))).filter(Boolean);
+  // 검색 핸들러
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPage(1);
+    setPageGroup(1);
+    fetchList();
+  };
 
   // 장애유형 필터 토글 함수
   const toggleFilter = (type: string) => {
@@ -235,14 +291,14 @@ const DisabledJobseekers: React.FC = () => {
             데이터 갱신
             </button>
             <button
-            onClick={fetchList}
+            onClick={() => fetchList()}
             disabled={loading}
             className={`${styles.button} ${styles.loadButton}`}
             >
             목록 불러오기
             </button>
         </div>
-        <div className={styles.searchBar}>
+        <form onSubmit={handleSearch} className={styles.searchBar}>
             <input
             className={styles.searchInput}
             type="text"
@@ -250,7 +306,8 @@ const DisabledJobseekers: React.FC = () => {
             value={search}
             onChange={e => setSearch(e.target.value)}
             />
-        </div>
+            <button type="submit" className={styles.searchButton}>검색</button>
+        </form>
 
         <div className={styles.filterContainer}>
           <div 
@@ -296,35 +353,36 @@ const DisabledJobseekers: React.FC = () => {
         {loading && <div className={styles.loading}>데이터를 불러오는 중...</div>}
 
         <div className={styles.cardGrid}>
-            {pagedList.map((item) => (
-            <div key={item.id} className={styles.card}>
-                <div className={styles.cardTags}>
-                <span className={styles.tag}>{item.장애유형}</span>
-                {item.중증여부 === '중증' ? (
-                    <span className={`${styles.tag} ${styles.severeTag}`}>{item.중증여부}</span>
-                ) : (
-                    <span className={`${styles.tag} ${styles.mildTag}`}>{item.중증여부}</span>
-                )}
-                {item.희망임금?.includes('월급') && <span className={styles.tag}>월급</span>}
-                {item.희망임금?.includes('시급') && <span className={styles.tag}>시급</span>}
-                {item.희망임금?.includes('일급') && <span className={styles.tag}>일급</span>}
-                {item.희망임금?.includes('연봉') && <span className={styles.tag}>연봉</span>}
+            {jobseekers.length > 0 ? (
+              jobseekers.map((item) => (
+                <div key={item.id} className={styles.card}>
+                    <div className={styles.cardTags}>
+                    <span className={styles.tag}>{item.장애유형}</span>
+                    {item.중증여부 === '중증' ? (
+                        <span className={`${styles.tag} ${styles.severeTag}`}>{item.중증여부}</span>
+                    ) : (
+                        <span className={`${styles.tag} ${styles.mildTag}`}>{item.중증여부}</span>
+                    )}
+                    {item.희망임금?.includes('월급') && <span className={styles.tag}>월급</span>}
+                    {item.희망임금?.includes('시급') && <span className={styles.tag}>시급</span>}
+                    {item.희망임금?.includes('일급') && <span className={styles.tag}>일급</span>}
+                    {item.희망임금?.includes('연봉') && <span className={styles.tag}>연봉</span>}
+                    </div>
+                    <div className={styles.cardFav} onClick={() => toggleFavorite(item.id)}>
+                    {favorites.includes(item.id) ? <FaStar color="#2563eb" /> : <FaRegStar />}
+                    </div>
+                    <div className={styles.cardTitle}>{item.희망직종 || '직종 미상'}</div>
+                    <div className={styles.cardDesc}>
+                    <b>희망지역:</b> {item.희망지역 || '-'}<br />
+                    <b>희망임금:</b> {formatSalary(item.희망임금) || '-'}<br />
+                    <b>연령:</b> {item.연령 || '-'}세<br />
+                    <b>등록일:</b> {item.구직등록일 || '-'}
+                    </div>
+                    <div className={styles.cardInfo}><b>기관분류</b> {item.기관분류 || '-'}</div>
                 </div>
-                <div className={styles.cardFav} onClick={() => toggleFavorite(item.id)}>
-                {favorites.includes(item.id) ? <FaStar color="#2563eb" /> : <FaRegStar />}
-                </div>
-                <div className={styles.cardTitle}>{item.희망직종 || '직종 미상'}</div>
-                <div className={styles.cardDesc}>
-                <b>희망지역:</b> {item.희망지역 || '-'}<br />
-                <b>희망임금:</b> {formatSalary(item.희망임금) || '-'}<br />
-                <b>연령:</b> {item.연령 || '-'}세<br />
-                <b>등록일:</b> {item.구직등록일 || '-'}
-                </div>
-                <div className={styles.cardInfo}><b>기관분류</b> {item.기관분류 || '-'}</div>
-            </div>
-            ))}
-            {pagedList.length === 0 && (
-            <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>검색 결과가 없습니다.</div>
+              ))
+            ) : (
+              <div style={{ padding: '2rem', textAlign: 'center', color: '#888', gridColumn: '1 / -1' }}>검색 결과가 없습니다.</div>
             )}
         </div>
 
