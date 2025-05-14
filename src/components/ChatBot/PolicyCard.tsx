@@ -12,7 +12,6 @@ interface PolicyCardProps {
 
 const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: expandedProp, onExpand, dragged }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
   const [dragStartX, setDragStartX] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -34,25 +33,7 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: e
     console.log('PolicyCard에 전달된 카드 데이터:', card);
   }, [card]);
 
-  useEffect(() => {
-    const fetchThumbnail = async () => {
-      if (card.source?.url) {
-        try {
-          const url = new URL(card.source.url);
-          const defaultThumbnail = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=128`;
-          setThumbnailUrl(defaultThumbnail);
-        } catch (error) {
-          console.error('Error processing URL:', error);
-          setThumbnailUrl('/images/policy-default.jpg');
-        }
-      } else {
-        setThumbnailUrl('/images/policy-default.jpg');
-      }
-    };
-
-    fetchThumbnail();
-  }, [card.source?.url]);
-
+  
   const getCardTypeClass = (type: string = 'policy') => {
     switch (type) {
       case 'policy':
@@ -174,7 +155,7 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: e
                     🔗 {sourceName} 바로가기
                   </a>
                 )}
-                {card.source.email && (
+                {/* {card.source.email && (
                   <a href={`mailto:${card.source.email}`} className={styles.sourceLink}
                     onMouseDown={e => e.stopPropagation()}
                     onMouseUp={e => e.stopPropagation()}
@@ -189,10 +170,10 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: e
                   >
                     📞 전화 문의: {card.source.phone}
                   </a>
-                )}
+                )} */}
               </div>
             )}
-            {card.buttons && card.buttons.length > 0 && (
+            {/* {card.buttons && card.buttons.length > 0 && (
               <div className={styles.buttons}>
                 {card.buttons.map((btn, idx) => (
                   <a
@@ -211,7 +192,7 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: e
                   </a>
                 ))}
               </div>
-            )}
+            )} */}
           </div>
         )}
       </div>
