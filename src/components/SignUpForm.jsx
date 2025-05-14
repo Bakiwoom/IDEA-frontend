@@ -44,7 +44,7 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
     //id 중복체크
     const handleIdCheck = async ()=>{
         const id = formData.id;
-
+        console.log(id)
         if(!id || id.trim() === ''){
             alert("ID를 입력해주세요.")
             return;
