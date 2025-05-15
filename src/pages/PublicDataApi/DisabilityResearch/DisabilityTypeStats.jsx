@@ -24,18 +24,25 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DownloadIcon from '@mui/icons-material/Download';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ShareIcon from '@mui/icons-material/Share';
-import { ResponsiveContainer, BarChart } from 'recharts';
 
 // 장애유형별 아이콘 매핑
-import AccessibleIcon from '@mui/icons-material/Accessible';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import HearingDisabledIcon from '@mui/icons-material/HearingDisabled';
-import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import MoodIcon from '@mui/icons-material/Mood';
-import ChildCareIcon from '@mui/icons-material/ChildCare';
-import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
-import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
+import AccessibleIcon from '@mui/icons-material/Accessible'; // 지체장애 - 휠체어
+import MedicalInformationIcon from '@mui/icons-material/MedicalInformation'; // 뇌병변장애
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'; // 시각장애 - 전맹
+import HearingDisabledIcon from '@mui/icons-material/HearingDisabled'; // 청각장애 - 청각기관
+import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver'; // 언어장애
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'; // 안면장애
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital'; //신장장애
+import FavoriteBorderIcon from '@mui/icons-material/Favorite'; // 심장장애
+import BiotechIcon from '@mui/icons-material/Biotech'; // 간장애
+import MasksIcon from '@mui/icons-material/Masks'; // 호흡기장애
+import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward'; //장루/요루장애
+import WarningAmberIcon from '@mui/icons-material/WarningAmber'; //간질장애
+import PsychologyIcon from '@mui/icons-material/Psychology'; // 지적장애
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions'; //자폐성장애애
+import SupportAgentIcon from '@mui/icons-material/SupportAgent'; // 정신장애
+import MilitaryTechIcon from '@mui/icons-material/MilitaryTech'; // 국가유공
+import AllInclusiveIcon from '@mui/icons-material/AllInclusive'; // 모든 장애유형
 
 // 통계 분석 유틸리티 가져오기
 import {
@@ -115,17 +122,24 @@ const barOptions = {
 
 // 장애유형별 아이콘 및 설명 매핑
 const disabilityIcons = {
-  '지체장애': { icon: AccessibleIcon, color: '#E74C3C', description: '신체의 일부나 기능에 장애가 있는 경우로, 이동이나 일상 활동에 제약이 있습니다.' },
-  '시각장애': { icon: VisibilityOffIcon, color: '#3498DB', description: '시각 기능의 손상이나 저하로 일상생활에 어려움이 있는 상태입니다.' },
-  '청각장애': { icon: HearingDisabledIcon, color: '#F39C12', description: '청력의 손실이나 저하로 의사소통에 어려움이 있는 상태입니다.' },
-  '언어장애': { icon: AccessibilityNewIcon, color: '#9B59B6', description: '말하기나 언어 표현에 어려움이 있는 상태입니다.' },
-  '지적장애': { icon: PsychologyIcon, color: '#2ECC71', description: '지적 기능이 평균 이하이며 적응 행동에 제한이 있는 상태입니다.' },
-  '자폐성장애': { icon: MoodIcon, color: '#1ABC9C', description: '사회적 상호작용과 의사소통에 어려움이 있는 발달장애의 일종입니다.' },
-  '정신장애': { icon: MoodIcon, color: '#E67E22', description: '정신 질환으로 인해 일상생활이나 사회 활동에 어려움이 있는 상태입니다.' },
-  '뇌병변장애': { icon: MedicalInformationIcon, color: '#C0392B', description: '뇌의 기질적 병변으로 인한 신체적, 정신적 장애가 있는 상태입니다.' },
-  '발달장애': { icon: ChildCareIcon, color: '#16A085', description: '발달 과정에서 나타나는 신체적, 정신적 장애로 학습이나 사회 적응에 어려움이 있습니다.' },
-  '기타': { icon: AllInclusiveIcon, color: '#7F8C8D', description: '위 분류에 해당하지 않는 다양한 유형의 장애를 포함합니다.' },
+  '지체장애': {icon: AccessibleIcon, color: '#E74C3C', description: '사지나 척추 등의 신체 일부에 구조적·기능적 손상이 있어 이동이나 일상생활에 제한이 있는 장애입니다.'},
+  '뇌병변장애': {icon: MedicalInformationIcon, color: '#C0392B', description: '뇌 손상(예: 뇌성마비 등)으로 인한 운동기능 및 신체 조절 기능에 장애가 있는 상태입니다.'},
+  '시각장애': {icon: VisibilityOffIcon, color: '#3498DB', description: '시각의 손상이나 기능 저하로 인해 물체 인식, 이동, 의사소통 등에 제약이 있는 장애입니다.'},
+  '청각장애': {icon: HearingDisabledIcon, color: '#F39C12', description: '청력의 손실 또는 저하로 인해 음성 정보 수신 및 의사소통에 어려움이 있는 상태입니다.'},
+  '언어장애': {icon: RecordVoiceOverIcon, color: '#9B59B6', description: '말소리 생성 또는 언어 표현 능력에 이상이 있어 의사소통에 제한이 있는 장애입니다.'},
+  '안면장애': {icon: SentimentDissatisfiedIcon, color: '#2ECC71', description: '안면 부위의 변형이나 기능 이상으로 인해 심리적·사회적 어려움이 수반되는 장애입니다.'},
+  '신장장애': {icon: LocalHospitalIcon, color: '#F39C12', description: '만성적인 신장 기능의 손상으로 투석 등 지속적인 치료가 필요한 상태입니다.'},
+  '심장장애': {icon: FavoriteBorderIcon, color: '#E67E22', description: '선천적 또는 후천적 심장 질환으로 심장 기능이 저하되어 신체활동에 제약이 있는 장애입니다.'},
+  '간장애': {icon: BiotechIcon, color: '#1ABC9C', description: '만성 간질환 또는 간 기능 저하로 인해 일상생활과 건강 유지에 어려움이 있는 상태입니다.'},
+  '호흡기장애': {icon: MasksIcon, color: '#16A085', description: '폐나 기도의 만성적 질환으로 인해 호흡에 제한이 있는 상태입니다.'},
+  '장루/요루장애': {icon: AccessibleForwardIcon, color: '#3498DB', description: '배변 또는 배뇨를 위해 인공적인 개구부(장루, 요루)를 지닌 상태로 위생관리와 일상에 제약이 따릅니다.'},
+  '간질장애': {icon: WarningAmberIcon, color: '#E74C3C', description: '만성적인 신경계 질환으로, 반복적인 발작(경련)을 특징으로 하는 장애입니다.'},
+  '지적장애': {icon: PsychologyIcon, color: '#2ECC71', description: '인지능력과 적응행동 발달이 현저히 낮아 교육 및 일상생활에 지속적인 지원이 필요한 상태입니다.'},
+  '자폐성장애': {icon: EmojiEmotionsIcon, color: '#1ABC9C', description: '사회적 상호작용, 의사소통, 행동 양상에서 발달적 차이를 보이는 신경발달장애입니다.'},
+  '정신장애': {icon: SupportAgentIcon, color: '#E67E22', description: '조현병, 우울증 등 정신질환으로 인해 일상생활이나 사회적 기능에 제한이 있는 상태입니다.'},
+  '국가유공': {icon: MilitaryTechIcon, color: '#9B59B6', description: '전상(戰傷) 등으로 장애를 입고 국가유공자로 등록된 분들로, 장애유형 분류와는 별개의 보훈대상입니다.'},
 };
+
 
 // 직종 분포 차트를 위한 향상된 옵션
 const jobTypeBarOptions = {
@@ -290,7 +304,12 @@ const DisabilityTypeStats = ({ data, onBackClick }) => {
   }
 
   return (
-    <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
+    <Box sx={{ 
+      p: { xs: 1, sm: 2, md: 3 },
+      maxWidth: '100vw',
+      overflowX: 'hidden'   
+      }}
+    >
       {/* 헤더 및 요약 정보 */}
       <Card elevation={3} sx={{ mb: 3, bgcolor: disabilityInfo.color + '15' }}>
         <CardContent>
@@ -371,10 +390,10 @@ const DisabilityTypeStats = ({ data, onBackClick }) => {
         </CardContent>
       </Card>
       
-      {/* 주요 분포 차트 (첫 번째 줄) */}
+      {/* 주요 분포 차트 (가로 3개 한 줄 정렬) */}
       <Grid container spacing={3} mb={3}>
         {/* 중증/경증 분포 */}
-        <Grid xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <Card elevation={2} sx={{ height: '100%' }}>
             <CardContent>
               <Typography variant="h6" gutterBottom align="center" fontWeight="medium">
@@ -386,9 +405,9 @@ const DisabilityTypeStats = ({ data, onBackClick }) => {
             </CardContent>
           </Card>
         </Grid>
-        
+
         {/* 지역별 분포 */}
-        <Grid xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <Card elevation={2} sx={{ height: '100%' }}>
             <CardContent>
               <Typography variant="h6" gutterBottom align="center" fontWeight="medium">
@@ -400,27 +419,27 @@ const DisabilityTypeStats = ({ data, onBackClick }) => {
             </CardContent>
           </Card>
         </Grid>
-      </Grid>
-      
-      {/* 연령대별 분포 */}
-      <Grid xs={12} md={6}>
-        <Card elevation={2} sx={{ height: '100%' }}>
-          <CardContent>
-            <Typography variant="h6" gutterBottom align="center" fontWeight="medium">
-              연령대별 분포
-            </Typography>
-            <Box height={220}>
-              {ageChartData && <Doughnut data={ageChartData} options={doughnutOptions} />}
-            </Box>
-          </CardContent>
-        </Card>
+
+        {/* 연령대별 분포 */}
+        <Grid item xs={12} md={4}>
+          <Card elevation={2} sx={{ height: '100%' }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom align="center" fontWeight="medium">
+                연령대별 분포
+              </Typography>
+              <Box height={220}>
+                {ageChartData && <Doughnut data={ageChartData} options={doughnutOptions} />}
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
       
       {/* 직종 및 임금 분포 (두 번째 줄) */}
-      <Grid container spacing={3} mb={3}>
-        {/* 희망직종 분포 - 히트맵 스타일의 바 차트 */}
-        <Grid xs={12} md={6}>
-          <Card elevation={2} sx={{ height: '100%' }}>
+      <Grid container spacing={3} mb={3} justifyContent="center">
+        {/* 희망직종 분포 */}
+        <Grid item xs={12} md={5.5}>
+          <Card elevation={2} sx={{ height: '100%', width: '100%' }}>
             <CardContent>
               <Typography variant="h6" gutterBottom align="center" fontWeight="medium">
                 희망직종 분포
@@ -435,22 +454,22 @@ const DisabilityTypeStats = ({ data, onBackClick }) => {
             </CardContent>
           </Card>
         </Grid>
-        
+
         {/* 희망임금 분포 */}
-        <Grid xs={12} md={6}>
-          <Card elevation={2} sx={{ height: '100%' }}>
+        <Grid item xs={12} md={5.5}>
+          <Card elevation={2} sx={{ height: '100%', width: '100%' }}>
             <CardContent>
               <Typography variant="h6" gutterBottom align="center" fontWeight="medium">
                 희망임금 분포
               </Typography>
-              <Box height={300}>
+              <Box height={300} display="flex" justifyContent="center" alignItems="center">
                 {salaryChartData && <Bar data={salaryChartData} options={barOptions} />}
               </Box>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
-      
+
       {/* 복합 분석 결과 */}
       <Card elevation={3}>
         <CardContent>
