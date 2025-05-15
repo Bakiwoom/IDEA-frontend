@@ -238,6 +238,44 @@ const DisabilityTypeStats = ({ data, onBackClick }) => {
   };
   const IconComponent = disabilityInfo.icon;
   
+  // 요약 텍스트에서 임금 정보 스타일링하는 헬퍼 함수
+  const renderSummaryWithStyledSalary = (summaryText, salaryDetails) => {
+    if (!summaryText) return summaryText;
+    // salaryDetails가 없거나, type 또는 amount가 없으면 원본 텍스트 반환
+    if (!salaryDetails || !salaryDetails.type || !salaryDetails.amount) {
+      return summaryText;
+    }
+
+    // summaryText에서 포맷팅된 임금 문자열(salaryDetails.formattedString)을 찾습니다.
+    // 이것은 "(유형) 금액" 형태입니다. (예: "(시급) 9,860")
+    const parts = summaryText.split(salaryDetails.formattedString);
+
+    if (parts.length === 2) {
+      // parts[0] = "... 희망 임금은 "
+      // parts[1] = "입니다."
+      let chipSx = {};
+      if (salaryDetails.type.includes('시급')) {
+        // 노랑/주황 계열 Chip
+        chipSx = { backgroundColor: theme.palette.warning.light, color: theme.palette.getContrastText(theme.palette.warning.light), fontWeight: 'bold', mx: 0.5 };
+      } else if (salaryDetails.type.includes('월급')) {
+        // 녹색/딥그린 계열 Chip
+        chipSx = { backgroundColor: theme.palette.success.light, color: theme.palette.getContrastText(theme.palette.success.light), fontWeight: 'bold', mx: 0.5 };
+      }
+
+      return (
+        <>
+          {parts[0]}
+          <Chip label={salaryDetails.type} size="small" sx={chipSx} />
+          <Typography component="span" variant="inherit" sx={{ fontWeight: 'bold' }}>
+            {salaryDetails.amount}
+          </Typography>
+          {parts[1]}
+        </>
+      );
+    }
+    return summaryText; // 분리되지 않으면 원본 반환
+  };
+
   useEffect(() => {
     // 로깅 추가: props로 전달된 data 확인
     console.log('[DisabilityTypeStats] Received props - data:', data);
@@ -284,7 +322,7 @@ const DisabilityTypeStats = ({ data, onBackClick }) => {
   }, [data, theme]);
   
   // 로딩 중일 때 스켈레톤 UI 표시
-  if (loading || !data) {
+  if (loading || !data || !statsSummary) {
     return (
       <Box sx={{ p: 3 }}>
         <Skeleton variant="rectangular" height={100} sx={{ mb: 2 }} />
@@ -376,16 +414,18 @@ const DisabilityTypeStats = ({ data, onBackClick }) => {
             <Typography variant="body2" paragraph>
               {disabilityInfo.description}
             </Typography>
-            <Typography variant="body1">{statsSummary?.summary}</Typography>
+            <Typography variant="body1">
+              {renderSummaryWithStyledSalary(statsSummary.summary, statsSummary.topSalaryDetails)}
+            </Typography>
           </Box>
           
           <Box display="flex" flexWrap="wrap" gap={1}>
-            <Chip label={`전체 인원: ${data.totalCount}명`} variant="outlined" />
+            <Chip label={`통계 인원: ${data.totalCount}명`} variant="outlined" />
             <Chip label={`${data.disabilityType} 인원: ${data.disabilityTypeCount}명`} variant="outlined" />
-            <Chip label={`주요 지역: ${statsSummary?.topRegion}`} variant="outlined" />
-            <Chip label={`주요 연령대: ${statsSummary?.topAgeGroup}`} variant="outlined" />
-            <Chip label={`주요 직종: ${statsSummary?.topJobType}`} variant="outlined" />
-            <Chip label={`주요 희망임금: ${statsSummary?.topSalary}`} variant="outlined" />
+            <Chip label={`주 희망지역: ${statsSummary?.topRegion}`} variant="outlined" />
+            <Chip label={`주 연령대: ${statsSummary?.topAgeGroup}`} variant="outlined" />
+            <Chip label={`주 희망직종: ${statsSummary?.topJobType}`} variant="outlined" />
+            <Chip label={`주 희망임금: ${statsSummary?.topSalary}`} variant="outlined" />
           </Box>
         </CardContent>
       </Card>

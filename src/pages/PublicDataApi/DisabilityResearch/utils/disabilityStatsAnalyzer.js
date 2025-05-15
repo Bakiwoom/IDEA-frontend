@@ -118,8 +118,25 @@ export const generateStatsSummary = (stats) => {
   const topJobType = Object.entries(stats.jobTypeDistribution || {})
     .sort((a, b) => b[1] - a[1])[0]?.[0] || '없음';
   
-  const topSalary = Object.entries(stats.salaryDistribution || {})
+  const topSalaryRaw = Object.entries(stats.salaryDistribution || {})
     .sort((a, b) => b[1] - a[1])[0]?.[0] || '없음';
+
+  let topSalaryDetails = {
+    original: topSalaryRaw,
+    type: null,
+    amount: null,
+    formattedString: topSalaryRaw === '없음' ? '정보 없음' : topSalaryRaw
+  };
+
+  if (topSalaryRaw && topSalaryRaw !== '없음') {
+    const match = topSalaryRaw.match(/\((시급|월급)\)\s*([\d,]+)/);
+    if (match) {
+      topSalaryDetails.type = `(${match[1]})`; // (시급) 또는 (월급)
+      const numericAmount = parseInt(match[2].replace(/,/g, ''), 10);
+      topSalaryDetails.amount = numericAmount.toLocaleString(); // 천단위 콤마 적용
+      topSalaryDetails.formattedString = `${topSalaryDetails.type} ${topSalaryDetails.amount}`;
+    }
+  }
   
   const severityInfo = calculateSeverityPercentage(stats.severityDistribution, stats.disabilityTypeCount)
     .map(item => `${item.severity}: ${item.count}명 (${item.percentage}%)`)
@@ -134,11 +151,12 @@ export const generateStatsSummary = (stats) => {
     topRegion,
     topAgeGroup,
     topJobType,
-    topSalary,
+    topSalary: topSalaryDetails.formattedString, // 포맷팅된 전체 문자열 (예: "(시급) 9,860")
+    topSalaryDetails: topSalaryDetails, // 상세 객체
     summary: `
       ${stats.disabilityType} 장애인은 전체 ${stats.totalCount}명 중 ${stats.disabilityTypeCount}명으로 ${stats.percentage}%를 차지합니다.
       주로 ${topRegion} 지역의 ${topAgeGroup} 연령층이 많으며, 가장 선호하는 직종은 ${topJobType}이고, 
-      희망 임금은 ${topSalary}입니다.
+      희망 임금은 ${topSalaryDetails.formattedString}입니다.
     `.trim().replace(/\s+/g, ' ')
   };
   console.log('[analyzer] generateStatsSummary output:', result);
