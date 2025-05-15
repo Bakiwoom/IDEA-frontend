@@ -6,6 +6,8 @@ import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { useAlert } from '../../components/Alert/AlertContext';
 import { useConfirm } from '../../components/Alert/ConfirmContext';
 import Nav from '../../components/Navbar';
+import { Modal, Box } from '@mui/material';
+import DisabilityStatsPage from './DisabilityResearch/DisabilityStatsPage';
 export const DISABLED_JOBSEEKERS_PAGE = '/public-data/disabled-jobseekers';
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -53,6 +55,8 @@ const DisabledJobseekers: React.FC = () => {
   const [disabilityTypes, setDisabilityTypes] = useState<string[]>([]);
   const { showAlert } = useAlert();
   const { confirm } = useConfirm();
+  const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
+  const [selectedDisabilityType, setSelectedDisabilityType] = useState<string | null>(null);
 
   // 데이터 불러오기
   const fetchList = async () => {
@@ -277,6 +281,27 @@ const DisabledJobseekers: React.FC = () => {
     setIsFilterExpanded(!isFilterExpanded);
   };
 
+  // 장애유형 통계 모달 열기 함수
+  const openStatsModal = (type: string) => {
+    setSelectedDisabilityType(type);
+    setIsStatsModalOpen(true);
+  };
+
+  // 모달 닫기 함수
+  const closeStatsModal = () => {
+    setIsStatsModalOpen(false);
+    setSelectedDisabilityType(null);
+  };
+
+  // 장애유형 필터 버튼 클릭 처리
+  const handleDisabilityButtonClick = (type: string) => {
+    // 필터 토글
+    toggleFilter(type);
+    
+    // 해당 유형을 선택하고 통계 모달 열기
+    openStatsModal(type);
+  };
+
   return (
     <>
         <Nav />
@@ -335,14 +360,19 @@ const DisabledJobseekers: React.FC = () => {
               {disabilityTypes.map(type => (
                 <button
                   key={type}
-                  onClick={() => toggleFilter(type)}
+                  onClick={() => handleDisabilityButtonClick(type)}
                   className={`${styles.symbolButton} ${
                     activeFilters.includes(type) ? styles.activeSymbol : ''
                   }`}
                   title={type}
                 >
                   <span className={styles.symbol}>{getDisabilitySymbol(type)}</span>
-                  <span className={styles.symbolText}>{type}</span>
+                  <span className={styles.symbolText}>
+                    {type}
+                    {activeFilters.includes(type) && (
+                      <span className={styles.viewStats}>통계 보기</span>
+                    )}
+                  </span>
                 </button>
               ))}
             </div>
@@ -427,6 +457,33 @@ const DisabledJobseekers: React.FC = () => {
             </button>
         </div>
         </div>
+
+        {/* 장애유형 통계 모달 */}
+        <Modal
+          open={isStatsModalOpen}
+          onClose={closeStatsModal}
+          aria-labelledby="statistics-modal-title"
+          aria-describedby="statistics-modal-description"
+        >
+          <Box sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '90%',
+            maxWidth: '1200px',
+            height: '90vh',
+            bgcolor: 'background.paper',
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 0,
+            overflowY: 'auto'
+          }}>
+            {selectedDisabilityType && (
+              <DisabilityStatsPage selectedDisabilityType={selectedDisabilityType} />
+            )}
+          </Box>
+        </Modal>
     </>
   );
 };
