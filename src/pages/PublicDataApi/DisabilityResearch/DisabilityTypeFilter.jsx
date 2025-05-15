@@ -83,7 +83,14 @@ const DisabilityTypeFilter = ({ disabilityTypes, loading, onSelect, selectedType
         </Typography>
         <Grid container spacing={2}>
           {[...Array(8)].map((_, index) => (
-            <Grid key={index} xs={6} sm={4} md={3} lg={2}>
+            <Grid
+              key={index}
+              size={{
+                xs: 6,
+                sm: 4,
+                md: 3,
+                lg: 2
+              }}>
               <Skeleton variant="rectangular" height={120} sx={{ borderRadius: 2 }} />
             </Grid>
           ))}
@@ -122,7 +129,6 @@ const DisabilityTypeFilter = ({ disabilityTypes, loading, onSelect, selectedType
           )}
         </Box>
       </Box>
-      
       <Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 8, lg: 8 }} justifyContent="center">
         {disabilityTypes.map((type) => {
           // 장애유형에 맞는 정보 가져오기
@@ -137,7 +143,15 @@ const DisabilityTypeFilter = ({ disabilityTypes, loading, onSelect, selectedType
           const isSelected = selectedType === type;
           
           return (
-            <Grid key={type} xs={2} sm={2} md={1} lg={1} sx={{ position: 'relative' }}>
+            <Grid
+              key={type}
+              sx={{ position: 'relative' }}
+              size={{
+                xs: 2,
+                sm: 2,
+                md: 1,
+                lg: 1
+              }}>
               <Tooltip 
                 title={disabilityInfo.description} 
                 arrow 
