@@ -23,7 +23,7 @@ import FavoriteBorderIcon from '@mui/icons-material/Favorite'; // 심장장애
 import BiotechIcon from '@mui/icons-material/Biotech'; // 간장애
 import MasksIcon from '@mui/icons-material/Masks'; // 호흡기장애
 import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward'; //장루/요루장애
-import WarningAmberIcon from '@mui/icons-material/WarningAmber'; //간질장애
+import WarningAmberIcon from '@mui/icons-material/WarningAmber'; //뇌전증장애
 import PsychologyIcon from '@mui/icons-material/Psychology'; // 지적장애
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions'; //자폐성장애애
 import SupportAgentIcon from '@mui/icons-material/SupportAgent'; // 정신장애
@@ -32,21 +32,21 @@ import AllInclusiveIcon from '@mui/icons-material/AllInclusive'; // 모든 장�
 
 // 장애유형별 아이콘 및 설명 매핑
 const disabilityIcons = {
-  '지체장애': {icon: AccessibleIcon, color: '#E74C3C', description: '사지나 척추 등의 신체 일부에 구조적·기능적 손상이 있어 이동이나 일상생활에 제한이 있는 장애입니다.'},
-  '뇌병변장애': {icon: MedicalInformationIcon, color: '#C0392B', description: '뇌 손상(예: 뇌성마비 등)으로 인한 운동기능 및 신체 조절 기능에 장애가 있는 상태입니다.'},
-  '시각장애': {icon: VisibilityOffIcon, color: '#3498DB', description: '시각의 손상이나 기능 저하로 인해 물체 인식, 이동, 의사소통 등에 제약이 있는 장애입니다.'},
-  '청각장애': {icon: HearingDisabledIcon, color: '#F39C12', description: '청력의 손실 또는 저하로 인해 음성 정보 수신 및 의사소통에 어려움이 있는 상태입니다.'},
-  '언어장애': {icon: RecordVoiceOverIcon, color: '#9B59B6', description: '말소리 생성 또는 언어 표현 능력에 이상이 있어 의사소통에 제한이 있는 장애입니다.'},
-  '안면장애': {icon: SentimentDissatisfiedIcon, color: '#2ECC71', description: '안면 부위의 변형이나 기능 이상으로 인해 심리적·사회적 어려움이 수반되는 장애입니다.'},
-  '신장장애': {icon: LocalHospitalIcon, color: '#F39C12', description: '만성적인 신장 기능의 손상으로 투석 등 지속적인 치료가 필요한 상태입니다.'},
-  '심장장애': {icon: FavoriteBorderIcon, color: '#E67E22', description: '선천적 또는 후천적 심장 질환으로 심장 기능이 저하되어 신체활동에 제약이 있는 장애입니다.'},
-  '간장애': {icon: BiotechIcon, color: '#1ABC9C', description: '만성 간질환 또는 간 기능 저하로 인해 일상생활과 건강 유지에 어려움이 있는 상태입니다.'},
-  '호흡기장애': {icon: MasksIcon, color: '#16A085', description: '폐나 기도의 만성적 질환으로 인해 호흡에 제한이 있는 상태입니다.'},
-  '장루/요루장애': {icon: AccessibleForwardIcon, color: '#3498DB', description: '배변 또는 배뇨를 위해 인공적인 개구부(장루, 요루)를 지닌 상태로 위생관리와 일상에 제약이 따릅니다.'},
-  '간질장애': {icon: WarningAmberIcon, color: '#E74C3C', description: '만성적인 신경계 질환으로, 반복적인 발작(경련)을 특징으로 하는 장애입니다.'},
-  '지적장애': {icon: PsychologyIcon, color: '#2ECC71', description: '인지능력과 적응행동 발달이 현저히 낮아 교육 및 일상생활에 지속적인 지원이 필요한 상태입니다.'},
-  '자폐성장애': {icon: EmojiEmotionsIcon, color: '#1ABC9C', description: '사회적 상호작용, 의사소통, 행동 양상에서 발달적 차이를 보이는 신경발달장애입니다.'},
-  '정신장애': {icon: SupportAgentIcon, color: '#E67E22', description: '조현병, 우울증 등 정신질환으로 인해 일상생활이나 사회적 기능에 제한이 있는 상태입니다.'},
+  '지체장애': {icon: AccessibleIcon, color: '#E74C3C', description: '팔, 다리, 척추 등 신체의 일부가 절단, 마비, 변형 등으로 인해 운동기능에 장애가 있는 장애.'},
+  '뇌병변장애': {icon: MedicalInformationIcon, color: '#C0392B', description: '뇌의 손상(예: 뇌졸중, 뇌성마비 등)으로 인해 복합적인 신체기능 장애가 발생한 장애.'},
+  '시각장애': {icon: VisibilityOffIcon, color: '#3498DB', description: '시력 저하 또는 시야 결손 등으로 시각적 정보 획득에 어려움이 있는 장애.'},
+  '청각장애': {icon: HearingDisabledIcon, color: '#F39C12', description: '청력 손실 또는 평형감각 이상으로 소리 인지 및 의사소통에 어려움이 있는 장애.'},
+  '언어장애': {icon: RecordVoiceOverIcon, color: '#9B59B6', description: '언어, 음성, 구어 기능의 장애로 의사소통에 제한이 있는 장애.'},
+  '안면장애': {icon: SentimentDissatisfiedIcon, color: '#2ECC71', description: '안면부의 결손, 함몰, 비후 등 변형으로 인해 사회적·심리적 어려움이 동반된 장애.'},
+  '신장장애': {icon: LocalHospitalIcon, color: '#F39C12', description: '만성 신장질환으로 투석치료를 받거나 신장이식 후 일상생활에 제한이 있는 장애.'},
+  '심장장애': {icon: FavoriteBorderIcon, color: '#E67E22', description: '심장기능 이상으로 일상생활이 현저히 제한되는 장애.'},
+  '간장애': {icon: BiotechIcon, color: '#1ABC9C', description: '만성·중증의 간기능 이상으로 일상생활이 제한되는 장애.'},
+  '호흡기장애': {icon: MasksIcon, color: '#16A085', description: '만성·중증의 호흡기 기능 이상으로 일상생활이 제한되는 장애.'},
+  '장루요루장애': {icon: AccessibleForwardIcon, color: '#3498DB', description: '인공적으로 만든 장루(항문)나 요루(요도)로 인해 일상생활에 제한이 있는 장애.'},
+  '뇌전증장애': {icon: WarningAmberIcon, color: '#E74C3C', description: '만성·중증의 뇌전증(간질)으로 일상생활이 제한되는 장애.'},
+  '지적장애': {icon: PsychologyIcon, color: '#2ECC71', description: '지능지수와 사회성지수가 70 이하로, 일상생활과 사회적응에 어려움이 있는 장애.'},
+  '자폐성장애': {icon: EmojiEmotionsIcon, color: '#1ABC9C', description: '사회적 상호작용 및 의사소통에 제한이 있고, 반복적 행동 특성을 보이는 자폐 스펙트럼 장애.'},
+  '정신장애': {icon: SupportAgentIcon, color: '#E67E22', description: '조현병, 양극성 장애, 반복성 우울장애 등 정신질환으로 일상생활 및 사회활동에 제한이 있는 장애.'},
   '국가유공': {icon: MilitaryTechIcon, color: '#9B59B6', description: '전상(戰傷) 등으로 장애를 입고 국가유공자로 등록된 분들로, 장애유형 분류와는 별개의 보훈대상입니다.'},
 };
 

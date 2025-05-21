@@ -326,7 +326,7 @@ ChatInput.displayName = 'ChatInput';
 
 const ChatBot: React.FC = () => {
   const { isOpen, messages, isLoading, closeChat, sendMessage, startChat, setMessages } = useChat();
-  const { role } = useAuth();
+  const { role, authUser } = useAuth();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -355,14 +355,31 @@ const ChatBot: React.FC = () => {
   const [isExpertBarOpen, setIsExpertBarOpen] = useState(false);
   const [actionCardsPatched, setActionCardsPatched] = useState(false);
   const navigate = useNavigate();
+  const [showSignUpChoice, setShowSignUpChoice] = useState(false);
+
+  // 로그인 안내 메시지
+  const loginGuideMessage: Message = {
+    id: 'login-guide',
+    content: '전문가와의 상담은 로그인 후 이용하실 수 있습니다.\n\n로그인이 필요하거나 회원 정보가 없으신 경우 회원가입을 진행해 주세요.',
+    sender: 'bot',
+    role: 'assistant',
+    timestamp: new Date(),
+    actionCards: [],
+    exampleQuestions: [
+      { id: 'login-1', expert_type: '', question: '로그인 하러 가기', category: '로그인' },
+      { id: 'login-2', expert_type: '', question: '회원가입 하러 가기', category: '회원가입' }
+    ]
+  };
 
   useEffect(() => {
     if (isOpen) {
       setIsAnimating(true);
       setIsClosing(false);
-      startChat(); // 채팅 시작 시 전문가 카드 로드
+      if (role) {
+        startChat(); // 로그인한 경우에만 실행
+      }
     }
-  }, [isOpen, startChat]);
+  }, [isOpen, startChat, role]);
 
   // 채팅 시작 시 한 번만 실행되는 useEffect
   useEffect(() => {
@@ -507,7 +524,11 @@ const ChatBot: React.FC = () => {
 
   // role이 바뀔 때마다 messages를 올바른 actionCards로 강제 초기화
   useEffect(() => {
-    if (isOpen) {
+    if (!role) {
+      setMessages([
+        loginGuideMessage
+      ]);
+    } else {
       setMessages([
         {
           id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(),
@@ -518,9 +539,9 @@ const ChatBot: React.FC = () => {
           actionCards: ExpertService.getExpertCardsByRole(role)
         }
       ]);
-      setActionCardsPatched(false);
     }
-  }, [role, isOpen, setMessages]);
+    setActionCardsPatched(false);
+  }, [role, setMessages]);
 
   // 메시지 응답 처리
   const handleMessageResponse = (message: Message) => {
@@ -610,7 +631,8 @@ const ChatBot: React.FC = () => {
               message={message} 
               isUser={message.sender === 'user'} 
             />
-            {message.actionCards && message.actionCards.length > 0 && (
+            {/* 전문가 카드: 로그인한 경우에만 노출 */}
+            {role && message.actionCards && message.actionCards.length > 0 && (
               <div className={styles.expertCards}>
                 {message.actionCards.map((card) => (
                   <div
@@ -632,6 +654,7 @@ const ChatBot: React.FC = () => {
                 ))}
               </div>
             )}
+            {/* 예시 질문은 로그인 안내 메시지에도 노출 */}
             {message.exampleQuestions && message.exampleQuestions.length > 0 && (
               <div className={styles.exampleQuestions}>
                 <h3 className={styles.exampleQuestionsTitle}>자주 묻는 질문</h3>
@@ -640,7 +663,17 @@ const ChatBot: React.FC = () => {
                     <button
                       key={question.id}
                       className={styles.questionButton}
-                      onClick={() => handleExampleQuestionClick(question)}
+                      onClick={() => {
+                        if (!role) {
+                          if (question.category === '로그인') {
+                            window.location.href = '/user/loginPage';
+                          } else if (question.category === '회원가입') {
+                            setShowSignUpChoice(true);
+                          }
+                        } else {
+                          handleExampleQuestionClick(question);
+                        }
+                      }}
                     >
                       {question.question}
                       {question.category && (
@@ -664,14 +697,43 @@ const ChatBot: React.FC = () => {
         )}
         <div ref={messagesEndRef} />
       </div>
+      {/* 회원가입 선택 모달 */}
+      {showSignUpChoice && (
+        <div className={styles.signUpChoiceModal}>
+          <div className={styles.signUpChoiceContent}>
+            <h3 className={styles.signUpChoiceTitle}>회원가입 유형 선택</h3>
+            <button
+              className={styles.questionButton}
+              onClick={() => { setShowSignUpChoice(false); window.location.href = '/user/userSignUpPage'; }}
+            >
+              개인 회원가입
+            </button>
+            <button
+              className={styles.questionButton}
+              onClick={() => { setShowSignUpChoice(false); window.location.href = '/user/vendorSignUpPage'; }}
+            >
+              기업 회원가입
+            </button>
+            <button
+              className={styles.questionButton}
+              onClick={() => setShowSignUpChoice(false)}
+            >
+              취소
+            </button>
+          </div>
+        </div>
+      )}
       {/* 하단 고정: 전문가 메뉴바 + 입력창 */}
       <div className={styles.inputAreaWrapper}>
-        <ChatbotBottomMenuBar
-          isOpen={isExpertBarOpen}
-          onToggle={toggleExpertBar}
-          onExpertSelect={handleExpertSelectFromBar}
-          currentExpertType={currentExpertType}
-        />
+        {/* 전문가 메뉴바: 로그인한 경우에만 노출 */}
+        {role && (
+          <ChatbotBottomMenuBar
+            isOpen={isExpertBarOpen}
+            onToggle={toggleExpertBar}
+            onExpertSelect={handleExpertSelectFromBar}
+            currentExpertType={currentExpertType}
+          />
+        )}
         <ChatInput
           isLoading={isLoading}
           onSendMessage={handleSendMessage}
