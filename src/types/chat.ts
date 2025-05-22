@@ -4,7 +4,7 @@ export interface Message {
   sender: 'user' | 'bot';
   role: 'user' | 'assistant';
   timestamp: Date;
-  cards?: PolicyCard[];
+  cards?: Card[];
   actionCards?: ExpertCard[];
   exampleQuestions?: ExpertQuestion[];
   action?: {
@@ -14,18 +14,18 @@ export interface Message {
   };
 }
 
-export interface PolicyCardButton {
+export interface CardButton {
   type: 'link' | 'tel' | 'email' | 'share';
   label: string;
   value: string;
 }
 
-export interface PolicyCard {
+export interface Card {
   id: string;
   title: string;
   subtitle?: string;
   summary: string;
-  type: 'policy' | 'employment' | 'welfare' | 'startup' | 'medical' | 'education' | 'counseling';
+  type: 'employment' | 'jobseeker_stats' | 'policy' | 'welfare' | 'general' | '';
   details: string;
   imageUrl?: string;
   source?: {
@@ -34,7 +34,7 @@ export interface PolicyCard {
     email?: string;
     phone?: string;
   };
-  buttons?: PolicyCardButton[];
+  buttons?: CardButton[];
 }
 
 export interface ExpertCard {

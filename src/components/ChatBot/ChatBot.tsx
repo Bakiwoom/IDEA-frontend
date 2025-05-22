@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import styles from './ChatBot.module.css';
 import { format } from 'date-fns';
 import { ChatBotIcon } from '../Icons/ChatBotIcon';
-import PolicyCard from './PolicyCard';
+import Card from './Card';
 import ChatbotBottomMenuBar from './ChatbotBottomMenuBar';
 import { useAuth } from '../../contexts/user/AuthProvider';
 import ExpertService, { ExpertQuestion } from './services/ExpertService';
-import { Message, PolicyCard as PolicyCardType } from '../../types/chat';
+import { Message, Card as CardType } from '../../types/chat';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -229,15 +229,15 @@ const ChatMessage = memo(({ message, isUser }: { message: Message; isUser: boole
             onTouchMove={isDragging ? handleDragMove : undefined}
             onTouchEnd={handleDragEnd}
           >
-            {message.cards.map((card: PolicyCardType, idx: number) => (
+            {message.cards.map((card: CardType, idx: number) => (
               <div key={card.id || `card-${idx}-${Date.now()}`} className={styles.cardItem}>
-                <PolicyCard
+                <Card
                   card={{
                     id: card.id || `card-${idx}-${Date.now()}`,
                     title: card.title || '제목 없음',
                     subtitle: card.subtitle,
                     summary: card.summary || '내용 요약 없음',
-                    type: card.type || 'policy',
+                    type: card.type || '',
                     details: card.details || card.summary || '상세 내용 없음',
                     source: card.source,
                     buttons: card.buttons
@@ -258,7 +258,7 @@ const ChatMessage = memo(({ message, isUser }: { message: Message; isUser: boole
           </div>
           {message.cards.length > 1 && (
             <div className={styles.cardIndicators}>
-              {message.cards.map((_: PolicyCardType, index: number) => (
+              {message.cards.map((_: CardType, index: number) => (
                 <div
                   key={index}
                   className={`${styles.cardIndicator} ${index === currentCardIndex ? styles.active : ''}`}
