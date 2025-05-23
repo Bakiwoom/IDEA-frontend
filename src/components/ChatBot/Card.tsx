@@ -30,7 +30,7 @@ const Card: React.FC<CardProps> = ({ card, isDragging, isExpanded: expandedProp,
 
   // 카드 데이터 로깅
   useEffect(() => {
-    console.log('PolicyCard에 전달된 카드 데이터:', card);
+    console.log('Card에 전달된 카드 데이터:', card);
   }, [card]);
 
   
