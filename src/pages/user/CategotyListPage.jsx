@@ -19,9 +19,6 @@ const CategoryListPage = () => {
     const [listVo, setListVo] = useState([]);
     const [bookmarkList, setBookmarkList] = useState([]);
 
-    //좋아요
-    const [isLiked, setIsLiked] = useState('');
-
     //페이징
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 12;
@@ -37,10 +34,44 @@ const CategoryListPage = () => {
         setCurrentPage(pageNumber);
     };
 
+    const [originalList, setOriginalList] = useState([]);
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [experienceFilters, setExperienceFilters] = useState([]);
 
-    const handleClickCategory = (item) => {
-        setSelectedCategory(item);
+    //검색
+    const handleSearch = (e)=>{
+        if (searchKeyword.trim() === "" && experienceFilters.length === 0) {
+            setListVo(originalList);
+            return;
+        }
+
+        const filteredList = originalList.filter((item) => {
+            const keywordMatch =
+                item.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+                item.companyName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+                item.location.toLowerCase().includes(searchKeyword.toLowerCase());
+
+            const experienceMatch =
+                experienceFilters.length === 0 || experienceFilters.includes(item.experienceLevel);
+
+            return keywordMatch && experienceMatch;
+        });
+
+        setCurrentPage(1);
+        setListVo(filteredList);
     }
+
+    // checkbox
+    const handleExperienceChange = (e) => {
+        const value = e.target.value;
+        const isChecked = e.target.checked;
+
+        if (isChecked) {
+            setExperienceFilters((prev) => [...prev, value]);
+        } else {
+            setExperienceFilters((prev) => prev.filter((item) => item !== value));
+        }
+    };
 
     //공고글 가져오기
     const getList = () => {
@@ -53,6 +84,7 @@ const CategoryListPage = () => {
         })
             .then((response) => {
                 setListVo(response.data.apiData);
+                setOriginalList(response.data.apiData);
             })
             .catch((error) => {
                 console.error("disabilityPage리스트 가져오기 실패:", error);
@@ -147,6 +179,13 @@ const CategoryListPage = () => {
 
     }, []);
 
+    useEffect(() => {
+
+        handleSearch();
+
+    }, [experienceFilters]);
+
+
 
     return (
         <>
@@ -158,8 +197,22 @@ const CategoryListPage = () => {
             </div> */}
             <div className={styles.container}>
                 <h2 className={styles.pageTitle}>장애인 채용공고</h2>
+                <div className={styles.searchContainer}>
+                    <div className={styles.searchbox}>
+                        <input className={styles.searchInput} type="text" placeholder="키워드를 입력해주세요" name="" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}/>
+                        <button className={styles.searchBTN} type="button" onClick={handleSearch}>🔎검색</button>
+                    </div>
+                    <div className={styles.experience}>
+                        <label className={styles.checkboxLabel} name="experience" value="신입">신입
+                            <input className={styles.checkbox} type="checkbox" name="experience" value="신입" onChange={handleExperienceChange}></input>
+                        </label>
+                        <label className={styles.checkboxLabel} name="experience" value="경력">경력
+                            <input className={styles.checkbox} type="checkbox" name="experience" value="경력" onChange={handleExperienceChange}></input>
+                        </label>
+                    </div>
+                </div>
                 <div className={styles.itemBoxContainer}>
-                    {listVo.map((item, index) => (
+                    {currentItems.map((item, index) => (
                         <div className={styles.itemBox} key={item.jobId} onClick={() => navigate(`/company/job/management/detail/${item.jobId}`)} style={{ cursor: 'pointer' }}>
                             <img
                                 src={item.companyLogo || "/images/nologo.png"}

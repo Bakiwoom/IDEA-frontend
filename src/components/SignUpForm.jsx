@@ -44,7 +44,6 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
     //id 중복체크
     const handleIdCheck = async ()=>{
         const id = formData.id;
-
         if(!id || id.trim() === ''){
             alert("ID를 입력해주세요.")
             return;
@@ -188,7 +187,7 @@ const SignUpForm = ({userType,fields,onSubmit}) =>{
                                             onChange={handleChange}
                                             className={styles.select}
                                         >
-                                            <option value="" disabled> 장애 유형을 선택해주세요 </option>
+                                            <option value="" disabled>선택해주세요.</option>
                                             {field.options.map((option, index) => (
                                                 <option key={index} value={option}>
                                                     {option}

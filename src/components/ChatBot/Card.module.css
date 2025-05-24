@@ -29,7 +29,7 @@
 }
 
 .title {
-  font-size: 1.25rem;
+  font-size: calc(1.25rem * var(--font-scale));
   font-weight: 700;
   color: var(--text-primary, #333);
   margin: 0.5rem 0;
@@ -37,7 +37,7 @@
 }
 
 .subtitle {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--font-scale));
   color: var(--text-secondary, #666);
   margin-top: 0.25rem;
 }
@@ -47,7 +47,7 @@
 }
 
 .summary {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--font-scale));
   color: var(--text-secondary, #666);
   line-height: 1.6;
   margin-bottom: 1rem;
@@ -62,7 +62,7 @@
 }
 
 .detailsContent {
-  font-size: 1rem;
+  font-size: calc(1rem * var(--font-scale));
   color: var(--text-primary, #333);
   line-height: 1.8;
   margin-bottom: 1.5rem;
@@ -177,6 +177,11 @@
 .badgeWelfare {
   background-color: #fff3bf;
   color: #e67700;
+}
+
+.badgeJobseekerStats {
+  background-color: #f3f0ff;
+  color: #5f3dc4;
 }
 
 .badgeStartup {
@@ -332,7 +337,7 @@
   display: inline-block;
   padding: 4px 8px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: calc(12px * var(--font-scale));
   font-weight: 500;
   margin-bottom: 8px;
 }
@@ -353,7 +358,7 @@
   padding: 12px;
   background: #f8f9fa;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: calc(14px * var(--font-scale));
   line-height: 1.6;
   color: #333;
 }

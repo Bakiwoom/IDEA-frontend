@@ -4,7 +4,8 @@ import styles from './ChatbotLayout.module.css';
 
 const ChatbotLayout = ({ children }) => {
   const { openChat, isOpen } = useChat();
-  const [position, setPosition] = useState({ x: window.innerWidth - 100, y: window.innerHeight - 100 });
+  // 초기 위치를 사이드바 하단 위치로 설정 (오른쪽 화면 가장자리)
+  const [position, setPosition] = useState({ x: window.innerWidth - 100, y: window.innerHeight - 200 });
   const [isDragging, setIsDragging] = useState(false);
   const dragStartPos = useRef({ x: 0, y: 0 });
   const mouseDownPos = useRef({ x: 0, y: 0 });
@@ -14,7 +15,27 @@ const ChatbotLayout = ({ children }) => {
     const savedPosition = localStorage.getItem('chatbotPosition');
     if (savedPosition) {
       setPosition(JSON.parse(savedPosition));
+    } else {
+      // 저장된 위치가 없을 경우 초기 위치를 사이드바 아래쪽으로 설정
+      setPosition({ 
+        x: window.innerWidth - 100, 
+        y: window.innerHeight - 200 
+      });
     }
+  }, []);
+
+  // 화면 크기 변경 시 챗봇 위치 조정
+  useEffect(() => {
+    const handleResize = () => {
+      setPosition(prevPosition => {
+        const newX = Math.min(prevPosition.x, window.innerWidth - 60);
+        const newY = Math.min(prevPosition.y, window.innerHeight - 60);
+        return { x: newX, y: newY };
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleMouseDown = (e) => {

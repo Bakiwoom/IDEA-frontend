@@ -129,6 +129,19 @@ body {
     text-decoration: none;
 } */
 
+.noDataMessage {
+  width: 100%;
+  grid-column: 1 / -1; /* This makes the element span all columns in the grid */
+  text-align: center;
+  padding: 30px 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  color: #495057;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 10px 0;
+}
+
 /* 카드 그리드 스타일 */
 .cardGrid {
     display: grid;

@@ -62,6 +62,9 @@ export const AuthProvider = ({ children }) => {
         setAuthUser(null)
         setMemberId(null)
         setName('');
+        setRole('');         // 추가!
+        setUserId('');       // 추가!
+        setCompanyId('');    // 추가!
     }
 
 

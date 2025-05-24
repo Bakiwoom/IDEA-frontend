@@ -18,7 +18,7 @@ export const userExpertCards: ExpertCard[] = [
 
 export const companyExpertCards: ExpertCard[] = [
   { id: 'employment_policy', title: '장애인 채용 정책 전문가', expert_type: '고용 정책', description: '장애인 고용 관련 법률, 제도, 지원금 안내', icon: '📑' },
-  // { id: 'job_seekers', title: '장애인 구직자 현황', expert_type: '구직자 현황', description: '장애인 구직자 통계 및 현황 정보', icon: '📊' },
-  { id: 'consulting', title: '고용 컨설팅', expert_type: '고용 컨설팅', description: '장애인 고용 환경 개선, 컨설팅 안내', icon: '💼' },
+  { id: 'job_seekers', title: '장애인 구직자 현황', expert_type: '구직자 현황', description: '장애인 구직자 통계 및 현황 정보', icon: '📊' },
+  // { id: 'consulting', title: '고용 컨설팅', expert_type: '고용 컨설팅', description: '장애인 고용 환경 개선, 컨설팅 안내', icon: '💼' },
   // { id: 'application_manage', title: '지원의향서 관리', expert_type: '지원의향서', description: '내 기업에 지원한 구직자 관리', icon: '📂' },
 ]; 

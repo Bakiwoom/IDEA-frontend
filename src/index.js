@@ -3,11 +3,17 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AlertProvider } from './components/Alert/AlertContext';
+import { ConfirmProvider } from './components/Alert/ConfirmContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <ConfirmProvider>
+      <AlertProvider>
+        <App />
+      </AlertProvider>
+    </ConfirmProvider>
   </React.StrictMode>
 );
 

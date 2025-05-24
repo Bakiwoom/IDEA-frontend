@@ -4,8 +4,9 @@ import styles from './WelfareServices.module.css';
 import { FaRegStar, FaStar } from 'react-icons/fa';
 import { useLocation, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
-import { DISABLED_JOB_OFFERS_PAGE } from './DisabledJoboffers';
-
+import { useAlert } from '../../components/Alert/AlertContext';
+import { useConfirm } from '../../components/Alert/ConfirmContext';
+import Nav from '../../components/Navbar';
 export const WELFARE_SERVICES_PAGE = '/public-data/welfare-services';
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -80,6 +81,8 @@ const WelfareServices: React.FC = () => {
     const [pageGroup, setPageGroup] = useState(1); // 10개 단위 그룹
     const [favorites, setFavorites] = useState<string[]>([]);
     const [tab, setTab] = useState('target');
+    const { showAlert } = useAlert();
+    const { confirm } = useConfirm();
 
     const detailRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
@@ -129,20 +132,21 @@ const WelfareServices: React.FC = () => {
     };
 
     const refreshData = async () => {
-        if (!window.confirm('최신 데이터를 갱신하시겠습니까? 시간이 다소 걸릴 수 있습니다.')) return;
-        
-        try {
-            setLoading(true);
-            setError(null);
-            await axios.post(`${API_URL}/api/public/welfare/list/refresh`);
-            alert('데이터가 갱신되었습니다!');
-            fetchList();
-        } catch (err) {
-            setError('데이터 갱신에 실패했습니다.');
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
+        confirm('최신 데이터를 갱신하시겠습니까? 시간이 다소 걸릴 수 있습니다.', async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                await axios.post(`${API_URL}/api/public/welfare/list/refresh`);
+                showAlert('데이터가 갱신되었습니다!', 'success', 3000);
+                fetchList();
+            } catch (err) {
+                setError('데이터 갱신에 실패했습니다.');
+                showAlert('데이터 갱신에 실패했습니다.', 'error', 3000);
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        });
     };
 
     const fetchDetail = async (servId: string) => {
@@ -190,11 +194,56 @@ const WelfareServices: React.FC = () => {
 
     useEffect(() => { setPage(1); setPageGroup(1); }, [search]); // 검색 시 1페이지, 1그룹으로 이동
 
-    // 페이지 번호 클릭 시 그룹 이동
+    // 페이지 변경 함수 - 페이지 번호 클릭 시에만 상단 스크롤
     const handlePageClick = (p: number) => {
         setPage(p);
         const newGroup = Math.ceil(p / pagesPerGroup);
         setPageGroup(newGroup);
+        
+        if (detailRef.current) {
+            detailRef.current.style.display = 'none';
+        }
+        
+        setSelectedDetail(null);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    
+    // 첫 페이지/마지막 페이지 이동 함수 - 스크롤 이동 없음
+    const goToFirstPage = () => {
+        setPageGroup(1);
+        setPage(1);
+        
+        if (detailRef.current) {
+            detailRef.current.style.display = 'none';
+        }
+        
+        setSelectedDetail(null);
+    };
+    
+    const goToLastPage = () => {
+        setPageGroup(totalGroups);
+        setPage(totalPages);
+        
+        if (detailRef.current) {
+            detailRef.current.style.display = 'none';
+        }
+        
+        setSelectedDetail(null);
+    };
+    
+    // 페이지 그룹 변경 함수 - 스크롤 이동 없음
+    const changePageGroup = (delta: number) => {
+        const newGroup = pageGroup + delta;
+        if (newGroup >= 1 && newGroup <= totalGroups) {
+            setPageGroup(newGroup);
+            setPage((newGroup - 1) * pagesPerGroup + 1);
+            
+            if (detailRef.current) {
+                detailRef.current.style.display = 'none';
+            }
+            
+            setSelectedDetail(null);
+        }
     };
 
     // 태그 추출 함수 (예시: lifeArray, intrsThemaArray 등에서 쉼표/슬래시/공백 분리)
@@ -235,34 +284,7 @@ const WelfareServices: React.FC = () => {
 
     return (
         <>
-            <nav className={styles.nav}>
-                <div className={`${styles.container} ${styles.navContainer}`}>
-                    <button className={styles.menuButton}>☰</button>
-                    <ul className={styles.navMenu}>
-                        <li>
-                            <Link to="/" className={styles.link}>
-                                홈으로
-                            </Link>
-                        </li>
-                        <li>
-                            <Link 
-                                to={DISABLED_JOB_OFFERS_PAGE} 
-                                className={styles.link}
-                            >
-                                구인 실시간 현황
-                            </Link>
-                        </li>
-                        <li>
-                            <Link 
-                                to={WELFARE_SERVICES_PAGE} 
-                                className={`${styles.link} ${window.location.pathname === WELFARE_SERVICES_PAGE ? styles.active : ''}`}
-                            >
-                                복지서비스 목록
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+            <Nav />
             <div className={styles.container}>
                 <h2 className={styles.title}>중앙부처 복지서비스 목록</h2>
                 
@@ -538,11 +560,43 @@ const WelfareServices: React.FC = () => {
 
                 {/* 페이징 */}
                 <div className={styles.pagination}>
-                    <button className={styles.pageBtn} onClick={()=>{ handleCloseDetail(); if(pageGroup>1){ setPage((pageGroup-2)*pagesPerGroup+1); setPageGroup(pageGroup-1); }}} disabled={pageGroup===1}>이전</button>
+                    <button 
+                        className={styles.pageBtn} 
+                        onClick={goToFirstPage} 
+                        disabled={page === 1}
+                    >
+                        &laquo;
+                    </button>
+                    <button 
+                        className={styles.pageBtn} 
+                        onClick={() => changePageGroup(-1)} 
+                        disabled={pageGroup === 1}
+                    >
+                        이전
+                    </button>
                     {pageNumbers.map(num => (
-                        <button key={num} className={`${styles.pageBtn} ${page===num?styles.active:''}`} onClick={()=>{ handleCloseDetail(); handlePageClick(num); }}>{num}</button>
+                        <button 
+                            key={num} 
+                            className={`${styles.pageBtn} ${page === num ? styles.active : ''}`} 
+                            onClick={() => handlePageClick(num)}
+                        >
+                            {num}
+                        </button>
                     ))}
-                    <button className={styles.pageBtn} onClick={()=>{ handleCloseDetail(); if(pageGroup<totalGroups){ setPage(pageGroup*pagesPerGroup+1); setPageGroup(pageGroup+1); }}} disabled={pageGroup===totalGroups}>다음</button>
+                    <button 
+                        className={styles.pageBtn} 
+                        onClick={() => changePageGroup(1)} 
+                        disabled={pageGroup === totalGroups}
+                    >
+                        다음
+                    </button>
+                    <button 
+                        className={styles.pageBtn} 
+                        onClick={goToLastPage} 
+                        disabled={page === totalPages}
+                    >
+                        &raquo;
+                    </button>
                 </div>
             </div>
         </>

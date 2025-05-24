@@ -302,7 +302,7 @@
 .messageContent {
   font-family: 'Noto Sans', 'Apple SD Gothic Neo', 'Segoe UI', 'sans-serif';
   line-height: 1.7;
-  font-size: 1.05rem;
+  font-size: calc(1.05rem * var(--font-scale));
 }
 
 .messageContent h1,
@@ -355,7 +355,7 @@
 }
 
 .timestamp {
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--font-scale));
   color: var(--text-secondary);
   min-width: 45px;
 }
@@ -973,7 +973,7 @@
 }
 
 .exampleQuestionsTitle {
-  font-size: 1.1rem;
+  font-size: calc(1.1rem * var(--font-scale));
   font-weight: 600;
   margin-bottom: 1rem;
   color: var(--text-primary);
@@ -996,7 +996,7 @@
   border: 1px solid rgba(66, 99, 235, 0.2);
   border-radius: 0.75rem;
   text-align: left;
-  font-size: 1rem;
+  font-size: calc(1rem * var(--font-scale));
   font-weight: 500;
   color: var(--text-primary);
   cursor: pointer;
@@ -1015,7 +1015,7 @@
 }
 
 .questionCategory {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--font-scale));
   color: var(--primary-color);
   background-color: rgba(66, 99, 235, 0.1);
   padding: 0.25rem 0.75rem;
@@ -1120,6 +1120,10 @@
   border-color: rgba(96, 165, 250, 0.2);
 }
 
+[data-theme='dark'] .exampleQuestionsTitle {
+  color: #e5e7eb;
+}
+
 [data-theme='dark'] .questionButton {
   background-color: #1f2937;
   border-color: rgba(96, 165, 250, 0.3);
@@ -1136,4 +1140,37 @@
 [data-theme='dark'] .questionCategory {
   background-color: rgba(96, 165, 250, 0.2);
   color: #93c5fd;
+}
+
+.signUpChoiceModal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.signUpChoiceContent {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  max-width: 350px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signUpChoiceTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary, #222);
+  text-align: center;
 }

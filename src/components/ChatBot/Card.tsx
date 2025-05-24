@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { PolicyCard as PolicyCardType } from '../../types/chat';
-import styles from './PolicyCard.module.css';
+import { Card as CardType } from '../../types/chat';
+import styles from './Card.module.css';
 
-interface PolicyCardProps {
-  card: PolicyCardType;
+interface CardProps {
+  card: CardType;
   isDragging?: boolean;
   isExpanded?: boolean;
   onExpand?: (expanded: boolean) => void;
   dragged?: boolean;
 }
 
-const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: expandedProp, onExpand, dragged }) => {
+const Card: React.FC<CardProps> = ({ card, isDragging, isExpanded: expandedProp, onExpand, dragged }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
   const [dragStartX, setDragStartX] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -31,65 +30,37 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: e
 
   // 카드 데이터 로깅
   useEffect(() => {
-    console.log('PolicyCard에 전달된 카드 데이터:', card);
+    console.log('Card에 전달된 카드 데이터:', card);
   }, [card]);
 
-  useEffect(() => {
-    const fetchThumbnail = async () => {
-      if (card.source?.url) {
-        try {
-          const url = new URL(card.source.url);
-          const defaultThumbnail = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=128`;
-          setThumbnailUrl(defaultThumbnail);
-        } catch (error) {
-          console.error('Error processing URL:', error);
-          setThumbnailUrl('/images/policy-default.jpg');
-        }
-      } else {
-        setThumbnailUrl('/images/policy-default.jpg');
-      }
-    };
-
-    fetchThumbnail();
-  }, [card.source?.url]);
-
-  const getCardTypeClass = (type: string = 'policy') => {
+  
+  const getCardTypeClass = (type: string = 'general') => {
     switch (type) {
       case 'policy':
         return styles.badgePolicy;
+      case 'welfare':
+        return styles.badgeWelfare;
       case 'employment':
         return styles.badgeEmployment;
-      // case 'welfare':
-      //   return styles.badgeWelfare;
-      // case 'startup':
-      //   return styles.badgeStartup;
-      // case 'medical':
-      //   return styles.badgeMedical;
-      // case 'education':
-      //   return styles.badgeEducation;
-      // case 'counseling':
-      //   return styles.badgeCounseling;
+      case 'jobseeker_stats':
+        return styles.badgeJobseekerStats;
+      case 'general':
       default:
         return styles.badgeDefault;
     }
   };
 
-  const getCardTypeIcon = (type: string = 'policy') => {
+  const getCardTypeIcon = (type: string = 'general') => {
     switch (type) {
       case 'policy':
         return '📜';
+      case 'welfare':
+        return '🏥';
       case 'employment':
         return '💼';
-      // case 'welfare':
-      //   return '🏥';
-      // case 'startup':
-      //   return '🚀';
-      // case 'medical':
-      //   return '⚕️';
-      // case 'education':
-      //   return '📚';
-      // case 'counseling':
-      //   return '💬';
+      case 'jobseeker_stats':
+        return '📊';
+      case 'general':
       default:
         return '📋';
     }
@@ -99,7 +70,7 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: e
   const title = card.title || '정보 없음';
   const summary = card.summary || '정보 요약이 없습니다.';
   const details = card.details || '상세 정보가 없습니다.';
-  const type = card.type || 'policy';
+  const type = card.type || 'general';
   const subtitle = card.subtitle || '';
   const sourceName = card.source?.name || '출처 정보 없음';
 
@@ -174,49 +145,16 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ card, isDragging, isExpanded: e
                     🔗 {sourceName} 바로가기
                   </a>
                 )}
-                {card.source.email && (
-                  <a href={`mailto:${card.source.email}`} className={styles.sourceLink}
-                    onMouseDown={e => e.stopPropagation()}
-                    onMouseUp={e => e.stopPropagation()}
-                  >
-                    📧 이메일 문의: {card.source.email}
-                  </a>
-                )}
-                {card.source.phone && (
-                  <a href={`tel:${card.source.phone}`} className={styles.sourceLink}
-                    onMouseDown={e => e.stopPropagation()}
-                    onMouseUp={e => e.stopPropagation()}
-                  >
-                    📞 전화 문의: {card.source.phone}
-                  </a>
-                )}
+                
               </div>
             )}
-            {card.buttons && card.buttons.length > 0 && (
-              <div className={styles.buttons}>
-                {card.buttons.map((btn, idx) => (
-                  <a
-                    key={idx}
-                    href={btn.type === 'tel' ? `tel:${btn.value}` : 
-                          btn.type === 'email' ? `mailto:${btn.value}` : 
-                          btn.value}
-                    target={btn.type === 'link' ? '_blank' : undefined}
-                    rel={btn.type === 'link' ? 'noopener noreferrer' : undefined}
-                    className={styles.button}
-                    onMouseDown={e => e.stopPropagation()}
-                    onMouseUp={e => e.stopPropagation()}
-                    onClick={btn.type === 'share' ? () => navigator.share?.({ title: card.title, url: card.source?.url }) : undefined}
-                  >
-                    {btn.label}
-                  </a>
-                ))}
-              </div>
-            )}
+            
           </div>
         )}
+
       </div>
     </div>
   );
 };
 
-export default PolicyCard; 
+export default Card; 
